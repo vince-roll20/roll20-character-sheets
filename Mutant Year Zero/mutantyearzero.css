@@ -83,9 +83,6 @@ h1{
   opacity: 1;
 }
 
-
-/* SHEEET *********************/
-
 .sheet-wrapper {
   overflow: hidden;
   box-sizing: border-box;
@@ -99,13 +96,9 @@ button[type="action"] {
   border-radius: 5px;
 }
 
-/* character grid layout */
-
 .sheet-character-grid {
   display: grid;
 }
-
-/* CHARACTER SHEET LAYOUT */
 
 .sheet-character-dice_pool {
   padding: 0;
@@ -124,7 +117,6 @@ button[type="action"] {
   grid-row-start: 4;
   overflow: hidden;
 }
-
 
 .sheet-character-dice_pool {
   min-width: 19em;
@@ -286,6 +278,7 @@ input.sheet-dice_only:checked
   justify-content: stretch;
   justify-items: stretch;
  }
+
 .sheet-dice-roll-input button,
 .sheet-dice-rolls-roll {
   grid-area: sheet-dice-rolls-roll;
@@ -307,6 +300,7 @@ input.sheet-dice_only:checked
   flex: 1;
   padding-right: 10px;
 }
+
 .sheet-dice-preset input[type="text"] {
   width: 100%;
 }
@@ -331,6 +325,7 @@ input.sheet-dice_only:checked
   padding-block: 2px;
   grid-area: sheet-dice-rolls-d666;
 }
+
 .sheet-dice-rolls-info {
   position: relative;
   display: flex;
@@ -346,7 +341,6 @@ input.sheet-dice_only:checked
   font-size: 1em !important;
 }
 
-/* */
 .sheet-dice-preset-header {
   font-size: 12px;
   margin-bottom: 0px;
@@ -354,16 +348,20 @@ input.sheet-dice_only:checked
   justify-self: flex-start;
   text-indent: 5px;
 }
+
 .sheet-dice-preset-preset {
   text-align: center;
   border-width: 0 1px 1px 1px;
 }
+
 .sheet-dice-footer-clear {
   grid-area: sheet-dice-rolls-clear;
 }
+
 .sheet-dice-footer-api {
   grid-area: sheet-dice-rolls-api;
 }
+
 .sheet-dice-footer-clear,
 .sheet-dice-footer-api {
   justify-self: flex-start;
@@ -391,8 +389,7 @@ button.sheet-api-button {
   justify-self: flex-start;
 }
 
-input[type="checkbox"].sheet-hidden,
-.sheet-hidden {
+.charsheet .sheet-hidden {
   display: none;
 }
 
@@ -408,6 +405,7 @@ input.sheet-hidden.sheet-api-toggle-show:not(:checked) ~ div .sheet-computed-rol
 .sheet-dice-rolls-roll button::before {
   content: "" !important;
 }
+
 input.sheet-hidden.sheet-api-toggle-show:checked
   ~ div div.sheet-api-roll
   button::after {
@@ -421,27 +419,7 @@ input.sheet-api-toggle-show:checked ~ .sheet-dice-footer-api button {
   color: white;
 }
 
-
-/* GRID STYLING */
-
-
-.sheet-dice_pool-grid .sheet-grid-item {
-  width: 103%;
-}
-
-
-/***** ADD TOGGLE FOR MODIFIERS */
-
-input.sheet-adv-modifiers:checked ~ div .sheet-modifiers-toggled-off {
-  display: none;
-}
-
-input.sheet-adv-modifiers:not(:checked) ~ div .sheet-modifiers-toggled-on {
-  display: none;
-}
-
 /**** DICE ROLLER STYLING ****/
-
 button[type="action"]:hover,
 button[type="action"]:hover>span,
 button[type="roll"]:hover {
@@ -453,15 +431,12 @@ button[type="roll"]:hover {
    font-size: 1.3em;
    margin: 0px 3px 0px 3px;
 }
-/*
-.sheet-dice-rolls button[type="action"].sheet-dice-pool:before {
-  font-family: "dicefontd6";
-  content: "f";
-} */
+
 .sheet-dice-rolls button[type="action"].sheet-dice-pool span {
   color: #fff;
   text-transform: capitalize;
 }
+
 button[type="action"] > span {
   -font-size: 95%;
   color: #333;
@@ -552,44 +527,7 @@ input.sheet-legendary:checked + span::before {
   background: #ff8c00;
 }
 
-/* Included to help color blind users */
-button[type="action"]:focus {
-  color: white;
-  border: 2px dotted white;
-  background: #a60100;
-}
-
-button[type="action"]:focus span {
-  color: white;
-}
-
-.sheet-dice_pool-grid button[type="action"]:focus {
-  border-width: 2px;
-  border-style: outset;
-  border-image: initial;
-}
-
-input[type="radio"].sheet-dice-selection.sheet-attribute:checked
-  + span::before {
-  border: 2px dotted black;
-}
-
-input[type="radio"].sheet-dice-selection.sheet-skill:checked + span::before,
-input[type="radio"].sheet-dice-selection.sheet-gear:checked + span::before,
-input[type="radio"].sheet-dice-selection.sheet-negative:checked + span::before,
-input[type="checkbox"].sheet-mighty:checked + span::before,
-input[type="checkbox"].sheet-epic:checked + span::before,
-input[type="checkbox"].sheet-legendary:checked + span::before {
-  font-size: 95%;
-  padding: 3px 0 0 0;
-  border: 2px dotted white;
-}
-
 /* ROLL TEMPLATE STYLING */
-
-.sheet-rolltemplate-mutantyearzero .sheet-small-caps {
-  font-variant-caps: small-caps;
-}
 
 .sheet-rolltemplate-mutantyearzero {
   padding: 12px 0 12px 0;
