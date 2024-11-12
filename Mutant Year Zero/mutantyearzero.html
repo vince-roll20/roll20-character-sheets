@@ -124,8 +124,8 @@
           </div>
         </div>
         <input class="hidden api-toggle-show" type="checkbox" name="attr_api_toggle" value="1" />
-        <input class="hidden" type="number" name="attr_pushable" value="1" hidden />
-        <input class="hidden" type="text" name="attr_push_latest" value="" hidden />
+        <input class="hidden" type="number" name="attr_pushable" value="1" />
+        <input class="hidden" type="text" name="attr_push_latest" value="" />
         <input class="hidden" name="attr_api_dice_command" value="@{whisper_option_api} [[(@{skill})d6]] [[(@{attribute})d6]] [[(@{gear})d6]] --Character|@{character_name} --Roll|@{current_preset}" hidden readonly />
         <div class="dice-roll-input chartype-background-dark">
           <div class="dice-preset">
@@ -794,54 +794,6 @@
   }
   /* END ASYNC FUNCTIONS */
 
-  const skills = {
-    // a javascript Object Literal, containing each skill, and its corresponding attribute
-    endure: 'strength_total',
-    force: 'strength_total',
-    fight: 'strength_total',
-    sneak: 'agility_total',
-    Move: 'agility_total',
-    shoot: 'agility_total',
-    scout: 'wits_total',
-    comprehend: 'wits_total',
-    know_the_zone: 'wits_total',
-    sense_emotion: 'empathy_total',
-    manipulate: 'empathy_total',
-    heal: 'empathy_total',
-  };
-
-  const misc = {
-    // a javascript Object Literal, containing each skill, and its corresponding skill modification
-    endure: 'endure_skill_misc',
-    force: 'force_skill_misc',
-    fight: 'fight_skill_misc',
-    sneak: 'sneak_skill_misc',
-    Move: 'move_skill_misc',
-    shoot: 'shoot_skill_misc',
-    scout: 'scout_skill_misc',
-    comprehend: 'comprehend_skill_misc',
-    know_the_zone: 'know_the_zone_skill_misc',
-    sense_emotion: 'sense_emotion_skill_misc',
-    manipulate: 'manipulate_skill_misc',
-    heal: 'heal_skill_misc',
-  };
-
-  const miscGear = {
-    // a javascript Object Literal, containing each skill, and its corresponding gear modification
-    endure: 'endure_gear_misc',
-    force: 'force_gear_misc',
-    fight: 'fight_gear_misc',
-    sneak: 'sneak_gear_misc',
-    Move: 'move_gear_misc',
-    shoot: 'shoot_gear_misc',
-    scout: 'scout_gear_misc',
-    comprehend: 'comprehend_gear_misc',
-    know_the_zone: 'know_the_zone_gear_misc',
-    sense_emotion: 'sense_emotion_gear_misc',
-    manipulate: 'manipulate_gear_misc',
-    heal: 'heal_gear_misc',
-  };
-
   /* GiGs number and log handling */
   const int = (score, on_error = 0) => parseInt(score) || on_error;
   const float = (score, on_error = 0) => parseFloat(score) || on_error;
@@ -900,43 +852,6 @@
       });
     });
   });
-
-  const dicePoolButtons = (which) => {
-    clog(`Change Detected: Dice Pool ${which} - button clicked`);
-    getAttrs([skills[which], misc[which], miscGear[which], getSkill(which), getSkillKey(which), getSkillName(which)], function (values) {
-      // skills[which] returns the attribute; e.g skills['sneak'] gives 'agility_total'
-      // getSkill(which) converts the skill name to a valid attribute string: getSkill('Know the zone') gives 'know-the-zone'
-      // getSkillName(which) uses label, string or key to return character type specific translated skill name: getSkillName('Know the zone') gives 'Know nature' for Animals
-      const stat = int(values[skills[which]]),
-        miscSkill_score = Math.max(int(values[misc[which]]), -3),
-        miscGear_score = int(values[miscGear[which]]),
-        // stat here first gets skills['sneak'] which will be, say, 'agility' and
-        //  then values['ability_total'] gives you the score from the character sheet.
-        skill_attribute_selected = stat > 0 ? stat : 0,
-        skill_bonus_misc_selected = miscSkill_score,
-        skill_bonus_misc_gear_selected = miscGear_score,
-        skill_only_selected = int(values[getSkill(which)]),
-        skill = getSkill(which),
-        skill_name = getSkillName(skill); // used to get the proper translated character type skill
-      clog('Found skill button click, Skill key ' + JSON.stringify(which) + ' calculated to ' + skill + ' corresponding to character type ' + skill_name);
-
-      setAttrs({
-        attribute: stat > 0 ? stat : 0, // this is a Ternary Operator, it starts with a question (e.g. is stat > 0)
-        // and if true, returns the bit after the ? and if false returns the bit after the :
-        // you can often replace simple if/then expressions with a single line ternary operator.
-        // uses the translation key
-        gear: miscGear_score,
-        skill: int(values[getSkill(which)]) + miscSkill_score,
-        skill_attribute_selected: skill_attribute_selected,
-        skill_bonus_misc_selected: skill_bonus_misc_selected,
-        skill_bonus_misc_gear_selected: skill_bonus_misc_gear_selected,
-        skill_only_selected: skill_only_selected,
-        //skill_notes_selected: skill_notes_selected,
-        current_preset: skill_name,
-        include_with_roll: `{{skill-base=${skill_attribute_selected}}} {{skill-skill=${skill_only_selected}}} {{skill-bonus-misc-skill=${skill_bonus_misc_selected}}} {{skill-bonus-misc-gear=${skill_bonus_misc_gear_selected}}}}`, // {{skill-notes=${skill_notes_selected}}
-      });
-    });
-  };
 
   on('sheet:opened clicked:dice_pool_clear', function () {
     clog('Change Detected: Clear Dice Pool - button clicked or sheet loaded');
