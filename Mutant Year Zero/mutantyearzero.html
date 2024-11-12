@@ -9,7 +9,6 @@
 <!-- Sheet visibility and behavioural attributes -->
 <input class="hidden attr-chartype-selected" name="attr_chartype" value="(@{chartype})" type="hidden" hidden readonly />
 <button class="hidden" type="action" name="act_push"></button>
-
 <div class="wrapper tab-content character character-grid">
   <div class="character-grid">
     <!-- DICE POOL GRID-->
@@ -176,6 +175,34 @@
         </div>
       </div>
     </div>
+  </div>
+  <!-- whisper settings -->
+  <div>
+    <input type="hidden" name="attr_translation_whisper_query" value="whisper-query" />
+    <input type="hidden" name="attr_translation_whisper_api_query" value="whisper_api-query" />
+    <div>
+      <span data-i18n="whisper-options">Whisper Options:</span>
+      <select name="attr_whisper_option" title="@{whisper_option}">
+        <option value="" data-i18n="whisper-nothing" selected>Do not whisper rolls(default).</option>
+        <option value="/w gm" data-i18n="whisper-rolls">Whisper all rolls to the GM.</option>
+        <option value="@{translation_whisper_macro_query}" data-i18n="whisper-query">Use a query.</option>
+      </select>
+    </div>
+    <div>
+      <span data-i18n="whisper-options-api">API Whisper Options:</span>
+      <select name="attr_whisper_option_api" title="@{whisper_option_api}">
+        <option value="!myz" data-i18n="whisper-nothing" selected>Do not whisper rolls(default).</option>
+        <option value="!wmyz" data-i18n="whisper-rolls">Whisper all rolls to the GM.</option>
+        <option value="@{translation_whisper_api_macro_query}" data-i18n="whisper-query">Use a query.</option>
+      </select>
+    </div>
+    <!-- used to translate query-->
+    <span style="display: none;" name="attr_translation_whisper_macro_query" value=""></span>
+    <span style="display: none;" name="attr_translation_whisper_api_macro_query" value=""></span>
+    <span style="display: none;" data-i18n="whisper-query">Whisper roll?</span>
+    <span style="display: none;" data-i18n="yes">yes</span>
+    <span style="display: none;" data-i18n="no">no</span>
+
   </div>
 </div>
 
@@ -767,22 +794,6 @@
   }
   /* END ASYNC FUNCTIONS */
 
-  const attributes = {
-    // an Object Literal: damages['strength'] returns 'damage', damages['empathy'] returns 'doubt', etc
-    strength: 'strength_total',
-    agility: 'agility_total',
-    wits: 'wits_total',
-    empathy: 'empathy_total',
-  };
-
-  const damages = {
-    // an Object Literal: damages['strength'] returns 'damage', damages['empathy'] returns 'doubt', etc
-    strength: 'damage',
-    agility: 'fatigue',
-    wits: 'confusion',
-    empathy: 'doubt',
-  };
-
   const skills = {
     // a javascript Object Literal, containing each skill, and its corresponding attribute
     endure: 'strength_total',
@@ -831,24 +842,6 @@
     heal: 'heal_gear_misc',
   };
 
-  const monster_skills = {
-    'endure monster': 'endure_monster',
-    'fight monster': 'fight_monster',
-    'force monster': 'force_monster',
-  };
-
-  const monster_misc = {
-    'endure monster': 'endure_skill_misc_monster',
-    'fight monster': 'fight_skill_misc_monster',
-    'force monster': 'force_skill_misc_monster',
-  };
-
-  const monster_miscGear = {
-    'endure monster': 'endure_gear_misc_monster',
-    'fight monster': 'fight_gear_misc_monster',
-    'force monster': 'force_gear_misc_monster',
-  };
-
   /* GiGs number and log handling */
   const int = (score, on_error = 0) => parseInt(score) || on_error;
   const float = (score, on_error = 0) => parseFloat(score) || on_error;
@@ -862,24 +855,6 @@
       output = `%c${text}`;
       console.log(output, textStyle);
     }
-  };
-
-  /* GiGs 'Super Simple Summarizer' */
-  const repeatingSum = (destination, section, fields, multiplier = 1) => {
-    if (!Array.isArray(fields)) fields = [fields];
-    getSectionIDs(`repeating_${section}`, (idArray) => {
-      const attrArray = idArray.reduce((m, id) => [...m, ...fields.map((field) => `repeating_${section}_${id}_${field}`)], []);
-      getAttrs(attrArray, (v) => {
-        //clog("values of v: " + JSON.stringify(v));
-        // getValue: if not a number, returns 1 if it is 'on' (checkbox), otherwise returns 0..
-        const getValue = (section, id, field) => float(v[`repeating_${section}_${id}_${field}`]) || (v[`repeating_${section}_${id}_${field}`] === 'on' ? 1 : 0);
-
-        const sumTotal = idArray.reduce((total, id) => total + fields.reduce((subtotal, field) => subtotal * getValue(section, id, field), 1), 0);
-        setAttrs({
-          [destination]: sumTotal * multiplier,
-        });
-      });
-    });
   };
 
   /* Wes's Dice Pool */
