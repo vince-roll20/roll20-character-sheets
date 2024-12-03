@@ -8,6 +8,19 @@ More Information
 - [Star Wars 5e Discord](https://discord.gg/zYcPYTu)
 
 # Changelog
+## 2024-11-30
+* Bugfix : Fixing buttons for when the sheet is resized
+* Bugfix : Fixing PC Powers
+* Improvement : Remade NPC Powers
+## 2024-11-27
+* Chore : Massive refactor of the sheet using GULP as build engine
+* Chore : Removal of leftover unused code for 5e compendium & Charmancer integration
+* Chore : Migrating from Legacy sheet to CSE
+* Bugfix : Removal of handler for turning speed and flying speed
+* Bugfix : Removal of Hp calculationf for ship and PC which was causing problem or not working.
+* Improvement : Small adjustement of the roll-templates.
+## 2024-11-16
+* correction following problem in PR 13282 : Npc traits visibility & Sheet Refresh problem
 ## 2024-07-06
 * Changed the npc Layout
 * Added the possibility to switch "edit/view" of npc traits

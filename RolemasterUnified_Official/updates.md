@@ -1,3 +1,29 @@
+# 2024-12-3
+
+- Initiative modified by maneuver penalty
+- Update rolltemplate for initiative to show penalty if present.
+- Add tests and validations for creatures.
+- All creature weapons now have a size (usually 0)
+- Display a message when an injury takes a character to negative hits.
+
+# 2024-11-26
+
+- Handle the knockback results when they have a ' in them.
+- Handle short swords and a few other weapons for creatures.
+
+
+# 2024-11-19
+
+- Stats are now right aligned.
+- Fix update for specialised skills.
+- RRs:
+    - now have a box.  Make them standout more.
+    - Use the pretty name. not the attribute name.
+    - Number now rolls with modifier.
+- Fix an issue causing some characters to have problems levelling up.
+- Fixed specialisations show the skill name when rolling.
+- Handle knacks for Alchemists.
+
 # 2024-11-14
 
 - Add description to each step of the Charactermancer buttons
