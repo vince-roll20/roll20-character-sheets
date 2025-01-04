@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Sancreek&display=swap');
 
 .charsheet .wrapper {
+  background-color: whitesmoke;
   display: grid;
   font-family: 'Times New Roman', Times, serif;
   margin: auto;
-  outline: 3px double #000;
+  outline: 6px double #222;
   overflow: hidden;
   padding: 1em;
   place-content: center;
   position: relative;
-  width: 100%;
 }
 
 .charsheet .main-layout {
@@ -47,10 +47,22 @@
   white-space: nowrap;
 }
 
-.charsheet span-2 {
+.charsheet .span-2 {
   grid-column: span 3;
 }
 
-.charsheet span-3 {
+.charsheet .span-3 {
   grid-column: span 4;
+}
+
+.charsheet .small-input {
+  width: 4em;
+}
+
+.charsheet .medium-input {
+  width: 8em;
+}
+
+.charsheet .large-input {
+  width: 16em;
 }
