@@ -60,6 +60,10 @@
   row-gap: 4px;
 }
 
+.charsheet .attributes-grid span {
+  text-align: center;
+}
+
 .charsheet .span-2 {
   grid-column: span 3;
 }
