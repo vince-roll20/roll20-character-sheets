@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Sancreek&display=swap');
+
+.charsheet .wrapper {
+  display: grid;
+  font-family: 'Times New Roman', Times, serif;
+  margin: auto;
+  outline: 3px double #000;
+  overflow: hidden;
+  padding: 1em;
+  place-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.charsheet .main-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.charsheet .banner {
+  grid-column: 1/-1;
+}
+
+.charsheet h1 {
+  color: #333;
+  font-family: 'Sancreek';
+  font-size: 3.5rem;
+}
+
+.charsheet .characteristics-grid {
+  display: inline-flex;
+  flex-wrap: wrap;
+  grid-column: 1/-1;
+  row-gap: 4px;
+}
+
+.charsheet .characteristics-grid > label {
+  align-items: center;
+  display: inline-flex;
+  flex: 1 1 0;
+  justify-content: left;
+  margin: auto;
+}
+
+.charsheet label span {
+  margin-right: 5px;
+  white-space: nowrap;
+}
+
+.charsheet span-2 {
+  grid-column: span 3;
+}
+
+.charsheet span-3 {
+  grid-column: span 4;
+}
