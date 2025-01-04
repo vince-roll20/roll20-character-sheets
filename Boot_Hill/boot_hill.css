@@ -7,18 +7,20 @@
   margin: auto;
   outline: 6px double #222;
   overflow: hidden;
-  padding: 1em;
+  padding: 10px;
   place-content: center;
   position: relative;
 }
 
 .charsheet .main-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 .charsheet .banner {
   grid-column: 1/-1;
+  justify-items: right;
 }
 
 .charsheet h1 {
@@ -47,6 +49,17 @@
   white-space: nowrap;
 }
 
+.charsheet .attributes-grid {
+  align-items: center;
+  display: grid;
+  grid-column: 1/5;
+  grid-template-columns: 1fr 5em 1fr;
+  outline: 1px solid #555;
+  overflow: hidden;
+  padding: 4px;
+  row-gap: 4px;
+}
+
 .charsheet .span-2 {
   grid-column: span 3;
 }
@@ -55,12 +68,28 @@
   grid-column: span 4;
 }
 
+.charsheet .span-4 {
+  grid-column: span 5;
+}
+
+.charsheet .span-5 {
+  grid-column: span 6;
+}
+
+.charsheet .span-all {
+  grid-column: 1/-1;
+}
+
 .charsheet .small-input {
   width: 4em;
+  margin: auto;
+  margin-left: 0;
 }
 
 .charsheet .medium-input {
   width: 8em;
+  margin: auto;
+  margin-left: 0;
 }
 
 .charsheet .large-input {
