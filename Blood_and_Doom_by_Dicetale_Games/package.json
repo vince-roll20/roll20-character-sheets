@@ -10,13 +10,13 @@
   },
   "devDependencies": {
     "@anduh/pug-cli": "^1.0.0-alpha7",
-    "@types/underscore": "^1.10.24",
+    "@types/underscore": "^1.13.0",
     "jstransformer-uglify-es": "^0.2.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.7.1",
+    "prettier": "^4.0.0-alpha.10",
     "prettier-plugin-sort-json": "^0.0.3",
-    "pug": "^3.0.2",
-    "sass": "^1.37.5",
-    "typescript": "^4.3.5"
+    "pug": "^3.0.3",
+    "sass": "^1.84.0",
+    "typescript": "^5.8.0-dev.20250212"
   }
 }
