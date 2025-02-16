@@ -16,7 +16,7 @@
     "prettier": "^4.0.0-alpha.10",
     "prettier-plugin-sort-json": "^0.0.3",
     "pug": "^3.0.3",
-    "sass": "^1.84.0",
-    "typescript": "^5.8.0-dev.20250212"
+    "sass": "^1.85.0",
+    "typescript": "^5.8.0-dev.20250216"
   }
 }
