@@ -9,12 +9,12 @@
     "format": "prettier --write --ignore-unknown ."
   },
   "devDependencies": {
-    "@anduh/pug-cli": "^1.0.0-alpha7",
+    "@anduh/pug-cli": "^1.0.0",
     "@types/underscore": "^1.13.0",
     "jstransformer-uglify-es": "^0.2.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^4.0.0-alpha.10",
-    "prettier-plugin-sort-json": "^0.0.3",
+    "prettier": "^3.5.1",
+    "prettier-plugin-sort-json": "^3.0.0",
     "pug": "^3.0.3",
     "sass": "^1.85.0",
     "typescript": "^5.8.0-dev.20250216"
