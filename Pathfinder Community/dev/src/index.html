@@ -17630,14 +17630,16 @@
                                         <div class="sheet-roll-cell">{{#range}}{{range}}{{/range}}</div>
                                     </div>
                                 {{/hasposrange}}
-                                {{#hasspellrange}}
-                                    {{#spell_range}}
-                                        <div class="sheet-roll-row">
-                                            <div class="sheet-roll-cell">**<span data-i18n="range">Range</span>**</div>
-                                            <div class="sheet-roll-cell">{{spell_range}}{{#hasposrange}}{{#range}} ({{range}} <span data-i18n="feet-abbrv">ft.</span>){{/range}}{{/hasposrange}}</div>
-                                        </div>
-                                    {{/spell_range}}
-                                {{/hasspellrange}}
+                                {{^hasposrange}}
+                                    {{#hasspellrange}}
+                                        {{#spell_range}}
+                                            <div class="sheet-roll-row">
+                                                <div class="sheet-roll-cell">**<span data-i18n="range">Range</span>**</div>
+                                                <div class="sheet-roll-cell">{{spell_range}}{{#hasposrange}}{{#range}} ({{range}} <span data-i18n="feet-abbrv">ft.</span>){{/range}}{{/hasposrange}}</div>
+                                            </div>
+                                        {{/spell_range}}
+                                    {{/hasspellrange}}
+                                {{/hasposrange}}
                             {{/is_sp}}
                             {{#hasattack}}
                                 <div class="sheet-roll-row">
@@ -17861,7 +17863,7 @@
                     {{/is_sp}}
                     {{^is_sp}}
                         {{#hasposrange}}<label>**<span data-i18n="range">Range</span>**<span class="sheet-right">{{#range}}{{range}}{{/range}}</span></label>{{/hasposrange}}
-                        {{#hasspellrange}}{{#spell_range}}<label>**<span data-i18n="range">Range</span>**<span class="sheet-right">{{spell_range}}{{#hasposrange}} ({{range}} <span data-i18n="feet-abbrv">ft.</span>){{/hasposrange}}</span></label>{{/spell_range}}{{/hasspellrange}}
+                        {{^hasposrange}}{{#hasspellrange}}{{#spell_range}}<label>**<span data-i18n="range">Range</span>**<span class="sheet-right">{{spell_range}}{{#hasposrange}} ({{range}} <span data-i18n="feet-abbrv">ft.</span>){{/hasposrange}}</span></label>{{/spell_range}}{{/hasspellrange}}{{/hasposrange}}
                     {{/is_sp}}
                     {{#hasattack}}<label>**<span data-i18n="attack-type">Attack type</span>**<span class="sheet-right">{{#attacktype}}{{attacktype}}{{/attacktype}}</span><span data-i18n="versus-touch">vs Touch</span></label>{{/hasattack}}
                     {{#targetarea}}<label>**<span data-i18n="targets-area-effect">Target/Area/Effect</span>**<span class="sheet-right">{{targetarea}}</span></label>{{/targetarea}}
