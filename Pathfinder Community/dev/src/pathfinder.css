@@ -392,6 +392,7 @@
     pointer-events: none;
     z-index: -1;
 }
+
 /* ability basis-name 'Other' is editable */
 .charsheet .other-editable:checked + label:has(.calc) {
     pointer-events: auto;
