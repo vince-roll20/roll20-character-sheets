@@ -569,41 +569,41 @@ export function resetSpellsTotals(dummy, eventInfo, callback, silently) {
 function setAttackEntryVals(spellPrefix, weaponPrefix, v, setter, noName) {
   let notes = '',
     attackType = '';
-  setter = setter || {};
+  const output = setter || {};
   try {
     TAS.debug('UPDATING SPELL ATTACK: ' + spellPrefix, v);
     attackType = PFUtils.findAbilityInString(v[spellPrefix + 'spell-attack-type']);
     if (v[spellPrefix + 'name']) {
       if (!noName) {
-        setter[weaponPrefix + 'name'] = v[spellPrefix + 'name'];
+        output[weaponPrefix + 'name'] = v[spellPrefix + 'name'];
       }
-      setter[weaponPrefix + 'source-spell-name'] = v[spellPrefix + 'name'];
+      output[weaponPrefix + 'source-spell-name'] = v[spellPrefix + 'name'];
     }
     if (attackType) {
-      setter[weaponPrefix + 'attack-type'] = v[spellPrefix + 'spell-attack-type'];
+      output[weaponPrefix + 'attack-type'] = v[spellPrefix + 'spell-attack-type'];
       if (/CMB/i.test(attackType)) {
-        setter[weaponPrefix + 'vs'] = 'cmd';
+        output[weaponPrefix + 'vs'] = 'cmd';
       } else {
-        setter[weaponPrefix + 'vs'] = 'touch';
+        output[weaponPrefix + 'vs'] = 'touch';
       }
     }
     if (v[spellPrefix + 'range_numeric']) {
-      setter[weaponPrefix + 'range'] = v[spellPrefix + 'range_numeric'];
+      output[weaponPrefix + 'range'] = v[spellPrefix + 'range_numeric'];
     }
     if (v[spellPrefix + 'range'] && v[spellPrefix + 'range_pick'] === 'see_text') {
       notes += 'Range: ' + v[spellPrefix + 'range'];
     }
 
     if (v[spellPrefix + 'damage-macro-text']) {
-      setter[weaponPrefix + 'precision_dmg_macro'] = v[spellPrefix + 'damage-macro-text'];
+      output[weaponPrefix + 'precision_dmg_macro'] = v[spellPrefix + 'damage-macro-text'];
       if (attackType) {
-        setter[weaponPrefix + 'critical_dmg_macro'] = v[spellPrefix + 'damage-macro-text'];
+        output[weaponPrefix + 'critical_dmg_macro'] = v[spellPrefix + 'damage-macro-text'];
       }
     }
     if (v[spellPrefix + 'damage-type']) {
-      setter[weaponPrefix + 'precision_dmg_type'] = v[spellPrefix + 'damage-type'];
+      output[weaponPrefix + 'precision_dmg_type'] = v[spellPrefix + 'damage-type'];
       if (attackType) {
-        setter[weaponPrefix + 'critical_dmg_type'] = v[spellPrefix + 'damage-type'];
+        output[weaponPrefix + 'critical_dmg_type'] = v[spellPrefix + 'damage-type'];
       }
     }
     if (v[spellPrefix + 'save']) {
@@ -637,12 +637,12 @@ function setAttackEntryVals(spellPrefix, weaponPrefix, v, setter, noName) {
       }
     }
     if (notes) {
-      setter[weaponPrefix + 'notes'] = notes;
+      output[weaponPrefix + 'notes'] = notes;
     }
   } catch (err) {
     TAS.error('PFSpells.setAttackEntryVals', err);
   } finally {
-    return setter;
+    return output;
   }
 }
 
@@ -1747,9 +1747,10 @@ function updateSpellsOld(callback, silently, eventInfo) {
  *@param {object} eventInfo used to find row id since id param will be null
  */
 export function importFromCompendium(id, eventInfo) {
+  let rowId = id;
   if (eventInfo) {
-    if (!id) {
-      id = SWUtils.getRowId(eventInfo.sourceAttribute);
+    if (!rowId) {
+      rowId = SWUtils.getRowId(eventInfo.sourceAttribute);
     }
   }
   getAttrs(
@@ -1968,7 +1969,7 @@ export function importFromCompendium(id, eventInfo) {
       setSilent['repeating_spells_effect_from_compendium'] = '';
       if (_.size(setSilent) > 0) {
         SWUtils.setWrapper(setSilent, PFConst.silentParams, function () {
-          updateSpell(id, eventInfo);
+          updateSpell(rowId, eventInfo);
         });
       }
     },
