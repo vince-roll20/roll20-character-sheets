@@ -30,7 +30,7 @@ export function resetCommandMacro(dummy, eventInfo, callback) {
         callback();
       }
     }),
-    repeatingSpellAttrs = ['spell_level', 'spellclass_number', 'name', 'school', 'slot', 'metamagic', 'used', 'isDomain', 'isMythic'],
+    repeatingSpellAttrs = ['spell_level', 'spellclass_number', 'name', 'school', 'slot', 'metamagic', 'used', 'cast', 'isDomain', 'isMythic'],
     class0BaseMacro =
       '&{template:pf_block} @{toggle_spell_accessible} @{toggle_rounded_flag}{{font=@{apply_specfont_chat}@{use_specfont}}} {{scroll_desc=@{scroll-desc}}} {{color=@{rolltemplate_color}}} {{header_image=@{header_image-pf_block}}} {{character_name=@{character_name}}} {{character_id=@{character_id}}} {{subtitle}} {{name=@{spellclass-0-name} ^{spells}}} {{concentration=@{Concentration-0}}} {{casterlevel=@{spellclass-0-level-total}}} {{row01=**^{checks}**}} {{row02=[^{caster-level-check}](~@{character_id}|Spell-Class-0-CL-Check) [^{concentration-check}](~@{character_id}|Concentration-Check-0) [^{spell-failure}](~@{character_id}|Spell-Fail-Check)}}',
     class1BaseMacro =
@@ -326,7 +326,7 @@ export function resetCommandMacro(dummy, eventInfo, callback) {
   );
 }
 
-/** update spells if a user changes "uses" on spell row
+/** update spells if a user changes "uses" or "cast" on spell row
  * @param {string} dummy normally id but not used
  * @param {map} eventInfo from event, not used
  * @param {function} callbackwhen done
@@ -342,6 +342,7 @@ function updateSpellsPerDay(dummy, eventInfo, callback, silently) {
     fields = [
       'total_spells_manually',
       'repeating_spells_used',
+      'repeating_spells_cast',
       'repeating_spells_spellclass_number',
       'repeating_spells_spell_level',
       'repeating_spells_slot',
@@ -379,17 +380,23 @@ function updateSpellsPerDay(dummy, eventInfo, callback, silently) {
         //TAS.debug("about to set "+fieldname+", and "+ fieldname2);
         TAS.repeating('spells')
           .attrs(fieldname, fieldname2)
-          .fields('row_id', 'used', 'spell_level', 'metamagic', 'slot')
+          .fields('row_id', 'used', 'cast', 'spell_level', 'metamagic', 'slot')
           .reduce(
             function (m, r) {
+              let memo = m || 0;
               try {
                 if (r.I.spell_level === spellLevel || (r.I.metamagic && r.I.slot === spellLevel)) {
-                  m += r.I.used;
+                  // updated to handle #cast
+                  const used = parseInt(r.I.used, 10) || 0;
+                  const cast = Math.abs(parseInt(r.I.cast, 10)) || 0;
+                  // specific row
+                  let remaining = used - cast;
+                  memo += Math.max(0, remaining);
                 }
               } catch (innererr) {
                 TAS.error('PFSpells.updateSpellsPerDay innererr', innererr);
               } finally {
-                return m;
+                return memo;
               }
             },
             0,
@@ -443,7 +450,8 @@ function getSpellTotals(ids, v, setter) {
         classNum = 0,
         metamagic = 0,
         slot,
-        uses = 0;
+        used = 0,
+        cast = 0;
       try {
         spellLevel = parseInt(v[prefix + 'spell_level'], 10) || 0;
         classNum = parseInt(v[prefix + 'spellclass_number'], 10);
@@ -463,8 +471,13 @@ function getSpellTotals(ids, v, setter) {
         }
         totalListed[classNum][spellLevel] += 1;
         if (!doNotProcess) {
-          uses = parseInt(v[prefix + 'used'], 10) || 0;
-          totalPrepped[classNum][spellLevel] += uses;
+          // updated to handle #cast
+          used = parseInt(v[prefix + 'used'], 10) || 0;
+          cast = Math.abs(parseInt(v[prefix + 'cast'], 10)) || 0;
+          //totalPrepped[classNum][spellLevel] += used - cast;
+          // ensure never drop below 0
+          let remaining = used - cast;
+          totalPrepped[classNum][spellLevel] += Math.max(0, remaining);
         }
       } catch (err2) {
         TAS.error('PFSpells.getSpellTotals err2', err2);
@@ -2069,10 +2082,11 @@ let events = {
   repeatingSpellEventsPlayer: {
     'change:repeating_spells:compendium_category': [importFromCompendium],
     'change:repeating_spells:used': [updateSpellsPerDay, updatePreparedSpellState, resetCommandMacro],
+    'change:repeating_spells:cast': [updateSpellsPerDay, updatePreparedSpellState, resetCommandMacro],
     'change:repeating_spells:metamagic': [toggleMetaMagic],
     'change:repeating_spells:name': [updateSpell],
   },
-  repeatingSpellMenuUpdatePlayer: ['name', 'spellclass_number', 'spell_level', 'slot', 'used', 'school', 'metamagic', 'isDomain', 'isMythic'],
+  repeatingSpellMenuUpdatePlayer: ['name', 'spellclass_number', 'spell_level', 'slot', 'used', 'cast', 'school', 'metamagic', 'isDomain', 'isMythic'],
   repeatingSpellAttackEventsPlayer: ['range_pick', 'range', 'damage-macro-text', 'damage-type', 'save', 'spell-attack-type', 'name'],
   repeatingSpellAttackEventsAuto: ['range_numeric', 'sr', 'savedc', 'toggle_attack_entry'],
 };
