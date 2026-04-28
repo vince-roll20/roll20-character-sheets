@@ -218,7 +218,7 @@
     z-index: 0;
   }
 
-  .abilities-columns > span:has(+ label .ability-button):nth-child(odd of span:has(+ label .ability-button)):after {
+  .abilities-columns > span:has(+ label .ability-button):nth-child(odd of span:has(+ label .ability-button))::after {
     content: '';
     display: block;
     height: 2.85em;
@@ -237,7 +237,7 @@
     background-color: oklch(77.944% 0.00009 271.152 / 0.5);
   }
 
-  .abilities-columns > span:has(+ label .ability-button):nth-child(odd of span:has(+ label .ability-button)):after,
+  .abilities-columns > span:has(+ label .ability-button):nth-child(odd of span:has(+ label .ability-button))::after,
   .repcontainer[data-groupname='repeating_weapon'] .repitem:nth-child(even),
   .column-header ~ .armor-columns:nth-child(even):not(.sect),
   .column-header ~ .armor-columns.sect:nth-child(odd),
@@ -256,7 +256,7 @@
   .repcontainer[data-groupname='repeating_ability'] .repitem:nth-child(odd),
   .repcontainer[data-groupname='repeating_nonweaponproficiencies'] .repitem:nth-child(odd),
   .repcontainer[data-groupname='repeating_notes'] .repitem:nth-child(odd),
-  .abilities-columns > label:has(.ability-button):nth-child(odd of label:has(.ability-button)):after,
+  .abilities-columns > label:has(.ability-button):nth-child(odd of label:has(.ability-button))::after,
   .column-header ~ .armor-columns:nth-child(even):not(.sect),
   .column-header ~ .armor-columns.sect:nth-child(odd),
   .column-header ~ .thief-columns:nth-child(odd),
@@ -506,6 +506,12 @@
 .charsheet input[type='checkbox'].toggle-lbs:not(:checked) ~ .background span.toggle-lbs + span,
 .charsheet input[type='checkbox'].toggle-lbs:checked ~ .background span.toggle-lbs {
   display: none;
+}
+
+/* toggle AR */
+.charsheet input[type='checkbox'].toggle-ar:checked ~ .background .toggle-ar {
+  display: none;
+  outline: 1px solid red;
 }
 
 .charsheet .background .toggle-multiclass-swap {
@@ -1526,7 +1532,7 @@ section.npc-box.statblock3 .image-avatar {
 
 .charsheet .logo-box .normalmode,
 .charsheet .logo-box .darkmode {
-  background-image: url(https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/ADnD_1E/images/logo.png);
+  background-image: url('https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/ADnD_1E/images/logo.png');
   background-position: 50% 0;
   background-repeat: no-repeat;
   background-size: contain;
@@ -1541,7 +1547,7 @@ section.npc-box.statblock3 .image-avatar {
 
 /* darkmode */
 .sheet-darkmode .tab-content .charsheet .logo-box .darkmode {
-  background-image: url(https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/ADnD_1E/images/logo_inverted.png);
+  background-image: url('https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/ADnD_1E/images/logo_inverted.png');
   display: block;
   opacity: 0.8;
 }
@@ -1556,7 +1562,12 @@ section.npc-box.statblock3 .image-avatar {
   grid-column: 3/4;
   grid-row-start: 1;
   position: absolute;
+  overflow: hidden;
   width: 100%;
+}
+
+.charsheet .header-box:has(.toggle-avatar[value="1"] + .image-avatar img[src]) .portrait-box {
+  overflow: visible;
 }
 
 /* sheet is set to no image */
@@ -1615,7 +1626,6 @@ section.npc-box.statblock3 .image-avatar {
 .charsheet .header-box:has(.toggle-avatar[value="1"] + .image-avatar img),
 .charsheet .header-box:has(.toggle-avatar[value="2"] + .image-avatar img) {
   grid-template-columns: 1fr 1.5fr auto;
-  overflow: hidden;
 }
 
 .charsheet .header-box:has(.image-avatar[style*='http']),
@@ -1651,6 +1661,20 @@ section.npc-box.statblock3 .image-avatar {
   .charsheet .background .wrapper .header-box:has(.image-avatar[style*='http']) .logo-box .ac-columns label:last-child,
   .charsheet .background .wrapper .header-box:has(.toggle-avatar[value="1"] + .image-avatar img[src]) .logo-box .ac-columns label:last-child {
     margin-left: 8px;
+  }
+
+  /* toggle AR */
+  .charsheet input[type='checkbox'].toggle-ar:checked ~ .background .wrapper .header-box:has(.image-avatar[style*='http']) .logo-box .ac-columns,
+  .charsheet input[type='checkbox'].toggle-ar:checked ~ .background .wrapper .header-box:has(.toggle-avatar[value="1"] + .image-avatar img[src]) .logo-box .ac-columns {
+    margin-right: -7em;
+    min-width: 92px;
+    width: 13vw;
+  }
+
+  .charsheet input[type='checkbox'].toggle-ar:checked ~ .background .wrapper .header-box:has(.image-avatar[style*='http']) .logo-box .ac-columns label,
+  .charsheet input[type='checkbox'].toggle-ar:checked ~ .background .wrapper .header-box:has(.toggle-avatar[value="1"] + .image-avatar img[src]) .logo-box .ac-columns label {
+    margin: auto;
+    min-width: stretch;
   }
 }
 
@@ -1877,6 +1901,11 @@ section.npc-box.statblock3 .image-avatar {
   display: grid;
   grid-template-columns: minmax(7em, 1.5fr) 3em minmax(11em, 2fr) repeat(4, minmax(3em, 1fr)) 3.5em 7em;
   justify-items: center;
+}
+
+/* toggle AR */
+.charsheet input[type='checkbox'].toggle-ar:checked ~ .background .armor-columns {
+  grid-template-columns: minmax(7em, 1.5fr) 3em minmax(11em, 2fr) repeat(3, minmax(3em, 1fr)) 3.5em 9em;
 }
 
 .charsheet .armor-box .armor-columns.sect {
@@ -3022,6 +3051,16 @@ section.npc-box.statblock3 .image-avatar {
   color: initial;
 }
 
+.charsheet .options-box .hide-areas-image {
+  aspect-ratio: 1;
+  background-image: url('https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/ADnD_1E/images/hidden_image.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 4em;
+  margin: -2em 0 0 3em;
+  position: relative;
+}
+
 .charsheet .options-box .settings label,
 .charsheet .wrapper .options-box .settings span h4 {
   background-color: revert;
@@ -4104,7 +4143,7 @@ section.npc-box.statblock3 .image-avatar {
 .charsheet .wrapper .text-notes {
   font-family: system-ui;
   font-size: var(--text-med);
-  padding: inherit;
+  padding-inline: 1em;
 }
 
 .charsheet .wrapper textarea,
@@ -5265,13 +5304,31 @@ section.npc-box.statblock3 .image-avatar {
   box-shadow: none;
   font-size: 0;
   padding: 2px 2px 0 2px;
+  transition: all .3s ease-in-out;
+}
+
+.ui-dialog .charsheet .repcontrol_add:hover {
+  padding: 0 2px 0 0;
+}
+
+.ui-dialog .charsheet .repcontrol_edit:hover,
+.ui-dialog .charsheet .repcontrol_add:hover {
+  color: var(--color-darkgrey1);
+  font-size: var(--text-sm);
+  margin-inline: 4px;
+  position: relative;
+}
+
+.ui-dialog .charsheet .repcontrol_edit:hover::after,
+.ui-dialog .charsheet .repcontrol_add:hover::before {
+  margin-inline: 2px;
 }
 
 .charsheet .repcontrol .btn:focus {
   outline: 0;
 }
 
-.charsheet .repcontrol .repcontrol_edit:after,
+.charsheet .repcontrol .repcontrol_edit::after,
 .charsheet .repcontrol .repcontrol_add::before {
   background-color: var(--color-white1);
   border: 1px solid var(--color-lightgrey2);
@@ -5284,21 +5341,21 @@ section.npc-box.statblock3 .image-avatar {
   visibility: visible;
 }
 
-.charsheet .repcontrol .repcontrol_edit:after {
+.charsheet .repcontrol .repcontrol_edit::after {
   content: '(';
 }
 
-.charsheet .editmode ~ .repcontrol .repcontrol_edit:after {
+.charsheet .editmode ~ .repcontrol .repcontrol_edit::after {
   content: ')';
 }
 
-.charsheet .repcontrol .repcontrol_add:before {
+.charsheet .repcontrol .repcontrol_add::before {
   content: '&';
 }
 
-.charsheet .editmode ~ .repcontrol .repcontrol_edit:hover:after,
-.charsheet .repcontrol .repcontrol_edit:hover:after,
-.charsheet .repcontrol .repcontrol_add:hover:before {
+.charsheet .editmode ~ .repcontrol .repcontrol_edit:hover::after,
+.charsheet .repcontrol .repcontrol_edit:hover::after,
+.charsheet .repcontrol .repcontrol_add:hover::before {
   color: var(--black);
 }
 
@@ -5407,7 +5464,7 @@ section.npc-box.statblock3 .image-avatar {
   }
 
   .charsheet .logo-box .normalmode {
-    background-image: url(https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/ADnD_1E/images/logo.png) !important;
+    background-image: url('https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/ADnD_1E/images/logo.png') !important;
     background-position: 50% 0 !important;
     background-repeat: no-repeat !important;
     background-size: contain !important;

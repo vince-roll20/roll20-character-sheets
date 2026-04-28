@@ -223,6 +223,13 @@
       "description": "Hide Macro-text fields by default. This can still be enabled/edited per sheet."
     },
     {
+      "attribute": "toggle_ar",
+      "displayname": "Armor Class Rating (AR):",
+      "type": "checkbox",
+      "value": "1",
+      "description": "Hides Armor Class Rating fields and totals."
+    },
+    {
       "attribute": "whisper_pc",
       "displayname": "Whisper PC Rolls?:",
       "type": "select",

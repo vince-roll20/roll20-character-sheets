@@ -30,6 +30,7 @@
 <input type="checkbox" name="attr_toggle_lbs" class="toggle-lbs hidden" value="1" />
 <input type="checkbox" name="attr_toggle_row_shading" class="toggle-row-shading hidden" value="1" />
 <input type="checkbox" name="attr_toggle_linear_background" class="toggle-linear-background hidden" value="1" />
+<input type="checkbox" name="attr_toggle_ar" value="1" class="toggle-ar hidden" />
 <div class="background">
   <div class="wrapper">
     <!-- Sheet Header-->
@@ -65,14 +66,17 @@
             <span class="left">
               <span>v<span name="attr_sheet_version">
             </span>
-            <span class="right"> • 4/21/26'</span>
+            <span class="right"> • 4/25/26'</span>
           </h5>
           <ul>
             <h5>Latest</h5>
-            <li>Fixed a small overflow issue in the sheet's header.</li>
-            <li>Added borders around the hit/damage and dual-wield fields at the top of the attacks section.</li>
+            <li>Fixed a small overflow issue in the sheet's header when no sheet portrait has been provided.</li>
+            <li>Added an option to the sheet settings to hide Armor Class Rating (AR) fields and totals. Not everyone plays 1e using weapon vs armor class rating, so now you can hide those areas if you so desire.</li>
+            <li>Hovering over the repeating section control icons at the bottom of a repeating section now displays roll20's default text to help identify their purpose. ie "Modify", "+Add", and "Done".</li>
 
             <h5>Recent/Previous</h5>
+            <li>Fixed a small overflow issue in the sheet's header.</li>
+            <li>Added borders around the hit/damage and dual-wield fields at the top of the attacks section.</li>
             <li>Updated the sheet's version/update function.</li>
             <li>Fixed a bug the was introduced with the last update that prevented the sheet's version check from setting the sheet_version to the latest final_version.</li>
             <li>Added the sheet's default attack macro to the sheet settings page. This will allow you to edit the default attack macro if desired. Editing the macro will automatically be applied to any new attacks. I've also included an "Update Attacks" button that will update all existing attacks on the sheet. The default attack macro can also be edited outside the game from the game settings page. By doing so, all new PC's/NPC's will use the customized attack macro by default. In order to update existing attacks on existing PC/NPC's, you would need to use the "Update Attacks" button from the sheet settings on each PC/NPC. This is an advanced optional feature.</li>
@@ -200,7 +204,7 @@
             <input type="text" class="readonly-span width-smaller" name="attr_armorclass_rear" title="@{armorclass_rear} | Best AC without a Dex bonus." value="0" />
             <span class="text-medium">Rear</span>
           </label>
-          <label class="label-under" title="@{armorclass_rating} | Best Armor Rating">
+          <label class="label-under toggle-ar" title="@{armorclass_rating} | Best Armor Rating">
             <input type="text" class="readonly-span width-smaller" name="attr_armorclass_rating" value="-" />
             <span class="text-medium">AR</span>
           </label>
@@ -353,7 +357,7 @@
           <span title="Only worn items are included in the AC calculations below.">In Use</span>
           <span>Name</span>
           <span title="Armor Class">AC</span>
-          <span title="Armor Rating for weapon vs armor adjustments.">AR</span>
+          <span class="toggle-ar" title="Armor Rating for weapon vs armor adjustments.">AR</span>
           <span title="Magical Bonuses to AC.">Magic</span>
           <span title="Misc adjustments to AC.">Misc</span>
           <span title="Items in use are carried, but items not in use can still be carried.">Carried</span>
@@ -376,7 +380,7 @@
             <option value="1">1</option>
             <option value="0">0</option>
           </select>
-          <select name="attr_unarmored_base" title="@{unarmored_base} | Enter the actual AR value for this item.">
+          <select name="attr_unarmored_base" class="toggle-ar" title="@{unarmored_base} | Enter the actual AR value for this item.">
             <option value="10" selected>10</option>
             <option value="9">9</option>
             <option value="8">8</option>
@@ -428,7 +432,7 @@
             <option class="hidden" value="-9">-9</option>
             <option class="hidden" value="-10">-10</option>
           </select>
-          <select name="attr_armortype_base" title="@{armortype_base} | Enter the actual AR value for this item.">
+          <select name="attr_armortype_base" class="toggle-ar" title="@{armortype_base} | Enter the actual AR value for this item.">
             <option value="10" selected>10</option>
             <option value="9">9</option>
             <option value="8">8</option>
@@ -469,7 +473,7 @@
             <option value="1">1</option>
             <option value="0">0</option>
           </select>
-          <select name="attr_armortype2_base" title="@{armortype2_base} | Enter the actual AR value for this item.">
+          <select name="attr_armortype2_base" class="toggle-ar" title="@{armortype2_base} | Enter the actual AR value for this item.">
             <option value="10" selected>10</option>
             <option value="9">9</option>
             <option value="8">8</option>
@@ -510,7 +514,7 @@
             <option value="-9">+9</option>
             <option value="-10">+10</option>
           </select>
-          <select name="attr_armorshield_base" title="@{armorshield_base} | ie +2 lowers AR by -2.">
+          <select name="attr_armorshield_base" class="toggle-ar" title="@{armorshield_base} | ie +2 lowers AR by -2.">
             <option value="0" selected>+0</option>
             <option value="-1">+1</option>
             <option value="-2">+2</option>
@@ -576,7 +580,7 @@
             <option value="1">1</option>
             <option value="0">0</option>
           </select>
-          <select name="attr_armorother_base" title="@{armorother_base} | Enter the actual AR value for this item.">
+          <select name="attr_armorother_base" class="toggle-ar" title="@{armorother_base} | Enter the actual AR value for this item.">
             <option value="10" selected>10</option>
             <option value="9">9</option>
             <option value="8">8</option>
@@ -617,7 +621,7 @@
             <option value="-9">+9</option>
             <option value="-10">+10</option>
           </select>
-          <select name="attr_armorother2_base" title="@{armorother2_base} | ie +2 lowers AR by -2.">
+          <select name="attr_armorother2_base" class="toggle-ar" title="@{armorother2_base} | ie +2 lowers AR by -2.">
             <option value="0" selected>+0</option>
             <option value="-1">+1</option>
             <option value="-2">+2</option>
@@ -654,7 +658,7 @@
             <option value="-9">+9</option>
             <option value="-10">+10</option>
           </select>
-          <select name="attr_armorother3_base" title="@{armorother3_base} | ie +2 lowers AR by -2.">
+          <select name="attr_armorother3_base" class="toggle-ar" title="@{armorother3_base} | ie +2 lowers AR by -2.">
             <option value="0" selected>+0</option>
             <option value="-1">+1</option>
             <option value="-2">+2</option>
@@ -690,7 +694,7 @@
             <option value="-9">+9</option>
             <option value="-10">+10</option>
           </select>
-          <select name="attr_armorother4_base" title="@{armorother4_base} | ie +2 lowers AR by -2.">
+          <select name="attr_armorother4_base" class="toggle-ar" title="@{armorother4_base} | ie +2 lowers AR by -2.">
             <option value="0" selected>+0</option>
             <option value="-1">+1</option>
             <option value="-2">+2</option>
@@ -726,7 +730,7 @@
             <option value="-9">+9</option>
             <option value="-10">+10</option>
           </select>
-          <select name="attr_armorother5_base" title="@{armorother5_base} | ie +2 lowers AR by -2.">
+          <select name="attr_armorother5_base" class="toggle-ar" title="@{armorother5_base} | ie +2 lowers AR by -2.">
             <option value="0" selected>+0</option>
             <option value="-1">+1</option>
             <option value="-2">+2</option>
@@ -763,7 +767,7 @@
             <option value="-9">+9</option>
             <option value="-10">+10</option>
           </select>
-          <select name="attr_armorother6_base" title="@{armorother6_base} | ie +2 lowers AR by -2.">
+          <select name="attr_armorother6_base" class="toggle-ar" title="@{armorother6_base} | ie +2 lowers AR by -2.">
             <option value="0" selected>+0</option>
             <option value="-1">+1</option>
             <option value="-2">+2</option>
@@ -797,7 +801,7 @@
               <input type="text" class="hidden" name="attr_armorclass_base_best" value="0" readonly />
             </span>
           </label>
-          <label class="readonly-span-textonly" title="In Use/Best AR">
+          <label class="readonly-span-textonly toggle-ar" title="In Use/Best AR">
             <span>
               <span name="attr_armorclass_rating_used"></span>
               <input type="text" class="hidden" name="attr_armorclass_rating_used" value="0" readonly />
@@ -907,13 +911,13 @@
               </label>
             </span>
             <span></span>
-            <span class="inline-label" title="@{armor_rating_flag} | AC is not from armor. Weapons vs Armor Type does not apply.">
+            <span class="inline-label toggle-ar" title="@{armor_rating_flag} | AC is not from armor. Weapons vs Armor Type does not apply.">
               <label>
                 <span>Ignore AR:</span>
                 <input type="checkbox" name="attr_armor_rating_flag" value="1" />
               </label>
             </span>
-            <span class="inline-label" title="@{armorclass_rating} | Best AR">
+            <span class="inline-label toggle-ar" title="@{armorclass_rating} | Best AR">
               <label><span>Armor Rating</span></label>
               <input type="text" class="readonly-span width-small" name="attr_armorclass_rating" value="-" />
             </span>
@@ -2830,39 +2834,39 @@
                 <input type="text" class="width-small" name="attr_weapon_length" title="@{repeating_weapon_$X_weapon_length}" value="" placeholder="-" />
                 <input type="text" class="width-small" name="attr_weapon_space" title="@{repeating_weapon_$X_weapon_space}" value="" placeholder="-" />
                 <input type="text" class="width-small" name="attr_weapon_misc" title="@{repeating_weapon_$X_weapon_misc}" value="" placeholder="-" />
-                <h5>Armor Type:</h5>
-                <span>0</span>
-                <span>1</span>
-                <span>2</span>
-                <span>3</span>
-                <span>4</span>
-                <span>5</span>
-                <span>6</span>
-                <span>7</span>
-                <span>8</span>
-                <span>9</span>
-                <span>10</span>
-                <input type="checkbox" name="attr_weapon_tohitacadj_flag" title="@{repeating_weapon_$x_weapon_tohitacadj_flag}" value="1" />
-                <input type="text" class="hidden" name="attr_weapon_tohitacadj" value="{{ToHitArmorType0}} {{ToHitArmorType1}} {{ToHitArmorType2}} {{ToHitArmorType3}} {{ToHitArmorType4}} {{ToHitArmorType5}} {{ToHitArmorType6}} {{ToHitArmorType7}} {{ToHitArmorType8}} {{ToHitArmorType9}} {{ToHitArmorType10}}" />
+                <h5 class="toggle-ar" >Armor Type:</h5>
+                <span class="toggle-ar" >0</span>
+                <span class="toggle-ar" >1</span>
+                <span class="toggle-ar" >2</span>
+                <span class="toggle-ar" >3</span>
+                <span class="toggle-ar" >4</span>
+                <span class="toggle-ar" >5</span>
+                <span class="toggle-ar" >6</span>
+                <span class="toggle-ar" >7</span>
+                <span class="toggle-ar" >8</span>
+                <span class="toggle-ar" >9</span>
+                <span class="toggle-ar" >10</span>
+                <input class="toggle-ar" type="checkbox" name="attr_weapon_tohitacadj_flag" title="@{repeating_weapon_$x_weapon_tohitacadj_flag}" value="1" />
+                <input type="text" class="hidden toggle-ar" name="attr_weapon_tohitacadj" value="{{ToHitArmorType0}} {{ToHitArmorType1}} {{ToHitArmorType2}} {{ToHitArmorType3}} {{ToHitArmorType4}} {{ToHitArmorType5}} {{ToHitArmorType6}} {{ToHitArmorType7}} {{ToHitArmorType8}} {{ToHitArmorType9}} {{ToHitArmorType10}}" />
               </span>
               <span class="to-hit-input center">
                 <label class="label-under-small">SPD</label>
                 <label class="label-under-small">LEN</label>
                 <label class="label-under-small">SPC</label>
                 <label class="label-under-small">MISC</label>
-                <h5>Adjustment:</h5>
-                <span><input type="text" name="attr_weapon_thac_adj0" title="@{repeating_weapon_$x_weapon_thac_adj0}" value="0" /></span>
-                <span><input type="text" name="attr_weapon_thac_adj1" title="@{repeating_weapon_$x_weapon_thac_adj1}" value="0" /></span>
-                <span><input type="text" name="attr_weapon_thac_adj2" title="@{repeating_weapon_$x_weapon_thac_adj2}" value="0" /></span>
-                <span><input type="text" name="attr_weapon_thac_adj3" title="@{repeating_weapon_$x_weapon_thac_adj3}" value="0" /></span>
-                <span><input type="text" name="attr_weapon_thac_adj4" title="@{repeating_weapon_$x_weapon_thac_adj4}" value="0" /></span>
-                <span><input type="text" name="attr_weapon_thac_adj5" title="@{repeating_weapon_$x_weapon_thac_adj5}" value="0" /></span>
-                <span><input type="text" name="attr_weapon_thac_adj6" title="@{repeating_weapon_$x_weapon_thac_adj6}" value="0" /></span>
-                <span><input type="text" name="attr_weapon_thac_adj7" title="@{repeating_weapon_$x_weapon_thac_adj7}" value="0" /></span>
-                <span><input type="text" name="attr_weapon_thac_adj8" title="@{repeating_weapon_$x_weapon_thac_adj8}" value="0" /></span>
-                <span><input type="text" name="attr_weapon_thac_adj9" title="@{repeating_weapon_$x_weapon_thac_adj9}" value="0" /></span>
-                <span><input type="text" name="attr_weapon_thac_adj10" title="@{repeating_weapon_$x_weapon_thac_adj10}" value="0" /></span>
-                <label class="label-under-small stack-text">show w/roll</label>
+                <h5 class="toggle-ar" >Adjustment:</h5>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj0" title="@{repeating_weapon_$x_weapon_thac_adj0}" value="0" /></span>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj1" title="@{repeating_weapon_$x_weapon_thac_adj1}" value="0" /></span>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj2" title="@{repeating_weapon_$x_weapon_thac_adj2}" value="0" /></span>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj3" title="@{repeating_weapon_$x_weapon_thac_adj3}" value="0" /></span>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj4" title="@{repeating_weapon_$x_weapon_thac_adj4}" value="0" /></span>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj5" title="@{repeating_weapon_$x_weapon_thac_adj5}" value="0" /></span>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj6" title="@{repeating_weapon_$x_weapon_thac_adj6}" value="0" /></span>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj7" title="@{repeating_weapon_$x_weapon_thac_adj7}" value="0" /></span>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj8" title="@{repeating_weapon_$x_weapon_thac_adj8}" value="0" /></span>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj9" title="@{repeating_weapon_$x_weapon_thac_adj9}" value="0" /></span>
+                <span class="toggle-ar" ><input type="text" name="attr_weapon_thac_adj10" title="@{repeating_weapon_$x_weapon_thac_adj10}" value="0" /></span>
+                <label class="label-under-small stack-text toggle-ar">show w/roll</label>
               </span>
             </span>
             <textarea class="height-short" name="attr_weapon_notes" title="@{repeating_weapon_$X_weapon_notes}" placeholder="Description"></textarea>
@@ -3028,7 +3032,7 @@
                     </select>
                     <span>AC</span>
                   </label>
-                  <label class="label-under-small hide-ar">
+                  <label class="label-under-small hide-ar toggle-ar">
                     <select class="show-shield-only" name="attr_equipment_armor_base" title="@{repeating_equipment_$X_equipment_armor_base} | ie +2 lowers AR by -2.">
                       <option value="0" selected>+0</option>
                       <option value="-1">+1</option>
@@ -4478,8 +4482,13 @@
             <span>Sheet Macros:</span>
             <input type="checkbox" name="attr_toggle_macros" value="1" checked />
           </label>
-          <label></label>
-          <span class="span-five text-notes">These options will show/hide sections of the sheet. Some options may hide related fields as well. ie hiding "Thief Skills" will also hide "Backstab" in attacks.</span>
+          <label class="hide-areas-image"></label>
+          <label class="inline-label span-two" title="@{toggle_ar} | Hides Armor Class Rating fields and totals.">
+            <span>Armor Class Rating (AR):</span>
+            <input type="checkbox" name="attr_toggle_ar" value="1" />
+          </label>
+          <label class="span-three"></label>
+          <span class="span-all text-notes">These options will show/hide sections of the sheet. Some options may hide related fields as well. ie hiding "Thief Skills" will also hide "Backstab" in attacks.</span>
         </span>
         <span class="five-columns">
           <h4>Whisper Options:</h4>
@@ -4697,7 +4706,7 @@
           <span>ARMOR CLASS:</span>
           <input type="text" class="width-smallest field-border" name="attr_armorclass" title="@{armorclass} | Best AC. See Armor Details to adjust." value="10" style="text-align:center; padding:0;">
         </label>
-        <label class="label-under-small width-auto">
+        <label class="label-under-small width-auto toggle-ar">
           <span>
             <span>AR:</span>
             <select name="attr_unarmored_base" title="@{unarmored_base}" class="width-small">
@@ -4992,7 +5001,7 @@
     <section class="footer-box">
       <span class="inline-label text-small">
         <span>Questions/feedback?</span>
-        <button type="roll" class="url-roll" title="Post this link to chat." value="[AD&D1e Development Game](https://app.roll20.net/campaigns/details/731454/)">AD&D1e Development Game</button>
+        <button type="roll" class="url-roll" title="Post this link to chat." value="[AD&D1e Development Game & Forum](https://app.roll20.net/campaigns/details/731454/)">AD&D1e Development Game & Forum</button>
       </span>
       <span class="inline-label text-small">
         <span>Author: Vince &amp; the Roll20 Community</span>

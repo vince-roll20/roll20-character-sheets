@@ -427,7 +427,7 @@
 	"startcombat": "&#9876;Draw Steel&#9876;",
 	"respite": "Respite",
 	"initiative-title": "Roll 1d10",
-	"initiative": "Initiative:",
+	"initiative": "Initiative",
 	"import-warning1": "Paste the contents of the Forge Steel data export (*.ds-hero, *.ds-monster, or *.ds-monster-group file) into the text box below, then click 'Import'.",
 	"import-warning2": "This will overwrite attributes on this sheet. This cannot be undone.",
 	"import-warning3": "The import feature is a work in progress. Check for mistakes.",
@@ -586,5 +586,6 @@
 	"beastheart-rampage-table-20-text": "As a free maneuver, your companion can increase their size up to size 2, or increase their size by 1 if their original size is already 2 or larger. This size increase lasts until your companion’s rampage ends or they use a free maneuver to end it. While your companion’s size is increased, they gain a +2 bonus to speed and stability, the potencies of their abilities increase by 1, and the size of their Feral Strike ability’s burst increases by 1.",
 	"beastheart-rampage-table-24": "24 (10th level)",
 	"beastheart-rampage-table-24-text": "When your companion increases their size, they can increase it up to size 3, or increase their size by 1 if their original size is already 3 or larger. Whenever they make a power roll while their size is increased this way, they can roll 3d10 and discard the lowest roll.",
-	"import-companion": "Import Companion (Beastheart)"
+	"import-companion": "Import Companion (Beastheart)",
+	"fire-keyword": "Fire"
 }

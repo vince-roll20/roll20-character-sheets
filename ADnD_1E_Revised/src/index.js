@@ -2562,7 +2562,7 @@ versionator = async (current_version, final_version) => {
     return await recalcToHitACadj(1.692, final_version);
   }
   if (current_version < 1.693) {
-    return await checkOpenDoors(1.693, final_version);
+    return await checkOpenDoors(1.694, final_version);
   }
   // All updates completed
   const finalCheck = await getAttrsAsync(['sheet_version', 'old_character']);
@@ -2581,7 +2581,7 @@ versionator = async (current_version, final_version) => {
 };
 
 on('sheet:opened', async () => {
-  const final_version = 1.693;
+  const final_version = 1.694;
   const v = await getAttrsAsync(['sheet_version', 'old_character']);
   let current_version = parseFloat(v.sheet_version) || 0;
   // New Sheet?
@@ -3871,9 +3871,11 @@ on('change:repeating_spells:spell_name', async (eventInfo) => {
 const getToHitACadjUpdate = (v, id) => {
   // clog(`Δ detected: getToHitACadjUpdate for id:${id}`);
   const output = {};
-  const flag = +v[`repeating_weapon_${id}_weapon_tohitacadj_flag`] || 0;
+  const hideAR = +v.toggle_ar || 0;
+  const includeToHitACadj = +v[`repeating_weapon_${id}_weapon_tohitacadj_flag`] || 0;
+  // clog(`includeToHitACadj:${includeToHitACadj} hideAR:${hideAR}`);
   output[`repeating_weapon_${id}_weapon_tohitacadj`] =
-    flag === 1
+    includeToHitACadj === 1 && hideAR === 0
       ? '{{ToHitArmorType0=@{weapon_thac_adj0}}} {{ToHitArmorType1=@{weapon_thac_adj1}}} {{ToHitArmorType2=@{weapon_thac_adj2}}} {{ToHitArmorType3=@{weapon_thac_adj3}}} {{ToHitArmorType4=@{weapon_thac_adj4}}} {{ToHitArmorType5=@{weapon_thac_adj5}}} {{ToHitArmorType6=@{weapon_thac_adj6}}} {{ToHitArmorType7=@{weapon_thac_adj7}}} {{ToHitArmorType8=@{weapon_thac_adj8}}} {{ToHitArmorType9=@{weapon_thac_adj9}}} {{ToHitArmorType10=@{weapon_thac_adj10}}}'
       : '{{ToHitArmorType0}} {{ToHitArmorType1}} {{ToHitArmorType2}} {{ToHitArmorType3}} {{ToHitArmorType4}} {{ToHitArmorType5}} {{ToHitArmorType6}} {{ToHitArmorType7}} {{ToHitArmorType8}} {{ToHitArmorType9}} {{ToHitArmorType10}}';
   return output;
@@ -3884,11 +3886,25 @@ on(
   async (eventInfo) => {
     // clog(`Δ detected: ${eventInfo.sourceAttribute}`);
     const id = eventInfo.sourceAttribute.split('_')[2];
-    const v = await getAttrsAsync([`repeating_weapon_${id}_weapon_tohitacadj_flag`, `repeating_weapon_${id}_weapon_tohitacadj`]);
+    const v = await getAttrsAsync([`repeating_weapon_${id}_weapon_tohitacadj_flag`, 'toggle_ar']);
     const output = getToHitACadjUpdate(v, id);
     await setAttrsAsync(output, {silent: true});
   },
 );
+
+on('change:toggle_ar', async (eventInfo) => {
+  // clog(`Δ detected: ${eventInfo.sourceAttribute}`);
+  const output = {};
+  const idArray = await getSectionIDsAsync('repeating_weapon');
+  const fields = idArray.flatMap((id) => [`repeating_weapon_${id}_weapon_tohitacadj_flag`]);
+  fields.push('toggle_ar');
+  const v = await getAttrsAsync(fields);
+  idArray.forEach((id) => {
+    const rowUpdate = getToHitACadjUpdate(v, id);
+    Object.assign(output, rowUpdate);
+  });
+  await setAttrsAsync(output, {silent: true});
+});
 
 // Matrix or THAC0 Toggle for repeating_weapon
 const getToHitRowUpdate = (v, id) => {
