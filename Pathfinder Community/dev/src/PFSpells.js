@@ -181,6 +181,8 @@ export function resetCommandMacro(dummy, eventInfo, callback) {
                     classStr = '',
                     isDomain = 0,
                     isMythic = 0,
+                    used = 0,
+                    cast = 0,
                     uses = 0,
                     name = '';
                   try {
@@ -199,7 +201,9 @@ export function resetCommandMacro(dummy, eventInfo, callback) {
                     classStr = 'class' + (values[prefix + 'spellclass_number'] || '0');
                     isDomain = parseInt(values[prefix + 'isDomain'], 10) || 0;
                     isMythic = usesMythic * parseInt(values[prefix + 'isMythic'], 10) || 0;
-                    uses = parseInt(values[prefix + 'used'], 10) || 0;
+                    cast = Math.abs(parseInt(values[prefix + 'cast'], 10)) || 0;
+                    used = parseInt(values[prefix + 'used'], 10) || 0;
+                    uses = Math.max(0, used - cast);
                     name = values[prefix + 'name'] || '';
                   } catch (errmap) {
                     TAS.error('PFSpells.resetCommandMacro errmap on id ' + id, errmap);
@@ -357,7 +361,7 @@ function updateSpellsPerDay(dummy, eventInfo, callback, silently) {
       fieldname2 = '',
       initialtot = {};
     try {
-      //TAS.debug("PFSpells.updateSpellsPerDay: ",v);
+      TAS.debug('PFSpells.updateSpellsPerDay: ', v);
       if (!parseInt(v.total_spells_manually, 10)) {
         spellLevel = parseInt(v.repeating_spells_spell_level, 10) || 0;
         //TAS.debug("total spells manually is off spellLEvel is "+spellLevel);
@@ -377,7 +381,7 @@ function updateSpellsPerDay(dummy, eventInfo, callback, silently) {
         fieldname2 = 'spellclass-' + classNum + '-level-' + spellLevel + '-spells-prepared';
         initialtot[fieldname] = 0;
         initialtot[fieldname2] = 0;
-        //TAS.debug("about to set "+fieldname+", and "+ fieldname2);
+        TAS.debug('about to set ' + fieldname + ', and ' + fieldname2);
         TAS.repeating('spells')
           .attrs(fieldname, fieldname2)
           .fields('row_id', 'used', 'cast', 'spell_level', 'metamagic', 'slot')
@@ -1423,6 +1427,7 @@ function updateSpell(id, eventInfo, callback, doNotUpdateTotals) {
     prefix + 'Concentration-mod',
     prefix + 'spell_options',
     prefix + 'used',
+    prefix + 'cast',
     prefix + 'slot',
     prefix + 'metamagic',
     spellLevelField,
@@ -1988,7 +1993,7 @@ export let recalculate = TAS.callback(function callPFSpellsRecalculate(callback,
     }),
     recalcTotals = _.once(function () {
       resetSpellsPrepared();
-      resetSpellsTotals(null, null, null, silently);
+      resetSpellsTotals();
       resetCommandMacro();
       PFSpellOptions.resetOptions();
       done();
@@ -2156,6 +2161,23 @@ function registerEventHandlers() {
       }
     }),
   );
+
+  on(
+    'change:total_spells_manually',
+    TAS.callback(function playerUpdateSpell(eventInfo) {
+      TAS.debug('caught ' + eventInfo.sourceAttribute + ' event' + eventInfo.sourceType);
+      if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api') {
+        getAttrs(['total_spells_manually'], (v) => {
+          const doNotProcess = parseInt(v.total_spells_manually, 10) || 0;
+          if (!doNotProcess) {
+            resetSpellsTotals();
+            resetCommandMacro();
+          }
+        });
+      }
+    }),
+  );
+
   _.each(events.repeatingSpellEventsPlayer, function (functions, eventToWatch) {
     _.each(functions, function (methodToCall) {
       on(
