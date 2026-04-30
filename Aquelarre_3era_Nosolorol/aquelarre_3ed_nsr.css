@@ -587,10 +587,24 @@ textarea:focus {
     font-size: 24px;
     color: #761d2c;
     text-align: center;    
-    background-image: url("https://rolmasters.com/ROLL20/AQUELARRE3/AQUELARRE_4_CENEFA_TITULOS_3.png");
-    background-repeat:repeat-x;
-	background-size:auto;
-	background-position: left bottom;
+	}
+.sheet-tituloatributoseditables{
+	float:left;
+	position:relative; 
+	width:100%;	
+	height:auto;
+    min-height: 30px;
+    margin: 0px 0px 0px;
+	padding: 0px;
+  font-family: "IM Fell Great Primer", serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 24px;
+    color: #761d2c;
+    text-align: center;
+       background-color: transparent;
+    outline: 0px;
+    border:none;
 	}
 .sheet-selectdifcar{
     width: 90%; 
@@ -1518,10 +1532,6 @@ border-color: black;
     overflow-y: auto;
     scrollbar-color: darkred transparent;
     scrollbar-width: thin;
-    background-image: url("https://rolmasters.com/ROLL20/AQUELARRE3/VYC_ESGRIMA_FONDO_V2.png");
-    background-repeat: no-repeat;
-	background-size:contain;
-	background-position: center bottom;
 	}
 .sheet-cajaarmas{
 	float:none;
@@ -1869,10 +1879,6 @@ textarea:focus {
     overflow-y: auto;
     scrollbar-color: darkred transparent;
     scrollbar-width: thin;
-    background-image: url("https://rolmasters.com/ROLL20/AQUELARRE3/VYC_ALQUIMIA_FONDO_V3.png");
-    background-repeat: no-repeat;
-	background-size:contain;
-	background-position: center bottom;
     border-bottom: 1px solid darkred;
 	}
 .sheet-cajaalquimia{

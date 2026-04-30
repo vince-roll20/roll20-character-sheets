@@ -28,7 +28,7 @@
                                 <option value="1d20">d20</option> 
                              </select>
                             
-                             <button type="roll" class="sheet-VJnsbu" name="roll_weapons" value="@{tirada_secreta} &{template:nsbu} {{title=WEAPONS ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorweapons} + modifier: [[@{selectorweapons}+?{Modifier|0}]]}}">ROLL</button>
+                             <button type="roll" class="sheet-VJnsbu" name="roll_weapons" value="@{tirada_secreta} &{template:nsbu} {{title=WEAPONS ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorweapons} : [[@{selectorweapons}]]}}">ROLL</button>
                         </div><!-- end .sheet-statsbox -->
                     
                     
@@ -42,7 +42,7 @@
                                 <option value="1d20">d20</option> 
                              </select>
                             
-                            <button type="roll" class="sheet-VJnsbu" name="roll_brawl" value="@{tirada_secreta} &{template:nsbu} {{title=BRAWL ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorbrawl} + modifier: [[@{selectorbrawl}+?{Modifier|0}]]}}">ROLL</button>
+                            <button type="roll" class="sheet-VJnsbu" name="roll_brawl" value="@{tirada_secreta} &{template:nsbu} {{title=BRAWL ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorbrawl} : [[@{selectorbrawl}]]}}">ROLL</button>
                         </div><!-- end .sheet-statsbox -->
                     
                     
@@ -56,7 +56,7 @@
                                 <option value="1d20">d20</option> 
                              </select>
                             
-                            <button type="roll" class="sheet-VJnsbu" name="roll_hot" value="@{tirada_secreta} &{template:nsbu} {{title=HOT ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorhot} + modifier: [[@{selectorhot}+?{Modifier|0}]]}}">ROLL</button>
+                            <button type="roll" class="sheet-VJnsbu" name="roll_hot" value="@{tirada_secreta} &{template:nsbu} {{title=HOT ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorhot} : [[@{selectorhot}]]}}">ROLL</button>
                         </div><!-- end .sheet-statsbox -->
        
                     </div><!-- end .sheet-width100 -->
@@ -75,7 +75,7 @@
                                 <option value="1d20">d20</option> 
                              </select>
                             
-                             <button type="roll" class="sheet-VJnsbu" name="roll_drive" value="@{tirada_secreta} &{template:nsbu} {{title=DRIVE ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectordrive} + modifier: [[@{selectordrive}+?{Modifier|0}]]}}">ROLL</button>
+                             <button type="roll" class="sheet-VJnsbu" name="roll_drive" value="@{tirada_secreta} &{template:nsbu} {{title=DRIVE ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectordrive} : [[@{selectordrive}]]}}">ROLL</button>
                         </div><!-- end .sheet-statsbox -->
                     
                     
@@ -89,7 +89,7 @@
                                 <option value="1d20">d20</option> 
                              </select>
                             
-                            <button type="roll" class="sheet-VJnsbu" name="roll_stunts" value="@{tirada_secreta} &{template:nsbu} {{title=STUNTS ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorstunts} + modifier: [[@{selectorstunts}+?{Modifier|0}]]}}">ROLL</button>
+                            <button type="roll" class="sheet-VJnsbu" name="roll_stunts" value="@{tirada_secreta} &{template:nsbu} {{title=STUNTS ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorstunts} : [[@{selectorstunts}]]}}">ROLL</button>
                         </div><!-- end .sheet-statsbox -->
                     
                     
@@ -103,7 +103,7 @@
                                 <option value="1d20">d20</option> 
                              </select>
                             
-                            <button type="roll" class="sheet-VJnsbu" name="roll_wits" value="@{tirada_secreta} &{template:nsbu} {{title=WITS ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorwits} + modifier: [[@{selectorwits}+?{Modifier|0}]]}}">ROLL</button>
+                            <button type="roll" class="sheet-VJnsbu" name="roll_wits" value="@{tirada_secreta} &{template:nsbu} {{title=WITS ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorwits} : [[@{selectorwits}]]}}">ROLL</button>
                         </div><!-- end .sheet-statsbox -->
        
                     </div><!-- end .sheet-width100 -->
@@ -122,7 +122,7 @@
                                 <option value="1d20">d20</option> 
                              </select>
                             
-                             <button type="roll" class="sheet-VJnsbu" name="roll_tech" value="@{tirada_secreta} &{template:nsbu} {{title=TECH ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectortech} + modifier: [[@{selectortech}+?{Modifier|0}]]}}">ROLL</button>
+                             <button type="roll" class="sheet-VJnsbu" name="roll_tech" value="@{tirada_secreta} &{template:nsbu} {{title=TECH ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectortech} : [[@{selectortech}]]}}">ROLL</button>
                         </div><!-- end .sheet-statsbox -->
                     
                     
@@ -136,7 +136,7 @@
                                 <option value="1d20">d20</option> 
                              </select>
                             
-                            <button type="roll" class="sheet-VJnsbu" name="roll_tough" value="@{tirada_secreta} &{template:nsbu} {{title=TOUGH ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectortough} + modifier: [[@{selectortough}+?{Modifier|0}]]}}">ROLL</button>
+                            <button type="roll" class="sheet-VJnsbu" name="roll_tough" value="@{tirada_secreta} &{template:nsbu} {{title=TOUGH ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectortough} : [[@{selectortough}]]}}">ROLL</button>
                         </div><!-- end .sheet-statsbox -->
                     
                     
@@ -150,7 +150,7 @@
                                 <option value="1d20">d20</option> 
                              </select>
                             
-                            <button type="roll" class="sheet-VJnsbu" name="roll_sneak" value="@{tirada_secreta} &{template:nsbu} {{title=SNEAK ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorsneak} + modifier: [[@{selectorsneak}+?{Modifier|0}]]}}">ROLL</button>
+                            <button type="roll" class="sheet-VJnsbu" name="roll_sneak" value="@{tirada_secreta} &{template:nsbu} {{title=SNEAK ROLL}} {{subtitle=@{character_name}}} {{rollResult=@{selectorsneak} : [[@{selectorsneak}]]}}">ROLL</button>
                         </div><!-- end .sheet-statsbox -->
        
                     </div><!-- end .sheet-width100 -->
@@ -159,21 +159,11 @@
     
                 </div><!-- end .sheet-statscolumn -->
         
-            <div class="sheet-espai-40"></div><!-- end .sheet-espai-40 --> 
+            <div class="sheet-espai-10"></div><!-- end .sheet-espai-5 --> 
             
                 <div class="sheet-width100">
                     <div class="sheet-espai-5"></div><!-- end .sheet-espai-5 --> 
-                    <input type="checkbox"  class="sheet-check-turbotoken" style="margin: 0px 0px 0px 73px;" name="attr_turbotoken1">
-                    <input type="checkbox"  class="sheet-check-turbotoken" style="margin: 0px 0px 0px 2px;" name="attr_turbotoken2">
-                    <input type="checkbox"  class="sheet-check-turbotoken" style="margin: 0px 0px 0px 2px;" name="attr_turbotoken3">
-                    <input type="checkbox"  class="sheet-check-turbotoken" style="margin: 0px 0px 0px 2px;" name="attr_turbotoken4">
-                    <input type="checkbox"  class="sheet-check-turbotoken" style="margin: 0px 0px 0px 2px;" name="attr_turbotoken5">
-                    <input type="checkbox"  class="sheet-check-turbotoken" style="margin: 0px 0px 0px 2px;" name="attr_turbotoken6">
-                    <input type="checkbox"  class="sheet-check-turbotoken" style="margin: 0px 0px 0px 2px;" name="attr_turbotoken7">
-                    <input type="checkbox"  class="sheet-check-turbotoken" style="margin: 0px 0px 0px 2px;" name="attr_turbotoken8">
-                    <input type="checkbox"  class="sheet-check-turbotoken" style="margin: 0px 0px 0px 2px;" name="attr_turbotoken9">
-                    <input type="checkbox"  class="sheet-check-turbotoken" style="margin: 0px 0px 0px 2px;" name="attr_turbotoken10">
-                    <input type="number"  class="sheet-total-turbotoken" style="margin: 0px 0px 0px 2px;" name="attr_turbotokentotal" value="0">
+                    <input type="number"  class="sheet-total-turbotoken" style="margin: 4px 0px 0px 310px;" name="attr_turbotokentotal" value="0" min="0" max="999">
                 </div><!-- end .sheet-width100 -->
     
                 <textarea class="sheet-textarea-nsbu" name="attr_abilities" style=" width: 350px !important; height: 255px !important; margin: 90px 0px 0px 64px;" title=""></textarea>

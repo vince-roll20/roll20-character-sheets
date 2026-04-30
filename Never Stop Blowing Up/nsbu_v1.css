@@ -53,7 +53,7 @@
     max-width: 860px;
     height: 1100px;
     margin: 0px 0px 0px 0px;
-    background-image: url("https://rolmasters.com/ROLL20/NSBUS/Never_Stop_Blowing_Up_Fondo_C_860px.jpg");
+    background-image: url("https://rolmasters.com/ROLL20/NSBUS/Never_Stop_Blowing_Up_Fondo_D_860px.jpg");
     background-repeat: no-repeat;
 	background-size:cover;
 	background-position: top left;
@@ -149,13 +149,13 @@ accent-color:Black;
 }
 
 .sheet-total-turbotoken{
-	width:60px;	
-	height:40px;
+	width:90px!important;	
+	height:50px!important;
     margin: 0px 0px;
     padding: 0px 0px 0px 0px ;
     border-bottom: solid 2px #000000;
     background-color: transparent;
-    font-size: 18px; 
+    font-size: 26px; 
     font-family: "Goldman", sans-serif;
     text-align: center;
     color: #000000;
@@ -235,20 +235,6 @@ accent-color:Black;
     padding: 0px 0px;
 }
 
-/*============= MAGIA TAB 4 CSS =============*/
-
-
-details{
-    color: #A45700 !important;
-    padding: 5px 0px 0px;
-    cursor: pointer;
-    }
-details:hover{
-    color: #472600 !important;
-    padding: 5px 0px 0px;
-    cursor: pointer;
-    }
-
 
 /*============= GENERAL CSS =============*/
 
@@ -306,66 +292,6 @@ details:hover{
 .sheet-espai-160 { height: 160px; }
 .sheet-espai-200 { height: 200px; }
 
-/*============= REPCONTROL BOTONS CSS =============*/
-.repcontrol {
-  display: flex;
-  width: 96%;
-  justify-content: flex-end;
-  clear: both;
-}
-.repcontrol_add,
-.repcontrol_edit,
-.repcontrol_add:hover,
-.repcontrol_edit:hover,
-.repcontrol_add:active,
-.repcontrol_edit:active
-.repcontrol_add:focus,
-.repcontrol_edit:focus{
-  width: 2em;
-  height: 1.2em;
-  margin: 1px;
-  padding: 0 1px 3px 1px;
-  box-shadow: none;
-  color: transparent !important;
-  text-shadow: none;
-  outline: transparent !important;
-}
-.repcontrol_move {
-  float: left;
-  margin-left: 5px;
-  cursor: move;
-}
-button.btn.repcontrol_del:after,
-button.btn.repcontrol_del:hover {
-  color: black;
-}
-button.btn.repcontrol_edit:after {
-  font-family: Pictos;
-  content: '(';
-  color: black;
-  margin: 0 0 0 -38px;
-}
-.repcontainer.ui-sortable.editmode ~ .repcontrol button.btn.repcontrol_edit:after {
-  margin: 0 0 0 -28px;
-  content: ')';
-}
-button.btn.repcontrol_add:after {
-  font-family: Pictos;
-  content: '&';
-  color: black;
-  margin: 0 0 0 -31px;
-}
-button.btn:hover.repcontrol_edit:after,
-button.btn:hover.repcontrol_add:after,
-button.btn:hover.repcontrol_del:after {
-  color: #73940D;
-}
-a.btn.repcontrol_move:hover {
-  color: #73940D;
-}
-button.btn.btn-danger.pictos.repcontrol_del:hover {
-  color: #fff;
-}
 
 /*=================== FIRMA CSS ===================*/
 
@@ -380,24 +306,6 @@ button.btn.btn-danger.pictos.repcontrol_del:hover {
     font-weight: 500;
     font-size: 10px;
     text-align: center;
-}
-
-.sheet-logoeditorial { 
-    position: absolute;
-    right: 10px!important;
-    bottom: 50px!important;
-    float: right;
-    width: 50px; 
-    height: 49px;
-    box-sizing:border-box; 
-    z-index:2;
-    background-image: url("https://rolmasters.com/ROLL20/ULTIMO_ADIOS/Logo-blanco-htpublishers.png");
-	background-repeat:no-repeat;
-	background-size:cover;
-	background-position: center;
-}
-.sheet-logoeditorial:hover { 
-    background-image: url("https://rolmasters.com/ROLL20/ULTIMO_ADIOS/Logo-blanco-htpublishers.png");
 }
 
 
@@ -500,7 +408,7 @@ button.btn.btn-danger.pictos.repcontrol_del:hover {
 	padding: 8px 0px;
     color: #000000;
     text-align:center;
-    font-family: "Goldman", sans-serif;
+    font-family: "Goldman", sans-serif!important;
     font-weight: 400;
     font-size: 16px;
     font-style: normal;
@@ -523,14 +431,4 @@ button.btn.btn-danger.pictos.repcontrol_del:hover {
 
 
 /*============= CHECK CSS  =============*/
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0; }
-
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield; }
 

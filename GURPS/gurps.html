@@ -4357,13 +4357,9 @@
 					<input type="text" name="attr_announcement_version" readonly="readonly" value="0" title="GURPS Character Sheet Version" />
 				</h4>
 
-				<!-- current version notes: 2.24.1 -->
+				<!-- current version notes: 2.24.2 -->
 				<ul>
-					<li><b>COPYRIGHT:</b> Added Game Aid and trademark copyright text that matches Steve Games Online Policy.</li>
-					<li><b>FIXED:</b> Vehicle Sheet, ranged table. Fixed bug where the [Enabled] malfunction status was not displaying correctly.</li>
-					<li><b>NEW:</b> Under Combat\Your Hit Locations,  added a green CLEAR button, which when clicked, will clear any values in Layer 1 through 4, uncheck the Back checkbox (if checked), the Notes text box, the Summary, Wounds, and Notes fields. These buttons only affect the currently selected Template. </li>
-					<li><b>FIXED:</b> Humanoid Low-tech location labels. <b>User Action:</b> If your character is currently using the "Template Humanoid Low-Tech", then make sure to select "Humanoid Low-tech" and press the <b>[Apply]</b> button to load these fixes, but this will clear any values you may have entered.</li>
-					<li><b>FIXED:</b> Under Combat\Ranged\Close Range Shotgun Damage Tool, updated the default damage type notes to match the new format.</li>
+					<li><b>FIXED:</b> Fix B269 dice/add conversion logic. Reported by Captain Joy.</li>
 				</ul>
 				
 				<label class="check"><input type="checkbox" name="attr_announcements_hide" value="1">&nbsp;<b><span data-i18n="hide-until-next-update">Hide until next update</span></b></label>
@@ -13738,7 +13734,7 @@ visualize what it will look like in chat.
 															<option value="2" data-i18n="option-two">+2</option>
 															<option value="3" data-i18n="option-three">+3</option>
 															<option value="4" data-i18n="option-four">+4</option>
-															<option value="5" data-i18n="option-four">+5</option>
+															<option value="5" data-i18n="option-five">+5</option>
 														</select>
 													</div>
 												</div>
@@ -28065,7 +28061,12 @@ For more information, see B409.
 
 			<p>Pull Request: <span name="attr_latest_changes"></span></p>
 
-			<!-- current version notes: 2.24.1 -->
+			<!-- current version notes: 2.24.2 -->
+			 <ul>
+				<li><b>BUGFIX:</b> Fix B269 dice/add conversion logic. Reported by Captain Joy.</li>
+			</ul>
+
+			<h4>Version: 2.24.1</h4>
 			<ul>
 				<li><b>COPYRIGHT:</b> Added Game Aid and trademark copyright text that matches Steve Games Online Policy.</li>
 				<li><b>FIXED:</b> Vehicle Sheet, ranged table. Fixed bug where the [Enabled] malfunction status was not displaying correctly.</li>
@@ -33825,9 +33826,9 @@ B378
 	
 	const noop = function () { }; // do nothing callback function.
 	
-	const version = "2.24.1";
+	const version = "2.24.2";
 	
-	const latestChangesDate = "2/24/2026";
+	const latestChangesDate = "2/28/2026";
 	
 	let modCascade = true;
 	
@@ -60990,17 +60991,19 @@ Characters with Skill: ${knowsSkill}`;
 		// now we need to get calculate the final modifier. 
 		let finalModifier = originalModifier + flatModifier + dieModifierValue;
 
-		// check for applyDiceAdds
-		if (applyDiceAdds && finalModifier >= 4) {
-
-			// if finalModifier is 4 to 6, finalModifier = finalModifier - 4 but add 1 to numberOfDice
-			// if finalModifier is 7 or higher, finalModifier = finalModifier - 7 but add 1 to numberOfDice
-			if (finalModifier >= 7) {
-				finalModifier -= 7;
-				numberOfDice += 1;
-			} else {
-				finalModifier -= 4;
-				numberOfDice += 1;
+		// B269 Optional Rule: Modifying Dice + Adds
+		if (applyDiceAdds) {
+			// Convert positive adds first.
+			// +4 to +6 -> +1d
+			// +7 or more -> +2d
+			while (finalModifier >= 4) {
+				if (finalModifier >= 7) {
+					finalModifier -= 7;
+					numberOfDice += 2;
+				} else {
+					finalModifier -= 4;
+					numberOfDice += 1;
+				}
 			}
 		}
 
