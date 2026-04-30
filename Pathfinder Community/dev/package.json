@@ -33,6 +33,6 @@
     "jshint": "^2.13.6",
     "prettier-eslint": "^16.4.2",
     "underscore": "^1.13.8",
-    "webpack-sources": "^3.4.0"
+    "webpack-sources": "^3.4.1"
   }
 }
