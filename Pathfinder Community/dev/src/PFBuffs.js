@@ -1099,7 +1099,7 @@ function updateBuffTotalAsync(col, callback, silently) {
               return updateBuffTotal(c, rows, v, m);
             }, setter);
           } else {
-            clearBuffTotals();
+            clearBuffTotals(done, silently);
           }
         } catch (errou) {
           TAS.error('PFBuffs.updateBuffTotalAsync errou on col ' + col, errou);
