@@ -216,7 +216,8 @@ var armorcols = ['armor', 'shield', 'natural'],
   //all total fields plus "_exists", INCLUDING penalty fields
   buffTotFields = _.chain(totColumns)
     .map(function (totstr) {
-      var isAbility = PFAbilityScores.abilities.indexOf(totstr) >= 0 && totstr.indexOf('skill') < 1;
+      // var isAbility = PFAbilityScores.abilities.indexOf(totstr) >= 0 && totstr.indexOf('skill') < 1;
+      var isAbility = PFAbilityScores.abilities.indexOf(totstr) >= 0 && totstr.indexOf('skill') < 0;
       if (!isAbility) {
         return ['buff_' + totstr + '-total', 'buff_' + totstr + '_exists'];
       } else {
@@ -731,6 +732,7 @@ function assembleRows(ids, v, col) {
           //TAS.debug("assembleRows looking at "+ bonusField  +" = " + v[bonusField] + " show is "+ v[innerPrefix+'-show']);
           if (v[bonusField] && parseInt(v[innerPrefix + '-show'], 10) === 1) {
             if (!col || v[bonusField] === col || relatedBuffsL.indexOf(v[bonusField]) >= 0) {
+              vals.id = id; // ATTACH ID: Allows source tracking for stacking rules
               vals.bonus = v[bonusField];
               vals.val = parseInt(v[innerPrefix + '_val'], 10) || 0;
               if (vals.bonus === 'size') {
@@ -759,13 +761,11 @@ function assembleRows(ids, v, col) {
       }, []);
       if (valArray && _.size(valArray)) {
         //TAS.debug("assembleRows this row had these",valArray);
-        // UPDATED: Assign concat result to local variable to avoid parameter mutation
         result = m.concat(valArray);
       }
     } catch (erri3) {
       TAS.error('PFBuffs.assembleRows erri3:', erri3);
     } finally {
-      // UPDATED: Return local result; ensures the accumulator is never lost/undefined
       return result;
     }
   }, []);
@@ -793,179 +793,175 @@ function updateBuffTotal(col, rows, v, setter) {
     tempTotalCol = 0,
     totalcol = '',
     isWorn = 1,
-    //stackArmor=0,
     columns = [col];
   const output = setter || {};
   try {
-    // GUARD: Initialize safeRows as empty array to prevent TypeError if rows is undefined
     const safeRows = rows || [];
     //TAS.debug("total sync for "+col,rows,v);
-    isAbility = PFAbilityScores.abilities.indexOf(col) >= 0 && col.indexOf('skill') < 9;
+    isAbility = PFAbilityScores.abilities.indexOf(col) >= 0 && col.indexOf('skill') < 0;
     if (affectedBuffs[col]) {
       columns = columns.concat(affectedBuffs[col]);
     }
-    // UPDATED: Filter safeRows instead of rows to prevent crash
     const filteredRows = safeRows.filter(function (row) {
-      if (columns.indexOf(row.bonus) >= 0) {
-        return 1;
-      }
-      return 0;
+      return columns.indexOf(row.bonus) >= 0;
     });
+
     if (filteredRows && _.size(filteredRows)) {
       TAS.debug('PFBUFFS ROWS NOW:', filteredRows);
       if (col === 'hptemp') {
-        //hptemp=alwaysstack
-        sums.sum = filteredRows
-          .filter(function (row) {
-            return row.val > 0;
-          })
-          .reduce(function (memo, row) {
-            // UPDATED: Return sum directly to avoid parameter reassignment
-            return memo + (row.val || 0);
-          }, 0);
+        // hptemp = always stack
+        sums.sum = filteredRows.filter((row) => row.val > 0).reduce((memo, row) => memo + (row.val || 0), 0);
       } else if (col === 'size') {
-        //size=neverstack , negative is not a penalty
+        // size = never stack, negative is not a penalty
         sums = filteredRows.reduce(function (memo, row) {
-          if (row.val > 0) {
-            memo.sum = Math.max(memo.sum, row.val);
-          } else if (row.val < 0) {
-            memo.pen = Math.min(memo.pen, row.val);
-          }
+          if (row.val > 0) memo.sum = Math.max(memo.sum, row.val);
+          else if (row.val < 0) memo.pen = Math.min(memo.pen, row.val);
           return memo;
         }, sums);
         sums.sum += sums.pen;
       } else {
-        //if (col==='armor'||col==='shield'){
-        //  stackArmor = 0;//parseInt(v.use_piecemeal_armor,10)||0;
-        //}
-        //stack all rows
+        // General Stacking Logic. Uses id for source tracking.
         bonuses = filteredRows.reduce(function (memo, row) {
           if (row.bonus === col) {
+            let type = (row.bonusType || '').toLowerCase();
+            let sourceId = row.id || 'unknown';
+            let sourceKey = sourceId + '_' + type;
+
             if (row.val < 0) {
-              memo.penalty = (memo.penalty || 0) + row.val;
-            } else if (stackingTypes.includes(row.bonusType)) {
-              // || stackArmor ) {
-              memo[row.bonusType] = (memo[row.bonusType] || 0) + row.val;
+              // PENALTY LOGIC
+              if (type === 'untyped') {
+                // use source tracking to untyped penalties
+                // prevents two buffs in the SAME row from double-stacking a penalty
+                memo.sources = memo.sources || {};
+                memo.sources[sourceKey] = Math.min(memo.sources[sourceKey] || 0, row.val);
+              } else {
+                // typed penalties: take the worst value (min).
+                let penKey = type + '_pen';
+                memo[penKey] = Math.min(memo[penKey] || 0, row.val);
+              }
             } else {
-              memo[row.bonusType] = Math.max(memo[row.bonusType] || 0, row.val);
+              // BONUS LOGIC: Only 'untyped' stack (sums). Takes best value (max).
+              if (type === 'untyped') {
+                // Ensure same row (source) doesn't stack with itself
+                memo.sources = memo.sources || {};
+                memo.sources[sourceKey] = Math.max(memo.sources[sourceKey] || 0, row.val);
+              } else {
+                // Typed bonuses: take the best value
+                memo[type] = Math.max(memo[type] || 0, row.val);
+              }
             }
           }
           return memo;
         }, {});
-        //subtract any nonstacking parent buffs affecting it:
-        if (_.size(columns) > 1) {
-          bonuses = filteredRows.reduce(function (memo, row) {
-            if (stackingTypes.indexOf(row.bonusType) < 0 && affectedBuffs[col].indexOf(row.bonus) >= 0 && row.val > 0 && memo[row.bonusType] > 0) {
-              if (row.val < memo[row.bonusType]) {
-                memo[row.bonusType] -= row.val;
-              } else {
-                memo[row.bonusType] = 0;
-              }
-            }
-            return memo;
-          }, bonuses);
-        }
-        if (!((col === 'armor' && bonuses.armor > 0) || (col === 'shield' && bonuses.shield > 0))) {
-          //subtract charsheet fields (charField) that overlap:
-          _.each(otherCharBonuses[col], function (charField, bonusType) {
-            TAS.debug('PFBUFFS ################## type:' + bonusType + ', comparing to ' + charField);
-            // need to check this
-            if (bonuses[bonusType]) {
-              tempChar = parseInt(v[charField], 10) || 0;
-              if (bonuses[bonusType] <= tempChar) {
-                bonuses[bonusType] = 0;
-              } else {
-                bonuses[bonusType] -= tempChar;
-              }
+        TAS.debug('PFBUFFS Source Tracking:', bonuses);
+
+        // final stacking/untyped sums from source
+        if (bonuses.sources) {
+          _.each(bonuses.sources, function (val) {
+            if (val < 0) {
+              // penalty from a unique source
+              bonuses.penalty = (bonuses.penalty || 0) + val;
+            } else {
+              // bonus from a unique source
+              bonuses.untyped = (bonuses.untyped || 0) + val;
             }
           });
-          //NOW START SUMMING
-          //if ability, penalty is applied separately
-          if (isAbility && _.contains(bonuses, 'penalty')) {
+          delete bonuses.sources;
+        }
+
+        if (!((col === 'armor' && bonuses.armor > 0) || (col === 'shield' && bonuses.shield > 0))) {
+          // ensure types are normalized to check for non-stacking
+          const relevantTypes = _.union(
+            filteredRows.map((r) => (r.bonusType || '').toLowerCase()),
+            _.keys(otherCharBonuses[col] || {}).map((k) => k.toLowerCase()),
+          ).filter((t) => t && !stackingTypes.includes(t) && t !== 'penalty');
+          // combined into a single pass to find max values for ALL types and columns
+          const typeMaxMap = filteredRows.reduce((memo, row) => {
+            const type = (row.bonusType || '').toLowerCase();
+            const bonus = row.bonus;
+            if (!memo[type]) memo[type] = {};
+            memo[type][bonus] = Math.max(memo[type][bonus] || 0, row.val);
+            return memo;
+          }, {});
+
+          relevantTypes.forEach((type) => {
+            const typeData = typeMaxMap[type] || {};
+            // max buff specifically for this child column
+            const childMax = typeData[col] || 0;
+            // max buff for parents
+            let parentMaxOfType = 0;
+            if (affectedBuffs[col]) {
+              // check parent keys via the map
+              parentMaxOfType = affectedBuffs[col].reduce((max, pCol) => {
+                return Math.max(max, typeData[pCol] || 0);
+              }, 0);
+            }
+            // sheet values lookup
+            let sheetVal = 0;
+            const charBonuses = otherCharBonuses[col];
+            if (charBonuses) {
+              const matchKey = Object.keys(charBonuses).find((k) => k.toLowerCase() === type);
+              if (matchKey) {
+                sheetVal = parseInt(v[charBonuses[matchKey]], 10) || 0;
+              }
+            }
+            // handle non-stacking types (ie trait, resistance)
+            // offset formula: max(child, parent, sheet) - ParentContribution - SheetValue
+            bonuses[type] = Math.max(childMax, parentMaxOfType, sheetVal) - parentMaxOfType - sheetVal;
+          });
+
+          // handle stacking types (ie untyped, dodge)
+          _.each(otherCharBonuses[col], function (charField, bonusType) {
+            TAS.debug('PFBUFFS ################## type:' + bonusType + ', comparing to ' + charField);
+            let lowType = bonusType.toLowerCase();
+            if (stackingTypes.includes(lowType) && bonuses[lowType]) {
+              tempChar = parseInt(v[charField], 10) || 0;
+              bonuses[lowType] = Math.max(0, bonuses[lowType] - tempChar);
+            }
+          });
+          // START SUMMING
+          // if ability, penalty is applied separately
+          if (isAbility && bonuses.penalty) {
             sums.pen = bonuses.penalty;
             bonuses.penalty = 0;
           }
-          //if ac,touch,cmd,flatfooted, copy dodge out
+          // if ac, touch, cmd, flatfooted, copy dodge out
           if (col === 'ac' && bonuses.dodge) {
             totaldodge += bonuses.dodge;
             bonuses.dodge = 0;
           }
-          sums.sum = _.reduce(
-            bonuses,
-            function (memo, bonus, bonusType) {
-              // UPDATED: Return sum directly to avoid parameter reassignment
-              return memo + bonus;
-            },
-            0,
-          );
+          // Final sum of all unique typed/untyped/penalty keys
+          sums.sum = _.reduce(bonuses, (memo, bonus) => memo + (bonus || 0), 0);
         } else {
-          //if armor or shield then compare both
-          //if only enhance then is ok to use above
-          TAS.debug('PFBUFFS ac bonuses  ', bonuses, otherCharBonuses[col]);
-          sums.sum = _.reduce(
-            bonuses,
-            function (memo, bonus, bonusType) {
-              // UPDATED: Return sum via ternary to avoid parameter reassignment
-              return bonus > 0 ? memo + bonus : memo;
-            },
-            0,
-          );
-          sums.pen = _.reduce(
-            bonuses,
-            function (memo, bonus, bonusType) {
-              // UPDATED: Return sum via ternary to avoid parameter reassignment
-              return bonus < 0 ? memo + bonus : memo;
-            },
-            0,
-          );
-          //if (!stackArmor){ ]
+          // Armor/Shield specific logic
+          // sum the base bonus (armor or shield) and the enhancement bonus separately.
+          // prevents global enhancement buffs from stacking here.
+          let baseVal = bonuses[col] || 0;
+          let enhVal = bonuses.enhancement || 0;
+          sums.sum = baseVal + enhVal;
+          // Sum all negative values as penalties
+          sums.pen = _.reduce(bonuses, (memo, b) => (b < 0 ? memo + b : memo), 0);
+          // check if equipped
           isWorn = parseInt(v[col + '3-equipped'], 10) || 0;
-          tempInt = 0;
-          if (isWorn) {
-            tempInt = _.reduce(
-              otherCharBonuses[col],
-              function (memo, charField, bonusType) {
-                // UPDATED: Return addition directly to avoid parameter reassignment
-                return memo + (parseInt(v[charField], 10) || 0);
-              },
-              0,
-            );
-          }
+          // Calculate the value already present on the character sheet (base armor AC)
+          tempInt = isWorn ? _.reduce(otherCharBonuses[col], (memo, f) => memo + (parseInt(v[f], 10) || 0), 0) : 0;
+          // If a buff exists, only apply the amount that exceeds the sheet's current value
           if (sums.sum > 0 && tempInt > 0) {
-            if (sums.sum <= tempInt) {
-              sums.sum = 0;
-            } else if (sums.sum > tempInt) {
-              sums.sum -= tempInt;
-            }
+            sums.sum = Math.max(0, sums.sum - tempInt);
           }
-          if (sums.pen !== 0) {
-            sums.sum += sums.pen;
-          }
+          // add penalties (negative values) to total
+          sums.sum += sums.pen;
         }
       }
     }
+    // Final assignment to output (AC/CMD/Total Columns)
     if (col === 'ac') {
       TAS.info('column is AC, setting dodge to ' + totaldodge);
-      //this means we ignore dodge, deflection to touch, cmd, flatfooted
       tempdodge = parseInt(v['buff_dodge-total'], 10) || 0;
-      //ignore dodge and deflect for any other than ac
-      if (totaldodge !== tempdodge) {
-        output['buff_dodge-total'] = totaldodge;
-      }
+      if (totaldodge !== tempdodge) output['buff_dodge-total'] = totaldodge;
       tempDodgeExists = parseInt(v['buff_dodge_exists'], 10) || 0;
-      if (totaldodge && !tempDodgeExists) {
-        output['buff_dodge_exists'] = 1;
-      } else if (tempDodgeExists && !totaldodge) {
-        output['buff_dodge_exists'] = 0;
-      }
-    }
-
-    // section added below to prevent cmd(type:dodge) buff from being included with cmdff
-    if (col === 'cmd' && bonuses.dodge !== 0) {
-      TAS.info('column is CMD, setting buffsFFcmdOnlyTemp to dodge buff:' + bonuses.dodge);
-      let buffsFFcmdOnlyTemp = bonuses.dodge;
-      output['buff_ffCMD-nododge'] = buffsFFcmdOnlyTemp || 0;
-      TAS.info('buff_ffCMD-nododge now set same as dodge buff:' + buffsFFcmdOnlyTemp);
+      if (totaldodge && !tempDodgeExists) output['buff_dodge_exists'] = 1;
+      else if (tempDodgeExists && !totaldodge) output['buff_dodge_exists'] = 0;
     }
 
     totalcol = buffToTot[col];
@@ -974,24 +970,17 @@ function updateBuffTotal(col, rows, v, setter) {
         output['buff_' + totalcol + '-total'] = sums.sum;
       }
       tempTotalCol = parseInt(v['buff_' + totalcol + '_exists'], 10) || 0;
-      if (sums.sum !== 0 && tempTotalCol === 0) {
-        output['buff_' + totalcol + '_exists'] = 1;
-      } else if (sums.sum === 0 && tempTotalCol === 1) {
-        output['buff_' + totalcol + '_exists'] = 0;
-      }
+      if (sums.sum !== 0 && tempTotalCol === 0) output['buff_' + totalcol + '_exists'] = 1;
+      else if (sums.sum === 0 && tempTotalCol === 1) output['buff_' + totalcol + '_exists'] = 0;
+
       if (isAbility) {
         if (parseInt(v['buff_' + totalcol + '-total_penalty'], 10) !== sums.pen) {
           output['buff_' + totalcol + '-total_penalty'] = sums.pen;
         }
         tempPenaltyExists = parseInt(v['buff_' + totalcol + '_penalty_exists'], 10) || 0;
-        if (sums.pen !== 0 && tempPenaltyExists === 0) {
-          output['buff_' + totalcol + '_penalty_exists'] = 1;
-        } else if (sums.pen === 0 && tempPenaltyExists === 1) {
-          output['buff_' + totalcol + '_penalty_exists'] = 0;
-        }
+        if (sums.pen !== 0 && tempPenaltyExists === 0) output['buff_' + totalcol + '_penalty_exists'] = 1;
+        else if (sums.pen === 0 && tempPenaltyExists === 1) output['buff_' + totalcol + '_penalty_exists'] = 0;
       }
-    } else {
-      TAS.error('PFBuffs.updateBuffTotal cannot find total column corresponding to ' + col);
     }
   } catch (err) {
     TAS.error('PFBuffs.updateBuffTotal', err);
