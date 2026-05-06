@@ -2297,6 +2297,7 @@ Lists Selected <input type='number' name='comp_cmbaselistcount'> / 6
 
       <button type='action' class='fancybutton' name='act_dump_summary'>Show Progress</button>
 
+      
       <div class='tplist'></div>
     </div>
 
@@ -2437,8 +2438,10 @@ Lists Selected <input type='number' name='comp_cmbaselistcount'> / 6
       <div> 
 	<p>Fulfilled: <span class='tpfulfilled' name='comp_tpfulfilled'></span>
 	  (<span class='tppercent' name='comp_tppercent'></span>%).</p>
+	<p>Grants:
+	    <select name='comp_tpgrants' class='tpgrants fancyselect'></select>
+	</p>
 	<input type='checkbox' class='accordian'> 
-	<span class='tpgrants'></span>
 	<div class='accordiantoggle'>
 	  <span class='tpdescription'></span>
 	  <p><b>Bonus</b></p>
@@ -11075,7 +11078,7 @@ Sheet Version: <span name='attr_version'></span>
 
 <br>
 
-Revision c2915c28d100896f758c38652168a55f568b8a67
+Revision 2c9f3a9c39cc24137801b96518d86836684bc621
 
 
 <hr>
@@ -16735,7 +16738,6 @@ onCheck("clicked:dump_summary", () => {
 	// Now the bonus items:
 	try {
 	  const bonus = JSON.parse(report.tp.data.bonus);
-	  console.log(bonus);
 	  bonus.forEach((item, index) => {
 	      updates[`${prefix} .tpbonusitem${index}`] = item.item;
 	      updates[`${prefix} .tpbonuschance${index}`] = item.chance;
@@ -16744,9 +16746,16 @@ onCheck("clicked:dump_summary", () => {
 	} catch (e) {
 	  rmuerror(`Bad JSON for bonus items ${report.tp.name}`, e);
 	}
+	let grants = []
+	try {
+	  grants = JSON.parse(report.tp.data.grants);
+	} catch(e) {
+	  rmuerror(`Problem parsing grants string for ${report.tp.name}`);
+	}
 	setCharmancerText(updates);
 	setAttrs(toggles);
-	console.log("Set TP", report.tp, updates, toggles);
+	setCharmancerOptions(`${prefix}_tpgrants`, grants)
+	console.log("Set TP", report.tp, updates, toggles, grants);
       });
     });
   });
@@ -24643,7 +24652,7 @@ injury.parseInjuryString = function (str) {
 		    case 'G':
 			grapplestatus += value;
 			updates.grapplestatus = grapplestatus;
-			sendMessage(`${cdata.character_name} is grappled at ${grapplestatus} (increase ${value}`);
+			sendMessage(`${cdata.character_name} is grappled at ${grapplestatus} (increase ${value})`);
 			break;
 		    case 'L': case 'O': // Already saved... do nothing
 			break;

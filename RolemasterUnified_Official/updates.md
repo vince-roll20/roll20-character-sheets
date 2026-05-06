@@ -1,3 +1,9 @@
+# 2026-05-05
+
+- Injury string fix missing ')'
+- Training Packages:
+  - Add 'grants' dropdown
+
 # 2026-04-21
 
 - Bugfix: When raising to average stat; set potential correctly (@snowdragon)

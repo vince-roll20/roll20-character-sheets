@@ -3053,7 +3053,7 @@ section.npc-box.statblock3 .image-avatar {
 
 .charsheet .options-box .hide-areas-image {
   aspect-ratio: 1;
-  background-image: url('https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/ADnD_1E/images/hidden_image.png');
+  background-image: url('https://raw.githubusercontent.com/Roll20/roll20-character-sheets/refs/heads/master/ADnD_1E_Revised/images/hidden_image.png');
   background-repeat: no-repeat;
   background-size: contain;
   height: 4em;
@@ -5087,6 +5087,7 @@ section.npc-box.statblock3 .image-avatar {
 .sheet-rolltemplate-attacks-table,
 .sheet-rolltemplate-general {
   margin: 0 0 0 -10px;
+  max-width: 50%;
   padding: 0 2px 0 2px;
   width: calc(100% + 10px);
 }
