@@ -5087,7 +5087,8 @@ section.npc-box.statblock3 .image-avatar {
 .sheet-rolltemplate-attacks-table,
 .sheet-rolltemplate-general {
   margin: 0 0 0 -10px;
-  max-width: 50%;
+  max-width: 480px;
+  min-width: 235px;
   padding: 0 2px 0 2px;
   width: calc(100% + 10px);
 }
