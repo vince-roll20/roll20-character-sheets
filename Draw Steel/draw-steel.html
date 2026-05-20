@@ -1246,8 +1246,8 @@
 				</div>
 			</fieldset>
 			<!-- Standard Abilities -->
-            <h5 class="panel-title" data-i18n="standard-main-actions"></h5>
 			<div class="standard-abilities">
+				<h5 class="panel-title" data-i18n="standard-main-actions"></h5>
 				<!-- Melee Free Strike Ability -->
 				<div class="standard-abilities-item">
 					<input class="toggle-button -edit" type="checkbox" />
@@ -1637,8 +1637,8 @@
 				</div>
 			</fieldset>
 			<!-- Standard Maneuvers -->
-            <h5 class="panel-title" data-i18n="standard-maneuvers"></h5>
 			<div class="standard-abilities">
+				<h5 class="panel-title" data-i18n="standard-maneuvers"></h5>
 				<!-- Knockback -->
 				<div class="standard-abilities-item">
 					<input type="hidden" name="attr_knockback_type" value="maneuver" />
@@ -2222,8 +2222,8 @@
 				</div>
 			</fieldset>
 			<!-- Standard Triggered Abilities -->
-            <h5 class="panel-title" data-i18n="standard-triggers"></h5>
 			<div class="standard-abilities">
+				<h5 class="panel-title" data-i18n="standard-triggers"></h5>
 				<!-- Opportunity Attack -->
 				<div class="standard-abilities-item">
 					<input class="toggle-button -edit" type="checkbox" />
@@ -2391,8 +2391,8 @@
 				</div>
 			</fieldset>
 			<!-- Standard Abilities -->
-            <h5 class="panel-title" data-i18n="standard-noaction-trait"></h5>
 			<div class="standard-abilities">
+				<h5 class="panel-title" data-i18n="standard-noaction-trait"></h5>
 				<!-- Jump Move -->
 				<div class="standard-abilities-item">
 					<input type="hidden" name="attr_jump_type" value="no-action" />
@@ -2648,8 +2648,8 @@
 				</div>
 			</fieldset>
 			<!-- Standard Moves -->
-            <h5 class="panel-title" data-i18n="standard-move-actions"></h5>
 			<div class="standard-abilities">
+				<h5 class="panel-title" data-i18n="standard-move-actions"></h5>
 				<!-- Advance Move Action -->
 				<div class="standard-abilities-item">
 					<input class="toggle-button -edit" type="checkbox" />
@@ -3205,6 +3205,15 @@
 							</div>
 							<textarea class="ability-malice" data-i18n-placeholder="malice" name="attr_ability_malice" spellcheck="false"></textarea>
 						</div>
+						<div class="ability-toggle-group">
+							<input type="checkbox" name="attr_has_spend" />
+							<label data-i18n="spend"></label>
+							<div class="grid-span-full">
+								<label data-i18n="ability-cost"></label>
+								<input type="text" name="attr_ability_spend_cost" />
+							</div>
+							<textarea class="ability-malice" data-i18n-placeholder="spend" name="attr_ability_spend" spellcheck="false"></textarea>
+						</div>
 					</div>			
 				</div>
 				<div class="ability-card -togglehide">
@@ -3280,7 +3289,11 @@
 						<label><span name="attr_ability_cost"></span>&nbsp;<span data-i18n="malice"></span>:</label>
 						<span class="ability-malice" name="attr_ability_malice"></span>
 					</div>
-				
+					<input type="hidden" name="attr_has_spend" />					
+					<div class="npc-ability-malice grid-span-full">
+						<label><span data-i18n="spend"></span>&nbsp;<span name="attr_ability_spend_cost"></span>:</label>
+						<span class="ability-malice" name="attr_ability_spend"></span>
+					</div>
 				</div>
 			</fieldset>
 		</div>
@@ -4890,7 +4903,16 @@
 		const damagePerSurge = parseInt(attrs.surge_damage) || 0;
 	
 		if (type === 'damage' && available > 0) {
-			const query = `?{${getTranslationByKey('how-many-surges')}|1|2|3}`;
+		
+			const maxSurges = Math.min(available, 3);
+			
+			const options = [];
+			for (let i = 1; i <= maxSurges; i++) {
+				options.push(i);
+			}
+			const queryOptions = options.length > 0 ? options.join('|') : '0';
+			
+			const query = (available > 1) ? `?{${getTranslationByKey('how-many-surges')}|${queryOptions}}}` : '1';
 			const template = `@{wtype}&{template:${ROLLTEMPLATES.SIMPLE}} {{charactername=@{character_name}}} {{name=^{surges}}} {{text=^{roll-surge-damage}}} {{rolltitle=[[${query}]] ^{surges}}} {{roll=[[([[${query}]]*${damagePerSurge})]] ^{surges-damage}}}`;
 	
 			startRoll(template, ({ rollId, results }) => {
@@ -5869,6 +5891,7 @@
 		MALICE_ABILITY: 'Malice Ability',
 		CONDITION_IMMUNITY: 'Condition Immunity',
 		SUMMON_CHOICE: 'Summon Choice',
+		ABILITY_DAMAGE: 'Ability Damage',
 	};
 
 	/**
@@ -6217,7 +6240,7 @@
 				let queryString = `!{{template:default}}{{ask=![[?{${getTranslationByKey('import-monster')}|${getTranslationByKey('import-select-prompt')},-1`;
 				for (const [index, monster] of data.monsters.entries()) {
 					
-					queryString += '|' + monster.name + ', ' + index.toString();
+					queryString += '|' + monster.name + ' (' + getTranslationByKey('level') + ' ' + monster.level + '), ' + index.toString();
 				}
 				queryString += '}]]}}';
 				
@@ -6465,6 +6488,16 @@
 				return { ...acc, ...processAbility(abilityData) };
 			}, {});
 		
+		const damageModifiers = allFeatures
+			.filter(f => f.type === FEATURE_TYPES.ABILITY_DAMAGE)
+			.reduce((acc, f) => {
+				const id = generateRowID();
+				acc[`repeating_damagemods_${id}_mod_name`] = f.name;
+				acc[`repeating_damagemods_${id}_mod_keywords`] = f.data?.keywords.join(', ');
+				acc[`repeating_damagemods_${id}_mod_value`] = f.data?.value;
+				return acc;
+			}, {});
+		
 		const immunity = [
 			getDamageModifiers(allFeatures, level, 'Immunity'),
 			getConditionImmunities(allFeatures),
@@ -6532,10 +6565,11 @@
 			...classFeatures,
 			...abilityFeatures,
 			...classAbilities,
+			...damageModifiers,
 		};
 
 		// Clear existing repeating sections before adding new data.
-		const sectionsToClear = ['modifiers', 'perks', 'ancestrytraits', 'classfeatures', 'abilities', 'noaction', 'maneuvers', 'triggered', 'moves', 'conditions'];
+		const sectionsToClear = ['modifiers', 'perks', 'ancestrytraits', 'classfeatures', 'abilities', 'noaction', 'maneuvers', 'triggered', 'moves', 'conditions', 'damagemods'];
 		await Promise.all(sectionsToClear.map(s => clearRepeatingSection(s)));
 		
 		// Set the new attributes on the character sheet.
@@ -6592,11 +6626,11 @@
 				}
 				return acc;
 			}, {});
-		
+
 		const abilityFeatures = data.features
 			.filter(f => f.type === FEATURE_TYPES.ABILITY)
 			.reduce((acc, f) => ({ ...acc, ...processMonsterAbility(f.data.ability) }), {});
-		
+
 		const maliceFeatures = malice ? importMalice(malice) : [];
 		
 		const minionTag = roleString.includes('Minion') ? getTranslationByKey('minion-text') : '';
