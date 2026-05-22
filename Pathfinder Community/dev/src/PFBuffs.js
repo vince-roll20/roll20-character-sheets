@@ -173,7 +173,6 @@ export var //values in the bonus dropdown
 //these have only their own type, enhancement, or untyped
 var armorcols = ['armor', 'shield', 'natural'],
   //buffsFFcmdOnlyTemp = '',
-
   //map of buffs to other buffs that affect it. left is "parent" buff that is subtracted from right
   buffsAffectingOthers = {
     ac: ['cmd', 'touch', 'flatfooted'],
@@ -701,7 +700,7 @@ export function clearBuffTotals(callback, silently) {
   });
 }
 
-/** Gets list of buffs from the buff rows for so we don't have to keep looping through the ids.
+/** Gets a list of buffs from the buff rows so we don't have to keep looping through the ids.
  * Returns between 0 to 6 "rows" for each id, each corresponds to b1..b6 buffs.
  * only returns buffs where -show is 1 and _val is != 0 (i.e. ones that exist for totalling)
  * @param {[string]} ids ids for list
@@ -721,7 +720,6 @@ function assembleRows(ids, v, col) {
   var rows = safeIds.reduce(function (m, id) {
     var valArray,
       prefix = 'repeating_buff2_' + id + '_';
-    // Create a local variable to hold the current state of the accumulator
     let result = m;
     try {
       valArray = buffsPerRow.reduce(function (im, n) {
@@ -732,7 +730,7 @@ function assembleRows(ids, v, col) {
           //TAS.debug("assembleRows looking at "+ bonusField  +" = " + v[bonusField] + " show is "+ v[innerPrefix+'-show']);
           if (v[bonusField] && parseInt(v[innerPrefix + '-show'], 10) === 1) {
             if (!col || v[bonusField] === col || relatedBuffsL.indexOf(v[bonusField]) >= 0) {
-              vals.id = id; // ATTACH ID: Allows source tracking for stacking rules
+              vals.id = id; // source tracking using id for stacking rules
               vals.bonus = v[bonusField];
               vals.val = parseInt(v[innerPrefix + '_val'], 10) || 0;
               if (vals.bonus === 'size') {
@@ -796,13 +794,13 @@ function updateBuffTotal(col, rows, v, setter) {
     columns = [col];
   const output = setter || {};
   try {
-    const safeRows = rows || [];
+    const tempRows = rows || [];
     //TAS.debug("total sync for "+col,rows,v);
     isAbility = PFAbilityScores.abilities.indexOf(col) >= 0 && col.indexOf('skill') < 0;
     if (affectedBuffs[col]) {
       columns = columns.concat(affectedBuffs[col]);
     }
-    const filteredRows = safeRows.filter(function (row) {
+    const filteredRows = tempRows.filter(function (row) {
       return columns.indexOf(row.bonus) >= 0;
     });
 
@@ -969,9 +967,32 @@ function updateBuffTotal(col, rows, v, setter) {
       if (parseInt(v['buff_' + totalcol + '-total'], 10) !== sums.sum) {
         output['buff_' + totalcol + '-total'] = sums.sum;
       }
+      const isSize = col === 'size';
+      const includesPenalty = bonuses.penalty < 0 || _.some(bonuses, (val, key) => key.endsWith('_pen') && val < 0);
+
+      // If parent buff type overrides child then child is hidden in panel
+      let parentIsGreater = false;
+      if (affectedBuffs[col]) {
+        // e.g., if col is 'fort', check if 'saves' (parent) total is already handling the value
+        parentIsGreater = _.some(affectedBuffs[col], (pCol) => {
+          let parentTotal = output['buff_' + buffToTot[pCol] + '-total'] || parseInt(v['buff_' + buffToTot[pCol] + '-total'], 10) || 0;
+          return parentTotal >= sums.sum && sums.sum > 0;
+        });
+      }
+
       tempTotalCol = parseInt(v['buff_' + totalcol + '_exists'], 10) || 0;
-      if (sums.sum !== 0 && tempTotalCol === 0) output['buff_' + totalcol + '_exists'] = 1;
-      else if (sums.sum === 0 && tempTotalCol === 1) output['buff_' + totalcol + '_exists'] = 0;
+      // when to show in buffs panel
+      if (parentIsGreater && tempTotalCol === 1) {
+        output['buff_' + totalcol + '_exists'] = 0;
+      } else if ((sums.sum > 0 || (sums.sum < 0 && (includesPenalty || isSize))) && !parentIsGreater && tempTotalCol === 0) {
+        // Show if positive, has true penalty, OR if it's a valid non-zero size change
+        output['buff_' + totalcol + '_exists'] = 1;
+      } else if (((sums.sum === 0 && !includesPenalty) || parentIsGreater) && tempTotalCol === 1) {
+        output['buff_' + totalcol + '_exists'] = 0;
+      } else if (sums.sum < 0 && !includesPenalty && !isSize && tempTotalCol === 1) {
+        // Only hide negative values if they aren't a true penalty AND isn't 'size'
+        output['buff_' + totalcol + '_exists'] = 0;
+      }
 
       if (isAbility) {
         if (parseInt(v['buff_' + totalcol + '-total_penalty'], 10) !== sums.pen) {
@@ -2302,7 +2323,7 @@ export function addCommonBuff(callback, eventInfo) {
     },
     setter = {},
     fields;
-  fields = ['add_common_buff', 'common_buff_toadd', 'CON-mod', 'level', 'speed-base'];
+  fields = ['add_common_buff', 'common_buff_toadd'];
   getAttrs(fields, function (v) {
     var onByDefault = 0;
     TAS.debug('adding common buff:', v);
@@ -2621,6 +2642,7 @@ function registerEventHandlers() {
     );
   });
 }
+
 registerEventHandlers();
 //PFConsole.log('   PFBuffs module loaded          ');
 //PFLog.modulecount++;

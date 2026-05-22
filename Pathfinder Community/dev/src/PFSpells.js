@@ -2096,6 +2096,7 @@ let events = {
   repeatingSpellAttackEventsPlayer: ['range_pick', 'range', 'damage-macro-text', 'damage-type', 'save', 'spell-attack-type', 'name'],
   repeatingSpellAttackEventsAuto: ['range_numeric', 'sr', 'savedc', 'toggle_attack_entry'],
 };
+
 function registerEventHandlers() {
   let tempstr = '';
   // combined all tempstr reduce functions
@@ -2285,4 +2286,5 @@ function registerEventHandlers() {
     }
   });
 }
+
 registerEventHandlers();
