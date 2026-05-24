@@ -215,8 +215,12 @@ var armorcols = ['armor', 'shield', 'natural'],
   //all total fields plus "_exists", INCLUDING penalty fields
   buffTotFields = _.chain(totColumns)
     .map(function (totstr) {
-      // var isAbility = PFAbilityScores.abilities.indexOf(totstr) >= 0 && totstr.indexOf('skill') < 1;
-      var isAbility = PFAbilityScores.abilities.indexOf(totstr) >= 0 && totstr.indexOf('skill') < 0;
+      var checkCol = (totstr || '').toUpperCase();
+      var upperAbilities = (PFAbilityScores.abilities || []).map(function (a) {
+        return a.toUpperCase();
+      });
+      var isAbility = upperAbilities.indexOf(checkCol) >= 0 && checkCol.indexOf('SKILL') < 0;
+
       if (!isAbility) {
         return ['buff_' + totstr + '-total', 'buff_' + totstr + '_exists'];
       } else {
@@ -796,7 +800,15 @@ function updateBuffTotal(col, rows, v, setter) {
   try {
     const tempRows = rows || [];
     //TAS.debug("total sync for "+col,rows,v);
-    isAbility = PFAbilityScores.abilities.indexOf(col) >= 0 && col.indexOf('skill') < 0;
+    totalcol = buffToTot[col] || '';
+
+    // ignore case differences
+    const checkCol = (totalcol || col || '').toUpperCase();
+    const upperAbilities = (PFAbilityScores.abilities || []).map(function (a) {
+      return a.toUpperCase();
+    });
+    isAbility = upperAbilities.indexOf(checkCol) >= 0 && checkCol.indexOf('SKILL') < 0;
+
     if (affectedBuffs[col]) {
       columns = columns.concat(affectedBuffs[col]);
     }
@@ -917,19 +929,40 @@ function updateBuffTotal(col, rows, v, setter) {
               bonuses[lowType] = Math.max(0, bonuses[lowType] - tempChar);
             }
           });
+
           // START SUMMING
-          // if ability, penalty is applied separately
-          if (isAbility && bonuses.penalty) {
-            sums.pen = bonuses.penalty;
-            bonuses.penalty = 0;
-          }
           // if ac, touch, cmd, flatfooted, copy dodge out
           if (col === 'ac' && bonuses.dodge) {
             totaldodge += bonuses.dodge;
             bonuses.dodge = 0;
           }
-          // Final sum of all unique typed/untyped/penalty keys
-          sums.sum = _.reduce(bonuses, (memo, bonus) => memo + (bonus || 0), 0);
+
+          // Let the general stacking logic sum everything normally first
+          if (isAbility) {
+            // Ability scores: positive bonuses add to the score,
+            // while negative penalties apply to the modifier halved.
+            sums.sum = _.reduce(bonuses, (memo, val) => (val > 0 ? memo + val : memo), 0);
+
+            // tracked penalty keys
+            let penaltyTotal = bonuses.penalty || 0;
+            _.each(bonuses, function (val, key) {
+              if (key.endsWith('_pen') && val < 0) {
+                // Take the worst penalty across types
+                penaltyTotal = Math.min(penaltyTotal, val);
+              }
+            });
+
+            // net penalty fallback
+            let netNegative = _.reduce(bonuses, (memo, val) => (val < 0 ? memo + val : memo), 0);
+            if (netNegative < 0 && penaltyTotal === 0) {
+              penaltyTotal = netNegative;
+            }
+            // NOTE: The core PFAbilityScores sheet worker handles the /2 rule downstream
+            // pass the full raw penalty total here.
+            sums.pen = Math.trunc(penaltyTotal);
+          } else {
+            sums.sum = _.reduce(bonuses, (memo, bonus) => memo + (bonus || 0), 0);
+          }
         } else {
           // Armor/Shield specific logic
           // sum the base bonus (armor or shield) and the enhancement bonus separately.
@@ -962,15 +995,14 @@ function updateBuffTotal(col, rows, v, setter) {
       else if (tempDodgeExists && !totaldodge) output['buff_dodge_exists'] = 0;
     }
 
-    totalcol = buffToTot[col];
     if (totalcol) {
       if (parseInt(v['buff_' + totalcol + '-total'], 10) !== sums.sum) {
         output['buff_' + totalcol + '-total'] = sums.sum;
       }
       const isSize = col === 'size';
-      const includesPenalty = bonuses.penalty < 0 || _.some(bonuses, (val, key) => key.endsWith('_pen') && val < 0);
+      const includesPenalty = sums.pen < 0 || bonuses.penalty < 0 || _.some(bonuses, (val, key) => key.endsWith('_pen') && val < 0);
 
-      // If parent buff type overrides child then child is hidden in panel
+      // If parent buff type overrides child then child is hidden in buffs panel
       let parentIsGreater = false;
       if (affectedBuffs[col]) {
         // e.g., if col is 'fort', check if 'saves' (parent) total is already handling the value
@@ -981,16 +1013,13 @@ function updateBuffTotal(col, rows, v, setter) {
       }
 
       tempTotalCol = parseInt(v['buff_' + totalcol + '_exists'], 10) || 0;
-      // when to show in buffs panel
-      if (parentIsGreater && tempTotalCol === 1) {
-        output['buff_' + totalcol + '_exists'] = 0;
-      } else if ((sums.sum > 0 || (sums.sum < 0 && (includesPenalty || isSize))) && !parentIsGreater && tempTotalCol === 0) {
-        // Show if positive, has true penalty, OR if it's a valid non-zero size change
+
+      // Buffs Panel display: Row shows up if there is a positive total,
+      // a valid 'size' change, or any trackable penalty present.
+      const shouldShowPanel = !parentIsGreater && (sums.sum > 0 || includesPenalty || (sums.sum < 0 && isSize));
+      if (shouldShowPanel && tempTotalCol === 0) {
         output['buff_' + totalcol + '_exists'] = 1;
-      } else if (((sums.sum === 0 && !includesPenalty) || parentIsGreater) && tempTotalCol === 1) {
-        output['buff_' + totalcol + '_exists'] = 0;
-      } else if (sums.sum < 0 && !includesPenalty && !isSize && tempTotalCol === 1) {
-        // Only hide negative values if they aren't a true penalty AND isn't 'size'
+      } else if (!shouldShowPanel && tempTotalCol === 1) {
         output['buff_' + totalcol + '_exists'] = 0;
       }
 

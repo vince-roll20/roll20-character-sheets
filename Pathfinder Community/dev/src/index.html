@@ -33,6 +33,7 @@
                     <ol>
                         <h4>Latest ($$CURRENTRELEASEDATE$$)</h4>
                         <li>Fixed a bug in buffs where a buff to all "saves" would erroneously stack with trait and resistance bonuses.</li>
+                        <li>Fixed a bug that prevented buff penalties to Ability scores from being displayed properly with the Debuff column.</li>
                         <li>Updated the feats and traits datalists to remove duplicate line items.</li>
                         <li>Updated #cast to also adjust the Spells/Day (#left column).</li>
                         <li>Copied the "Has multiple spellcasting classes" option from the Spells section to sheet settings>spells.</li>
@@ -211,18 +212,19 @@
             </div>
             <div class="status-panel" role="status" aria-live="polite" aria-label="Current Buffs" data-i18n-aria-label="current-buffs">
                 <div class="options">
-                    <input type="checkbox" class="buff-exists" name="attr_buff_STR_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-strength-title"><input title="@{buff_STR-total}" name="attr_buff_STR-total" type="number" value="0" class="calc" readonly /><span class="nowrap-over" data-i18n="strength-abbrv">STR</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_STR_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-strength-penalty-title"><input title="@{buff_STR-total_penalty}" name="attr_buff_STR-total_penalty" type="number" value="0" class="calc" readonly />-<span class="nowrap-over" data-i18n-title="buff-strength-penalty-title" data-i18n="strength-abbrv">STR</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_DEX_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-dexterity-title"><input title="@{buff_DEX-total}" name="attr_buff_DEX-total" type="number" value="0" class="calc" readonly /><span class="nowrap-over" data-i18n="dexterity-abbrv">DEX</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_DEX_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-dexterity-penalty-title"><input title="@{buff_DEX-total_penalty}" name="attr_buff_DEX-total_penalty" type="number" value="0" class="calc" readonly />-<span class="nowrap-over" data-i18n-title="buff-dexterity-penalty-title" data-i18n="dexterity-abbrv">DEX</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_CON_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-constitution-title"><input title="@{buff_CON-total}" name="attr_buff_CON-total" type="number" value="0" class="calc" readonly /><span class="nowrap-over" data-i18n="constitution-abbrv">CON</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_CON_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-constitution-penalty-title"><input title="@{buff_CON-total_penalty}" name="attr_buff_CON-total_penalty" type="number" value="0" class="calc" readonly />-<span class="nowrap-over" data-i18n-title="buff-constitution-penalty-title" data-i18n="constitution-abbrv">CON</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_INT_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-intelligence-title"><input title="@{buff_INT-total}" name="attr_buff_INT-total" type="number" value="0" class="calc" readonly /><span class="nowrap-over" data-i18n="intelligence-abbrv">INT</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_INT_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-intelligence-penalty-title"><input title="@{buff_INT-total_penalty}" name="attr_buff_INT-total_penalty" type="number" value="0" class="calc" readonly />-<span class="nowrap-over" data-i18n-title="buff-intelligence-penalty-title" data-i18n="intelligence-abbrv">INT</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_WIS_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-wisdom-title"><input title="@{buff_WIS-total}" name="attr_buff_WIS-total" type="number" value="0" class="calc" readonly /><span class="nowrap-over" data-i18n="wisdom-abbrv">WIS</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_WIS_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-wisdom-penalty-title"><input title="@{buff_WIS-total_penalty}" name="attr_buff_WIS-total_penalty" type="number" value="0" class="calc" readonly />-<span class="nowrap-over" data-i18n-title="buff-wisdom-penalty-title" data-i18n="wisdom-abbrv">WIS</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_CHA_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-charisma-title"><input title="@{buff_CHA-total}" name="attr_buff_CHA-total" type="number" value="0" class="calc" readonly /><span class="nowrap-over" data-i18n="charisma-abbrv">CHA</span></label>
-                    <input type="checkbox" class="buff-exists" name="attr_buff_CHA_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-charisma-penalty-title"><input title="@{buff_CHA-total_penalty}" name="attr_buff_CHA-total_penalty" type="number" value="0" class="calc" readonly />-<span class="nowrap-over" data-i18n-title="buff-charisma-penalty-title" data-i18n="charisma-abbrv">CHA</span></label>
+                    <input type="checkbox" class="buff-exists warn-show" name="attr_buff_STR_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-strength-penalty-title"><input title="@{buff_STR-total_penalty}" name="attr_buff_STR-total_penalty" type="number" value="0" class="calc" readonly /><span class="nowrap-over">-<span data-i18n-title="buff-strength-penalty-title" data-i18n="strength-abbrv">STR</span></span></label>
+                    <input type="checkbox" class="buff-exists" name="attr_buff_STR_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-strength-title"><input title="@{buff_STR-total}" name="attr_buff_STR-total" type="number" value="0" class="calc highlight" readonly /><span class="nowrap-over" data-i18n="strength-abbrv">STR</span></label>
+                    <input type="checkbox" class="buff-exists warn-show" name="attr_buff_DEX_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-dexterity-penalty-title"><input title="@{buff_DEX-total_penalty}" name="attr_buff_DEX-total_penalty" type="number" value="0" class="calc" readonly /><span class="nowrap-over">-<span data-i18n-title="buff-dexterity-penalty-title" data-i18n="dexterity-abbrv">DEX</span></span></label>
+                    <input type="checkbox" class="buff-exists" name="attr_buff_DEX_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-dexterity-title"><input title="@{buff_DEX-total}" name="attr_buff_DEX-total" type="number" value="0" class="calc highlight" readonly /><span class="nowrap-over" data-i18n="dexterity-abbrv">DEX</span></label>
+                    <input type="checkbox" class="buff-exists warn-show" name="attr_buff_CON_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-constitution-penalty-title"><input title="@{buff_CON-total_penalty}" name="attr_buff_CON-total_penalty" type="number" value="0" class="calc" readonly /><span class="nowrap-over">-<span data-i18n-title="buff-constitution-penalty-title" data-i18n="constitution-abbrv">CON</span></span></label>
+                    <input type="checkbox" class="buff-exists" name="attr_buff_CON_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-constitution-title"><input title="@{buff_CON-total}" name="attr_buff_CON-total" type="number" value="0" class="calc highlight" readonly /><span class="nowrap-over" data-i18n="constitution-abbrv">CON</span></label>
+                    <input type="checkbox" class="buff-exists warn-show" name="attr_buff_INT_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-intelligence-penalty-title"><input title="@{buff_INT-total_penalty}" name="attr_buff_INT-total_penalty" type="number" value="0" class="calc" readonly /><span class="nowrap-over">-<span data-i18n-title="buff-intelligence-penalty-title" data-i18n="intelligence-abbrv">INT</span></span></label>
+                    <input type="checkbox" class="buff-exists" name="attr_buff_INT_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-intelligence-title"><input title="@{buff_INT-total}" name="attr_buff_INT-total" type="number" value="0" class="calc highlight" readonly /><span class="nowrap-over" data-i18n="intelligence-abbrv">INT</span></label>
+                    <input type="checkbox" class="buff-exists warn-show" name="attr_buff_WIS_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-wisdom-penalty-title"><input title="@{buff_WIS-total_penalty}" name="attr_buff_WIS-total_penalty" type="number" value="0" class="calc" readonly /><span class="nowrap-over">-<span data-i18n-title="buff-wisdom-penalty-title" data-i18n="wisdom-abbrv">WIS</span></span></label>
+                    <input type="checkbox" class="buff-exists" name="attr_buff_WIS_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-wisdom-title"><input title="@{buff_WIS-total}" name="attr_buff_WIS-total" type="number" value="0" class="calc highlight" readonly /><span class="nowrap-over" data-i18n="wisdom-abbrv">WIS</span></label>
+                    <input type="checkbox" class="buff-exists warn-show" name="attr_buff_CHA_penalty_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-charisma-penalty-title"><input title="@{buff_CHA-total_penalty}" name="attr_buff_CHA-total_penalty" type="number" value="0" class="calc" readonly /><span class="nowrap-over">-<span data-i18n-title="buff-charisma-penalty-title" data-i18n="charisma-abbrv">CHA</span></span></label>
+                    <input type="checkbox" class="buff-exists" name="attr_buff_CHA_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-charisma-title"><input title="@{buff_CHA-total}" name="attr_buff_CHA-total" type="number" value="0" class="calc highlight" readonly /><span class="nowrap-over" data-i18n="charisma-abbrv">CHA</span></label>
+
                     <input type="checkbox" class="buff-exists" name="attr_buff_STR_skills_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-strength-title"><input title="@{buff_STR_skills-total}" name="attr_buff_STR_skills-total" type="number" value="0" class="calc" readonly /><span class="nowrap-over" data-i18n-title="buff-strength-based-skills-title" data-i18n="strength-skills-abbrv">STR</span></label>
                     <input type="checkbox" class="buff-exists" name="attr_buff_DEX_skills_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-dexterity-title"><input title="@{buff_DEX_skills-total}" name="attr_buff_DEX_skills-total" type="number" value="0" class="calc" readonly /><span class="nowrap-over" data-i18n-title="buff-dexterity-based-skills-title" data-i18n="dexterity-skills-abbrv">DEX</span></label>
                     <input type="checkbox" class="buff-exists" name="attr_buff_CON_skills_exists" value="1" role="presentation" /><label class="small-label2" data-i18n-aria-label="buff-constitution-title"><input title="@{buff_CON_skills-total}" name="attr_buff_CON_skills-total" type="number" value="0" class="calc" readonly /><span class="nowrap-over" data-i18n-title="buff-constitution-based-skills-title" data-i18n="constitution-skills-abbrv">CON</span></label>
@@ -1608,8 +1610,8 @@
                                     <span class="table-header" data-i18n-title="ability-damage-desc" data-i18n="damage">Damage</span>
                                     <span class="table-header extra-sect" data-i18n-title="ability-penalty-desc" data-i18n="penalty">Penalty</span>
                                     <span class="table-header" data-i18n-title="ability-drain-desc" data-i18n="drain">Drain</span>
-                                    <!-- hide debuff with noshow -->
-                                    <span class="table-header noshow" data-i18n-title="debuff-title" data-i18n="debuff">Debuff</span>
+                                    <!-- debuff -->
+                                    <span class="table-header" data-i18n-title="debuff-title" data-i18n="debuff">Debuff</span>
                                     <span class="table-header" data-i18n-title="condition-description" data-i18n-aria-label="condition-description" data-i18n="condition-abbrv">Cond</span>
                                     <span class="table-header extra-sect hide-readonly super note-d" data-i18n="macro">Macro</span>
                                 </div>
@@ -1624,12 +1626,15 @@
                                         <span class="table-cell"><input title="@{STR-misc}" type="number" name="attr_STR-misc" value="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{STR-racial}" type="number" name="attr_STR-racial" value="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{STR-asi}" type="number" name="attr_STR-asi" value="0" /></span>
-                                        <span class="table-cell left-border right-border"><input title="@{buff_STR-total}" type="number" name="attr_buff_STR-total" value="0" class="calc" readonly /></span>
+                                        <span class="table-cell left-border right-border">
+                                            <input type="checkbox" class="buff-exists hidden warn-show" name="attr_buff_STR_penalty_exists" value="1" role="presentation" />
+                                            <input title="@{buff_STR-total}" type="number" name="attr_buff_STR-total" value="0" class="calc highlight" readonly />
+                                        </span>
                                         <span class="table-cell"><input title="@{STR-damage}" type="number" name="attr_STR-damage" value="0" max="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{STR-penalty}" type="number" name="attr_STR-penalty" value="0" max="0" /></span>
                                         <span class="table-cell"><input title="@{STR-drain}" type="number" name="attr_STR-drain" value="0" max="0" /></span>
-                                        <!-- hide debuff with noshow -->
-                                        <span class="table-cell noshow"><input title="@{buff_STR-total_penalty}" name="attr_buff_STR-total_penalty" type="number" value="0" class="calc" readonly /></span>
+                                        <!-- debuff -->
+                                        <span class="table-cell"><input title="@{buff_STR-total_penalty}" name="attr_buff_STR-total_penalty" type="number" value="0" class="calc" readonly /></span>
                                         <span class="table-cell"><input title="@{STR-cond}" type="number" name="attr_STR-cond" value="0" class="calc" readonly /></span>
                                         <details class="table-cell extra-sect">
                                             <summary class="hide-readonly">...</summary>
@@ -1646,12 +1651,15 @@
                                         <span class="table-cell"><input title="@{DEX-misc}" type="number" name="attr_DEX-misc" value="0" min="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{DEX-racial}" type="number" name="attr_DEX-racial" value="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{DEX-asi}" type="number" name="attr_DEX-asi" value="0" /></span>
-                                        <span class="table-cell left-border right-border"><input class="calc" readonly title="@{buff_DEX-total}" type="number" name="attr_buff_DEX-total" value="0" /></span>
+                                        <span class="table-cell left-border right-border">
+                                            <input type="checkbox" class="buff-exists hidden warn-show" name="attr_buff_DEX_penalty_exists" value="1" role="presentation" />
+                                            <input class="calc highlight" title="@{buff_DEX-total}" type="number" name="attr_buff_DEX-total" value="0" readonly />
+                                        </span>
                                         <span class="table-cell"><input title="@{DEX-damage}" type="number" name="attr_DEX-damage" value="0" max="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{DEX-penalty}" type="number" name="attr_DEX-penalty" value="0" max="0" /></span>
                                         <span class="table-cell"><input title="@{DEX-drain}" type="number" name="attr_DEX-drain" value="0" max="0" /></span>
-                                        <!-- hide debuff with noshow -->
-                                        <span class="table-cell noshow"><input title="@{buff_DEX-total_penalty}" name="attr_buff_DEX-total_penalty" type="number" value="0" class="calc" readonly /></span>
+                                        <!-- debuff -->
+                                        <span class="table-cell"><input title="@{buff_DEX-total_penalty}" name="attr_buff_DEX-total_penalty" type="number" value="0" class="calc" readonly /></span>
                                         <span class="table-cell"><input class="calc" readonly title="@{DEX-cond}" type="number" name="attr_DEX-cond" value="0" max="0" /></span>
                                         <details class="table-cell extra-sect">
                                             <summary class="hide-readonly">...</summary>
@@ -1668,12 +1676,15 @@
                                         <span class="table-cell"><input title="@{CON-misc}" type="number" name="attr_CON-misc" value="0" min="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{CON-racial}" type="number" name="attr_CON-racial" value="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{CON-asi}" type="number" name="attr_CON-asi" value="0" /></span>
-                                        <span class="table-cell left-border right-border"><input class="calc" readonly title="@{buff_CON-total}" type="number" name="attr_buff_CON-total" value="0" /></span>
+                                        <span class="table-cell left-border right-border">
+                                            <input type="checkbox" class="buff-exists hidden warn-show" name="attr_buff_CON_penalty_exists" value="1" role="presentation" />
+                                            <input class="calc highlight" title="@{buff_CON-total}" type="number" name="attr_buff_CON-total" value="0" readonly />
+                                        </span>
                                         <span class="table-cell"><input title="@{CON-damage}" type="number" name="attr_CON-damage" value="0" max="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{CON-penalty}" type="number" name="attr_CON-penalty" value="0" max="0" /></span>
                                         <span class="table-cell"><input title="@{CON-drain}" type="number" name="attr_CON-drain" value="0" max="0" /></span>
-                                        <!-- hide debuff with noshow -->
-                                        <span class="table-cell noshow"><input title="@{buff_CON-total_penalty}" name="attr_buff_CON-total_penalty" type="number" value="0" class="calc" readonly /></span>
+                                        <!-- debuff -->
+                                        <span class="table-cell"><input title="@{buff_CON-total_penalty}" name="attr_buff_CON-total_penalty" type="number" value="0" class="calc" readonly /></span>
                                         <span class="table-cell"><input class="calc" readonly title="@{CON-cond}" type="number" name="attr_CON-cond" value="0" max="0" /></span>
                                         <details class="table-cell extra-sect">
                                             <summary class="hide-readonly">...</summary>
@@ -1690,12 +1701,15 @@
                                         <span class="table-cell"><input title="@{INT-misc}" type="number" name="attr_INT-misc" value="0" min="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{INT-racial}" type="number" name="attr_INT-racial" value="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{INT-asi}" type="number" name="attr_INT-asi" value="0" /></span>
-                                        <span class="table-cell left-border right-border"><input class="calc" readonly title="@{buff_INT-total}" type="number" name="attr_buff_INT-total" value="0" /></span>
+                                        <span class="table-cell left-border right-border">
+                                            <input type="checkbox" class="buff-exists hidden warn-show" name="attr_buff_INT_penalty_exists" value="1" role="presentation" />
+                                            <input class="calc highlight" title="@{buff_INT-total}" type="number" name="attr_buff_INT-total" value="0" readonly />
+                                        </span>
                                         <span class="table-cell"><input title="@{INT-damage}" type="number" name="attr_INT-damage" value="0" max="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{INT-penalty}" type="number" name="attr_INT-penalty" value="0" max="0" /></span>
                                         <span class="table-cell"><input title="@{INT-drain}" type="number" name="attr_INT-drain" value="0" max="0" /></span>
-                                        <!-- hide debuff with noshow -->
-                                        <span class="table-cell noshow"><input title="@{buff_INT-total_penalty}" name="attr_buff_INT-total_penalty" type="number" value="0" class="calc" readonly /></span>
+                                        <!-- debuff -->
+                                        <span class="table-cell"><input title="@{buff_INT-total_penalty}" name="attr_buff_INT-total_penalty" type="number" value="0" class="calc" readonly /></span>
                                         <span class="table-cell"><input class="calc" readonly title="@{INT-cond}" type="number" name="attr_INT-cond" value="0" max="0" /></span>
                                         <details class="table-cell extra-sect">
                                             <summary class="hide-readonly">...</summary>
@@ -1712,12 +1726,15 @@
                                         <span class="table-cell"><input title="@{WIS-misc}" type="number" name="attr_WIS-misc" value="0" min="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{WIS-racial}" type="number" name="attr_WIS-racial" value="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{WIS-asi}" type="number" name="attr_WIS-asi" value="0" /></span>
-                                        <span class="table-cell left-border right-border"><input class="calc" readonly title="@{buff_WIS-total}" type="number" name="attr_buff_WIS-total" value="0" /></span>
+                                        <span class="table-cell left-border right-border">
+                                            <input type="checkbox" class="buff-exists hidden warn-show" name="attr_buff_WIS_penalty_exists" value="1" role="presentation" />
+                                            <input class="calc highlight" title="@{buff_WIS-total}" type="number" name="attr_buff_WIS-total" value="0" readonly />
+                                        </span>
                                         <span class="table-cell"><input title="@{WIS-damage}" type="number" name="attr_WIS-damage" value="0" max="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{WIS-penalty}" type="number" name="attr_WIS-penalty" value="0" max="0" /></span>
                                         <span class="table-cell"><input title="@{WIS-drain}" type="number" name="attr_WIS-drain" value="0" max="0" /></span>
-                                        <!-- hide debuff with noshow -->
-                                        <span class="table-cell noshow"><input title="@{buff_WIS-total_penalty}" name="attr_buff_WIS-total_penalty" type="number" value="0" class="calc" readonly /></span>
+                                        <!-- debuff -->
+                                        <span class="table-cell"><input title="@{buff_WIS-total_penalty}" name="attr_buff_WIS-total_penalty" type="number" value="0" class="calc" readonly /></span>
                                         <span class="table-cell"><input class="calc" readonly title="@{WIS-cond}" type="number" name="attr_WIS-cond" value="0" max="0" /></span>
                                         <details class="table-cell extra-sect">
                                             <summary class="hide-readonly">...</summary>
@@ -1734,12 +1751,15 @@
                                         <span class="table-cell"><input title="@{CHA-misc}" type="number" name="attr_CHA-misc" value="0" min="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{CHA-racial}" type="number" name="attr_CHA-racial" value="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{CHA-asi}" type="number" name="attr_CHA-asi" value="0" /></span>
-                                        <span class="table-cell left-border right-border"><input class="calc" readonly title="@{buff_CHA-total}" type="number" name="attr_buff_CHA-total" value="0" /></span>
+                                        <span class="table-cell left-border right-border">
+                                            <input type="checkbox" class="buff-exists hidden warn-show" name="attr_buff_CHA_penalty_exists" value="1" role="presentation" />
+                                            <input class="calc highlight" title="@{buff_CHA-total}" type="number" name="attr_buff_CHA-total" value="0" readonly />
+                                        </span>
                                         <span class="table-cell"><input title="@{CHA-damage}" type="number" name="attr_CHA-damage" value="0" max="0" /></span>
                                         <span class="table-cell extra-sect"><input title="@{CHA-penalty}" type="number" name="attr_CHA-penalty" value="0" max="0" /></span>
                                         <span class="table-cell"><input title="@{CHA-drain}" type="number" name="attr_CHA-drain" value="0" max="0" /></span>
-                                        <!-- hide debuff with noshow -->
-                                        <span class="table-cell noshow"><input title="@{buff_CHA-total_penalty}" name="attr_buff_CHA-total_penalty" type="number" value="0" class="calc" readonly /></span>
+                                        <!-- debuff -->
+                                        <span class="table-cell"><input title="@{buff_CHA-total_penalty}" name="attr_buff_CHA-total_penalty" type="number" value="0" class="calc" readonly /></span>
                                         <span class="table-cell"><input class="calc" readonly title="@{CHA-cond}" type="number" name="attr_CHA-cond" value="0" max="0" /></span>
                                         <details class="table-cell extra-sect">
                                             <summary class="hide-readonly">...</summary>
