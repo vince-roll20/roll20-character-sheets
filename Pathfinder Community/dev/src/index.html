@@ -32,10 +32,12 @@
                     </h2>
                     <ol>
                         <h4>Latest ($$CURRENTRELEASEDATE$$)</h4>
-                        <li>Fixed a bug in buffs where a buff to all "saves" would erroneously stack with trait and resistance bonuses.</li>
-                        <li>Fixed a bug that prevented buff penalties to Ability scores from being displayed properly with the Debuff column.</li>
-                        <li>Updated the feats and traits datalists to remove duplicate line items.</li>
-                        <li>Updated #cast to also adjust the Spells/Day (#left column).</li>
+
+                        <li>Fixed: buff to CMD(Dodge) would erroneously be included with the "FF CMD" calc. Use the "Do not lose Dex..." checkbox e.g. Uncanny Dodge, to include any CMD(Dodge) buff.</li>
+                        <li>Fixed: buff to all "Saves" would erroneously stack with Trait and Resistance bonuses.</li>
+                        <li>Fixed: buff penalties to Ability scores were not displayed with the Ability row's "Debuff" column or in the active Buffs panel at the top of the sheet.</li>
+                        <li>Updated the Feats and Traits datalists to remove duplicate line items.</li>
+                        <li>Fixed: #cast in repeating_spells row was not linked to the Spells/Day, #left column.</li>
                         <li>Copied the "Has multiple spellcasting classes" option from the Spells section to sheet settings>spells.</li>
 
                         <h4>Previous</h4>

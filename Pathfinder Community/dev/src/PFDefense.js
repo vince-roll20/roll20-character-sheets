@@ -122,7 +122,8 @@ export function updateDefenses(callback, silently, eventInfo) {
         buffs = parseInt(v['buff_AC-total'], 10) || 0,
         buffsTouchOnly = parseInt(v['buff_Touch-total'], 10) || 0,
         buffsCMDOnly = parseInt(v['buff_CMD-total'], 10) || 0,
-        buffsFFcmdOnlyDropDodge = parseInt(v['buff_ffCMD-nododge'], 10) || 0,
+        // buff_ffCMD-nododge doesn't exist...?
+        // buffsFFcmdOnlyDropDodge = parseInt(v['buff_ffCMD-nododge'], 10) || 0,
         armor = parseInt(v['AC-armor'], 10) || 0,
         shield = parseInt(v['AC-shield'], 10) || 0,
         natural = parseInt(v['AC-natural'], 10) || 0,
@@ -261,7 +262,7 @@ export function updateDefenses(callback, silently, eventInfo) {
         } else if (loseDex) {
           if (!currUncanny) {
             dodge = 0;
-            //                    dodgebuff = 0;
+            // dodgebuff = 0;
             noDexShowLimit = 1;
           }
           //set to same as flat footed (probably 0) or less than if ability already under 10.
@@ -294,10 +295,13 @@ export function updateDefenses(callback, silently, eventInfo) {
         touch = 10 + ability + size + deflect + miscAC + condPenalty + dodge + bufftouch;
         ff = 10 + armor + shield + natural + ffAbility + size + deflect + miscAC + condPenalty + ffdodge + buffff;
         cmd = 10 + bab + cmdAbility1 + cmdAbility2 + -1 * size + deflect + miscCMD + cmdPenalty + dodge + buffcmd;
-        //            cmdFF = 10 + bab + cmdAbility1 + cmdFFAbility2 + (-1 * size) + deflect + miscCMD + cmdPenalty + ffdodge + buffffcmd;
-        cmdFF = 10 + bab + cmdAbility1 + cmdFFAbility2 + -1 * size + deflect + miscCMD + cmdPenalty + ffdodge + buffffcmd - (buffffcmd !== 0 ? buffsFFcmdOnlyDropDodge : 0);
-        // added '- buffsFFcmdOnlyDropDodge' to prevent cmd(type:dodge) buff from being included with cmdff
-        // need to prevent buffsFFcmdOnlyDropDodge from being included in the cmdff calc when the cmd(type:dodge) buff is unchecked...
+
+        // cmdFF = 10 + bab + cmdAbility1 + cmdFFAbility2 + -1 * size + deflect + miscCMD + cmdPenalty + ffdodge + buffffcmd;
+        // cmdFF = 10 + bab + cmdAbility1 + cmdFFAbility2 + -1 * size + deflect + miscCMD + cmdPenalty + ffdodge + buffffcmd - (buffffcmd !== 0 ? buffsFFcmdOnlyDropDodge : 0);
+
+        // prevents a buff to cmd(type:dodge) from being included with cmdff and handles uncanny toggle
+        cmdFF = 10 + bab + cmdAbility1 + cmdFFAbility2 + -1 * size + deflect + miscCMD + cmdPenalty + ffdodge + buffffcmd - (buffffcmd !== 0 && !currUncanny ? buffffcmd : 0);
+
         if (parseInt(v.buffsumac, 10) !== buffac) {
           setter.buffsumac = buffac;
         }
@@ -311,7 +315,8 @@ export function updateDefenses(callback, silently, eventInfo) {
           setter.buffsumcmd = buffcmd;
         }
         if (parseInt(v.buffsumffcmd, 10) !== buffffcmd) {
-          setter.buffsumffcmd = buffffcmd;
+          // displays buff: 0 on the FF CMD row if not uncanny
+          setter.buffsumffcmd = currUncanny ? buffffcmd : 0;
         }
         if (ac !== currAC || isNaN(currAC)) {
           setter['AC'] = ac;
