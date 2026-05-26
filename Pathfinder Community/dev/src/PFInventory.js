@@ -106,6 +106,7 @@ export function resetCommandMacro(callback) {
   PFMenus.resetOneCommandMacro('item', true, doneOne, '', groupMapForMenu);
   PFMenus.resetOneCommandMacro('item', false, doneOne, '', groupMapForMenu);
 }
+
 /** Gets the worn item grid row name corresponding to location number in dropdown
  *@param {Number|string} location a value from repeating_item_$X_location or name of location
  *@returns {string} name of "worn-space" to set
@@ -164,8 +165,9 @@ export function updateRepeatingItems(callback, silently, attrToUpdate) {
     }
   });
   try {
-    if (!attrToUpdate) {
-      attrToUpdate = totaledFields;
+    let updateAttr = attrToUpdate;
+    if (!updateAttr) {
+      updateAttr = totaledFields;
     }
     //TAS.debug("at updateRepeatingItems");
     TAS.repeating('item')
@@ -177,24 +179,24 @@ export function updateRepeatingItems(callback, silently, attrToUpdate) {
             //TAS.debug("in weight add row, variables: weight: "+r.F['item-weight']+", qty:"+r.I.qty+", max:"+r.I.qty_max +", loc:"+ r.I.location);
             if (r.I.qty > 0) {
               if (r.I.qty_max === 0 || r.I.qty_max === 1) {
-                if (attrToUpdate.weight && r.I.location !== locationMap.NotCarried) {
+                if (updateAttr.weight && r.I.location !== locationMap.NotCarried) {
                   m['item-weight'] += r.F['item-weight'] * r.F.qty;
                 }
-                if (attrToUpdate.value) {
+                if (updateAttr.value) {
                   m.value += r.F.value * r.F.qty;
                 }
-                if (attrToUpdate.hp) {
+                if (updateAttr.hp) {
                   m['item-hp'] += r.I['item-hp'] * r.I.qty;
                   m['item-hp_max'] += r.I['item-hp_max'] * r.I.qty;
                 }
               } else {
-                if (attrToUpdate.weight && r.I.location !== locationMap.NotCarried) {
+                if (updateAttr.weight && r.I.location !== locationMap.NotCarried) {
                   m['item-weight'] += r.F['item-weight'];
                 }
-                if (attrToUpdate.value) {
+                if (updateAttr.value) {
                   m.value += r.F.value;
                 }
-                if (attrToUpdate.hp) {
+                if (updateAttr.hp) {
                   m['item-hp'] += r.I['item-hp'];
                   m['item-hp_max'] += r.I['item-hp_max'];
                 }
@@ -218,14 +220,14 @@ export function updateRepeatingItems(callback, silently, attrToUpdate) {
           if (a['use_metrics'] > 0) {
             use_metrics = 0.454;
           }
-          if (attrToUpdate.weight) {
+          if (updateAttr.weight) {
             a.S['item_total_weight'] = Math.floor(m['item-weight'] * use_metrics * 100) / 100;
           }
-          if (attrToUpdate.hp) {
+          if (updateAttr.hp) {
             a.S['item-total-hp'] = m['item-hp'];
             a.S['item-total-hp_max'] = m['item-hp_max'];
           }
-          if (attrToUpdate.value) {
+          if (updateAttr.value) {
             a.S['item-total-value'] = Math.floor(m.value * 100) / 100;
           }
         },
@@ -236,6 +238,7 @@ export function updateRepeatingItems(callback, silently, attrToUpdate) {
     done();
   }
 }
+
 /** updateCarriedCurrency  totals weight for carried currency
  *@param {function} callback to call when done
  *@param {bool} silently if true send PFConst.silentParams to SWUtils.setWrapper
@@ -280,6 +283,7 @@ function updateCarriedCurrency(callback, silently) {
     }
   });
 }
+
 /** updateCarriedTotal- updates the total for carried weight
  *@param {function} callback to call when done
  *@param {bool} silently if true send PFConst.silentParams to SWUtils.setWrapper
@@ -328,6 +332,7 @@ function updateCarriedTotal(callback, silently) {
     }
   });
 }
+
 /** Got rid of the Worn Equipment section, so migrate any values to the Equipment as repeating entries.
  * Worn Armor & Worn Shield are now disabled and controlled by the Equipment section in the Inventory tab.
  *@param {function} callback to call when done
@@ -666,6 +671,7 @@ function migrateWornEquipment(callback) {
     }
   });
 }
+
 function unsetOtherItems(callback, location, id) {
   if (!id || location < 2 || !location) {
     if (typeof callback === 'function') {
@@ -710,6 +716,7 @@ function unsetOtherItems(callback, location, id) {
     });
   });
 }
+
 /** set old location to the new location, and unset other items set to this location, also updates loctype-tab
  *@param {string} id id of row updated, or null
  *@param {function} callback to call when done
@@ -724,18 +731,16 @@ function updateEquipmentLocation(id, callback, silently, eventInfo) {
       }
     }),
     /* unsetOtherItems makes sure any other row than id is not in location */
-
-    idStr = SWUtils.getRepeatingIDStr(id),
-    item_entry = 'repeating_item_' + idStr,
-    realItemID = id || (eventInfo ? SWUtils.getRowId(eventInfo.sourceAttribute) || '' : ''),
-    prefix = 'repeating_item_' + realItemID + '_',
-    locationField = prefix + 'location',
-    locationTabField = prefix + 'loctype-tab',
-    nameField = prefix + 'name',
-    oldLocationField = prefix + 'old_location',
-    rollField = prefix + 'macro-text';
+    idStr = id || (eventInfo ? SWUtils.getRowId(eventInfo.sourceAttribute) || '' : ''),
+    sourceAttr = SWUtils.getAttributeName(eventInfo.sourceAttribute),
+    item_entry = 'repeating_item_' + idStr + '_',
+    locationField = item_entry + 'location',
+    locationTabField = item_entry + 'loctype-tab',
+    nameField = item_entry + 'name',
+    oldLocationField = item_entry + 'old_location',
+    rollField = item_entry + 'macro-text';
   try {
-    //TAS.debug("updateEquipmentLocation: called for ID "+ realItemID);
+    //TAS.debug("updateEquipmentLocation: called for ID "+ idStr);
     //sample source: repeating_item_-kbkc95wvqw1n4rbgs1c_location
     // note that the source is always lowercase, but the actual ID is both cases
     //check value of 'location' to see if it is being worn; if not check to see if the player is removing it from 'worn'
@@ -751,6 +756,16 @@ function updateEquipmentLocation(id, callback, silently, eventInfo) {
       //TAS.debug("updateEquipmentLocation: ", v);
       try {
         location = parseInt(v[locationField], 10);
+        if (sourceAttr === 'set-as-armor') {
+          location = locationMap.Armor;
+          wornItemAttrs[locationField] = location;
+          setter[`${item_entry}equip-type`] = 2;
+        }
+        if (sourceAttr === 'set-as-shield') {
+          location = locationMap.Shield;
+          wornItemAttrs[locationField] = location;
+          setter[`${item_entry}equip-type`] = 2;
+        }
         if (isNaN(location)) {
           //TAS.debug("why is location not set!?");
           location = locationMap.NotCarried;
@@ -811,7 +826,7 @@ function updateEquipmentLocation(id, callback, silently, eventInfo) {
             if (itemName) {
               wornItemAttrs[wornSlot] = itemName;
             } else {
-              wornItemAttrs[wornSlot] = 'Row ' + realItemID;
+              wornItemAttrs[wornSlot] = 'Row ' + idStr;
             }
             wornItemAttrs[wornSlot + '-roll'] = '@{' + rollField + '}';
           }
@@ -830,7 +845,7 @@ function updateEquipmentLocation(id, callback, silently, eventInfo) {
           TAS.debug('updateEquipmentLocation, setting slot ', wornItemAttrs);
           SWUtils.setWrapper(wornItemAttrs, PFConst.silentParams, function () {
             if (location > locationMap.NotCarried) {
-              unsetOtherItems(callback, location, realItemID);
+              unsetOtherItems(callback, location, idStr);
             }
             done();
           });
@@ -847,6 +862,7 @@ function updateEquipmentLocation(id, callback, silently, eventInfo) {
     done();
   }
 }
+
 /** replace the values on the Defenses tab in disabled fields with this row's values
  * from the equipment.
  *@param {int} location the value of location attribute in repeating_item
@@ -976,7 +992,7 @@ function updateWornArmorAndShield(location, sourceAttribute, callback) {
           silentSetter[item_entry + 'set-as-shield'] = '0';
         }
         //set armor3 or shield3 name
-        itemName = w[item_entry + 'name'];
+        itemName = w[item_entry + 'name'] || 'Row ' + id;
         if (itemName) {
           if (w[defenseItem] !== itemName) {
             setter[defenseItem] = itemName;
@@ -1013,7 +1029,7 @@ function updateWornArmorAndShield(location, sourceAttribute, callback) {
       if (_.size(silentSetter) > 0) {
         SWUtils.setWrapper(silentSetter, PFConst.silentParams, function () {
           if (actualLocation !== location) {
-            updateEquipmentLocation(id, null, true, null);
+            updateEquipmentLocation(id, null, true, eventInfo);
           }
         });
       }
@@ -1026,6 +1042,7 @@ function updateWornArmorAndShield(location, sourceAttribute, callback) {
     }
   });
 }
+
 /**  calls updateEquipmentLocation for all items
  * can be refactored to be faster to do all at once
  */
@@ -1056,6 +1073,7 @@ export function updateLocations(callback) {
     }
   });
 }
+
 /** Triggered from a button in repeating_items, it will create a repeating attack entry from the item entry
  * @param {string} id the id of the item row
  * @param {string} weaponId if the row already exists, overwrite all fields but 'name' this is similar to updateAssociatedAttack
@@ -1174,6 +1192,7 @@ export function createAttackEntryFromRow(id, callback, silently, eventInfo, weap
     }
   });
 }
+
 export function updateAssociatedAttack(source, callback) {
   var done = _.once(function () {
       //TAS.debug("leaving PFInventory.updateAssociatedAttack");
@@ -1196,7 +1215,7 @@ export function updateAssociatedAttack(source, callback) {
     }
     itemId = SWUtils.getRowId(source);
     attrib = SWUtils.getAttributeName(source);
-    //TAS.debug("attrib=" + attrib);
+    TAS.debug('attrib=' + attrib);
     if (source.indexOf('repeating_weapon_') === 0) {
       // source is an attack, so pull all data from the source (item/spell/spell-like ability) to update the attack
       // attrib will be source-item, source-spell, or source-ability
@@ -1207,10 +1226,11 @@ export function updateAssociatedAttack(source, callback) {
     // source is an item, so update all linked attacks with the changed attribute
     weaponAttrib = attrib.replace('item-', '');
     if (attrib === 'name') {
-      weaponAttrib = 'source-item-name';
+      // weaponAttrib = 'source-item-name';
+      weaponAttrib = 'name';
     } else if (attrib === 'item-dmg-type') {
       weaponAttrib = 'type';
-    } else if (attrib === 'wpenhance') {
+    } else if (attrib === 'item-wpenhance') {
       weaponAttrib = 'enhance';
     }
   } catch (outererror1) {
@@ -1238,8 +1258,8 @@ export function updateAssociatedAttack(source, callback) {
       fields = _.reduce(
         idarray,
         function (memo, currentID) {
-          memo = memo.concat(['repeating_weapon_' + currentID + '_source-item', 'repeating_weapon_' + currentID + '_' + weaponAttrib]);
-          return memo;
+          const m = memo.concat(['repeating_weapon_' + currentID + '_source-item', 'repeating_weapon_' + currentID + '_' + weaponAttrib]);
+          return m;
         },
         [],
       );
@@ -1282,6 +1302,7 @@ export function updateAssociatedAttack(source, callback) {
     });
   });
 }
+
 /** Determines the equipment type from looking at the name.
  * DOES NOT WORK for armor or weapons, this is for after you have already determined it is not an armor or weapon type.
  *@param {string} name the name field
@@ -1364,6 +1385,7 @@ export function getEquipmentTypeFromName(name) {
   }
   return currType;
 }
+
 export function importFromCompendium(eventInfo) {
   var id = SWUtils.getRowId(eventInfo.sourceAttribute),
     prefix = 'repeating_item_' + id + '_',
@@ -1574,6 +1596,7 @@ export function importFromCompendium(eventInfo) {
     }
   });
 }
+
 function updateUses(callback) {
   var done = _.once(function () {
     //TAS.debug("leaving PFInventory.updateUses");
@@ -1693,6 +1716,7 @@ function unsetOrphanedWornSlots(callback) {
     });
   });
 }
+
 function deleteWornRow(source, location, type, name, callback) {
   const searchSource = source.toLowerCase();
   getAttrs(['armor3', 'shield3', ...wornSlotsRolls], function (v) {
@@ -1764,6 +1788,7 @@ function deleteWornRow(source, location, type, name, callback) {
     }
   });
 }
+
 export function setNewDefaults(callback, oldversion) {
   var done = _.once(function () {
     //TAS.debug("leaving PFInventory.setNewDefaults");
@@ -1879,6 +1904,7 @@ export function setNewDefaults(callback, oldversion) {
     }
   });
 }
+
 export function migrate(callback, oldversion) {
   var done = _.once(function () {
     //TAS.debug("leaving PFInventory.migrate");
@@ -1897,6 +1923,7 @@ export function migrate(callback, oldversion) {
     }),
   );
 }
+
 export var recalculate = TAS.callback(function PFInventoryRecalculate(callback, silently, oldversion) {
   var done = _.once(function () {
       TAS.info('leaving PFInventory.recalculate');
@@ -1922,6 +1949,7 @@ export var recalculate = TAS.callback(function PFInventoryRecalculate(callback, 
     done();
   }
 });
+
 function registerEventHandlers() {
   var tempstr = '';
   on(
@@ -1936,6 +1964,7 @@ function registerEventHandlers() {
   on(
     'change:repeating_item:location',
     TAS.callback(function eventUpdateItemLocation(eventInfo) {
+      const id = SWUtils.getRepeatingIDStr(id);
       // TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType);
       if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api') {
         getAttrs(['repeating_item_location', 'repeating_item_old_location'], function (v) {
@@ -1943,10 +1972,10 @@ function registerEventHandlers() {
             oldLoc = parseInt(v.repeating_item_old_location, 10);
           if (newLoc === locationMap.Armor || newLoc === locationMap.Shield) {
             updateWornArmorAndShield(newLoc, eventInfo.sourceAttribute, function () {
-              updateEquipmentLocation(null, null, null, eventInfo);
+              updateEquipmentLocation(id, null, null, eventInfo);
             });
           } else {
-            updateEquipmentLocation(null, null, null, eventInfo);
+            updateEquipmentLocation(id, null, null, eventInfo);
           }
           if (newLoc !== locationMap.NotCarried || (oldLoc !== locationMap.NotCarried && oldLoc !== newLoc)) {
             updateRepeatingItems(null, false, {weight: 1});
@@ -2068,17 +2097,15 @@ function registerEventHandlers() {
       }
     }),
   );
-  //change item worn in shield or armor location
+  //change in shield or armor
   on(
-    'change:repeating_item:item-defense-type change:repeating_item:item-acbonus change:repeating_item:item-max-dex change:repeating_item:item-acp change:repeating_item:item-spell-fail change:repeating_item:item-proficiency change:repeating_item:acenhance',
+    'change:repeating_item:name change:repeating_item:item-defense-type change:repeating_item:item-acbonus change:repeating_item:item-max-dex change:repeating_item:item-acp change:repeating_item:item-spell-fail change:repeating_item:item-proficiency change:repeating_item:acenhance',
     TAS.callback(function eventUpdateEquippedArmorOrShield(eventInfo) {
-      var location = 0;
       TAS.debug('caught ' + eventInfo.sourceAttribute + ' event' + eventInfo.sourceType);
       getAttrs(['repeating_item_location'], function (v) {
-        var location = parseInt(v['repeating_item_location'], 10) || 0;
-        if (location === locationMap.Armor || location === locationMap.Shield) {
-          updateWornArmorAndShield(location, eventInfo.sourceAttribute);
-        }
+        const location = parseInt(v['repeating_item_location'], 10) || 0;
+        if (location !== locationMap.Armor || location !== locationMap.Shield) return;
+        updateWornArmorAndShield(location, eventInfo.sourceAttribute);
       });
     }),
   );
@@ -2095,7 +2122,7 @@ function registerEventHandlers() {
     );
   });
   on(
-    'change:repeating_item:name change:repeating_item:item-dmg-type change:repeating_item:item-proficiency change:repeating_item:default_size change:repeating_item:wpenhance',
+    'change:repeating_item:name change:repeating_item:item-dmg-type change:repeating_item:item-proficiency change:repeating_item:default_size change:repeating_item:item-wpenhance',
     TAS.callback(function eventupdateAssociatedAttack(eventInfo) {
       TAS.debug('caught ' + eventInfo.sourceAttribute + ' event' + eventInfo.sourceType);
       if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api') {
@@ -2191,6 +2218,7 @@ function registerEventHandlers() {
     });
   });
 }
+
 registerEventHandlers();
 //PFConsole.log('   PFInventory module loaded      ' );
 //PFLog.modulecount++;
