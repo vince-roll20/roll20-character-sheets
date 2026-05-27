@@ -3215,6 +3215,10 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
     position: relative;
 }
 
+.charsheet .repitem .compendium-drop-target.active-drop-target {
+    border-color: #0078d4 !important;
+}
+
 .charsheet .vertical-middle {
     vertical-align: middle;
 }
