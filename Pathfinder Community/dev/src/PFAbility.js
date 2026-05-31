@@ -263,7 +263,7 @@ function getNewAbilityAttrs(ability) {
     setter[prefix + 'short-description'] = ability['short-description'] || '';
     setter[prefix + 'description'] = ability['description'] || '';
     setter[prefix + 'rule_category'] = ability['rule_category'] || '';
-    setter[prefix + 'CL-basis'] = ability['CL-basis'] || '0';
+    setter[prefix + 'CL-basis'] = ability['CL-basis'] || '(0*(@{level}))';
     setter[prefix + 'class-name'] = ability['class-name'] || '';
     if (ability.rule_category === 'spell-like-abilities') {
       setter[prefix + 'ability_type'] = 'Sp';
@@ -442,7 +442,7 @@ export function importFromCompendium(callback, eventInfo) {
             newcat = 'feats';
           } else if (compcat === 'monster rule') {
             newcat = 'monster-rule';
-          } else if (compcat === 'spell') {
+          } else if (compcat === 'spells') {
             newcat = 'spell-like-abilities';
           }
           if (newcat === 'monster-rule') {
@@ -510,7 +510,7 @@ export function importFromCompendium(callback, eventInfo) {
             if (ability_basis === 'CON' && parseInt(v.is_undead, 10)) {
               ability_basis = 'CHA';
             }
-            ability_basis = '@{' + ability_basis + '}';
+            ability_basis = '@{' + ability_basis + '-mod}';
             setter[prefix + 'ability-basis'] = ability_basis;
           }
         }
