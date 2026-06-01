@@ -1718,20 +1718,23 @@ also need 1 more level in selector or base css will override border */
 
 /******************************* API COMMAND BUTTONS *************************************/
 
-.charsheet button[type="roll"].command-button {
+.charsheet button[type="roll"].command-button,
+.charsheet button[type="action"].command-button {
     background-color: #fff;
-    color: #333;
-    padding: 0 0.4rem 0 0.4rem;
-    margin: 0.2rem;
-    font-weight: normal;
-    display: inline-block;
     border: 0.1rem solid #789;
     border-radius: 0.4rem;
+    color: #333;
+    display: inline-block;
     font-size: 1.4rem;
+    font-weight: normal;
+    margin: 0.2rem;
+    padding: 0 0.4rem 0 0.4rem;
 }
 
 .charsheet button[type="roll"].command-button:hover,
-.charsheet button[type="roll"].command-button:focus {
+.charsheet button[type="roll"].command-button:focus,
+.charsheet button[type="action"].command-button:hover,
+.charsheet button[type="action"].command-button:focus {
     color: #e20c0c;
     box-shadow: 0.1rem 0.1rem 0.2rem #333;
 }
@@ -1792,7 +1795,8 @@ also need 1 more level in selector or base css will override border */
 }
 
 .charsheet button[type="roll"].custom-button::before,
-.charsheet button[type="roll"].command-button::before {
+.charsheet button[type="roll"].command-button::before,
+.charsheet button[type="action"].command-button::before {
     content: "" !important;
 }
 
@@ -2177,6 +2181,20 @@ also need 1 more level in selector or base css will override border */
 /* if all pressed show all */
 .charsheet .tabs.custbordernav ~ .tabinput.tab99:checked ~ .repeating-fields .custrepeating-border {
     display: block !important;
+}
+
+.charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only {
+    display: none;
+}
+
+.charsheet .abilities .tabinput.tab6:checked ~ .selected-tabtitle.tab6 ~ .sla-only,
+.charsheet .abilities .tabinput.tab10:checked ~ .selected-tabtitle.tab10 ~ .sla-only {
+    display: inline-flex;
+    margin-left: 2em;
+}
+
+.ui-dialog .tab-content .charsheet .sla-only > * {
+    flex: 1 1 8em;
 }
 
 /* extra abilities tab: hide old .sections */
