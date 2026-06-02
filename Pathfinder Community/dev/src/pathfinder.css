@@ -2190,11 +2190,27 @@ also need 1 more level in selector or base css will override border */
 .charsheet .abilities .tabinput.tab6:checked ~ .selected-tabtitle.tab6 ~ .sla-only,
 .charsheet .abilities .tabinput.tab10:checked ~ .selected-tabtitle.tab10 ~ .sla-only {
     display: inline-flex;
-    margin-left: 2em;
+    left: initial;
+    margin: 0 0 0 1em;
 }
 
-.ui-dialog .tab-content .charsheet .sla-only > * {
-    flex: 1 1 8em;
+.charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only > span:first-child {
+    display: grid;
+    grid-template-columns: 2em 6em;
+    justify-items: stretch;
+    width: min-content;
+}
+
+.charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only > span:last-child {
+    display: grid;
+    grid-template-columns: 2em 6em minmax(0, auto);
+    justify-items: stretch;
+    margin-left: 1em;
+    width: min-content;
+}
+
+.charsheet .sla-only .or-B-show:not(:checked) ~ .either-or-sect {
+    visibility: collapse;
 }
 
 /* extra abilities tab: hide old .sections */
@@ -2949,18 +2965,26 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
     vertical-align: middle;
 }
 
-.charsheet .allrows-note {
-    margin-inline: 1em;
-    opacity: 0;
+.ui-dialog .tab-content .charsheet .allrows-note {
+    background: #fff;
+    display: inline-block;
+    margin-left: 0.5em;
     outline: 2px solid #e20c0c;
-    padding: 2px;
+    padding: 5px;
     pointer-events: none;
+    position: absolute;
+    z-index: 5;
 }
 
 .charsheet .deletesect-show:checked ~ .allrows-note,
 .charsheet .sheetconfig label:has(.deletesect-show:checked) + .allrows-note {
     opacity: 1;
     pointer-events: all;
+}
+
+.charsheet .deletesect-show:checked ~ .allrows-note:hover,
+.charsheet .sheetconfig label:has(.deletesect-show:checked) + .allrows-note:hover {
+    cursor: pointer;
 }
 
 .charsheet .small-label2 .createattackbutton + span::before {
@@ -3599,7 +3623,7 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
     margin: auto;
     place-items: center;
     position: relative;
-    vertical-align: top;
+    vertical-align: text-top;
 }
 
 .charsheet .core-details .small-label2 {
