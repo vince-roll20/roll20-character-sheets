@@ -2196,14 +2196,14 @@ also need 1 more level in selector or base css will override border */
 
 .charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only > span:first-child {
     display: grid;
-    grid-template-columns: 2em 6em;
+    grid-template-columns: 2em 6.25em;
     justify-items: stretch;
     width: min-content;
 }
 
 .charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only > span:last-child {
     display: grid;
-    grid-template-columns: 2em 6em minmax(0, auto);
+    grid-template-columns: 2em 6.25em minmax(0, auto);
     justify-items: stretch;
     margin-left: 1em;
     width: min-content;
