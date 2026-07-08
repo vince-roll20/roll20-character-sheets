@@ -5,6 +5,7 @@
 <input type="hidden" name="attr_intelligence_score_backup"/>
 <div style="text-align: center; width: 800px;" class="SAbutton">
  <button class="sheet-tab-button-main" type="action" name="act_main">Main</button>
+ <button class="sheet-tab-button-bio" type="action" name="act_bio">Bio</button>
  <button class="sheet-tab-button-definitions" type="action" name="act_definitions">Definitions</button>
  <button class="sheet-tab-button-abilities" type="action" name="act_abilities">Abilities/Feats</button>
  <button class="sheet-tab-button-spells" type="action" name="act_spells">Spells</button>
@@ -43,20 +44,20 @@
   <div id="species-name">
    <div>Species</div>
    <div><input title="@{species}" class="flex-input" type="text" name="attr_species"/></div>
-   <div>Speed</div>
+   <div>Speed (Land)</div>
    <div><input title="@{basespeed}" class="flex-input" type="text" name="attr_basespeed"/></div>
   </div>
   <div id="more-speed">
-   <div>Speed (Fly)</div>
-   <div><input title="@{flyspeed}" class="flex-input" type="text" name="attr_flyspeed" placeholder="#(Manuverability)"/></div>
+   <div>Sanctity</div>
+   <div><input title="@{Sanctity}" class="flex-input" type="text" name="attr_Sanctity"/></div>
    <div>Speed (Swim)</div>
    <div><input title="@{swimspeed}" class="flex-input" type="text" name="attr_swimspeed"/></div>
   </div>
   <div id="religion-name">
    <div>Religion</div>
    <div><input title="@{Religion}" class="flex-input" type="text" name="attr_Religion"/></div>
-   <div>Sanctity</div>
-   <div><input title="@{Sanctity}" class="flex-input" type="text" name="attr_Sanctity"/></div>
+   <div>Speed (Fly)</div>
+   <div><input title="@{flyspeed}" class="flex-input" type="text" name="attr_flyspeed" placeholder="#(Maneuverability)"/></div>
   </div>
   <div id="hd-and-size">
    <div>HD</div>
@@ -357,14 +358,14 @@
     <div>Roll</div>
     <div>
      <button class="button"
-             title="MagicTouchAttack"
+             title="Magic Touch Attack"
              type="roll"
              value="&{template:custom}{{title=Magic Touch Attack}}{{subtitle= @{character_name}'s touch spell}}{{Result:=[[1d20+@{MagicTouchAttack}]]}}"
              name="roll_MagicTouchAttackR"></button>
     </div>
     <div>
      <button class="button"
-             title="MartialTouchAttack"
+             title="Martial Touch Attack"
              type="roll"
              value="&{template:custom}{{title=Martial Touch Attack}}{{subtitle= @{character_name}'s touch attack}}{{Result:=[[1d20+@{MartialTouchAttack}]]}}"
              name="roll_MartialTouchAttackR"></button>
@@ -373,21 +374,21 @@
      <button class="button"
              title="Opposed Trip"
              type="roll"
-             value="&{template:custom}{{title=oppose strength (Trip)}}{{subtitle= @{character_name}'s opposing strength}}{{Result:=[[1d20+@{TripOpposed}]]}}"
+             value="&{template:custom}{{title=Opposed Strength (Trip)}}{{subtitle= @{character_name}'s opposing strength}}{{Result:=[[1d20+@{TripOpposed}]]}}"
              name="roll_TripOpposedR"></button>
     </div>
     <div>
      <button class="button"
              title="Opposed Shove"
              type="roll"
-             value="&{template:custom}{{title=oppose strength (Shove)}}{{subtitle= @{character_name}'s opposing strength}}{{Result:=[[1d20+@{ShoveOpposed}]]}}"
+             value="&{template:custom}{{title=Opposed Strength (Shove)}}{{subtitle= @{character_name}'s opposing strength}}{{Result:=[[1d20+@{ShoveOpposed}]]}}"
              name="roll_ShoveOpposedR"></button>
     </div>
     <div>
      <button class="button"
              title="Opposed Trample"
              type="roll"
-             value="&{template:custom}{{title=oppose strength (Trample)}}{{subtitle= @{character_name}'s opposing strength}}{{Result:=[[1d20+@{TrampleOpposed}]]}}"
+             value="&{template:custom}{{title=Opposed Strength (Trample)}}{{subtitle= @{character_name}'s opposing strength}}{{Result:=[[1d20+@{TrampleOpposed}]]}}"
              name="roll_opposed-trampleR"></button>
     </div>
     <div>
@@ -399,6 +400,47 @@
     </div>
    </div>
   </div> <!--Advanced Combat Grid-->
+  <div class="conditions-effects-block">
+   <div class="column-header">Conditions and Temporary Effects</div>
+   <div class="conditions-effects-content">
+    <div class="conditions-repeat-section">
+     <div class="conditions-subheader">Active Conditions</div>
+     <fieldset class="repeating_conditions">
+      <div class="condition-repeat-row">
+       <div class="condition-repeat-topline">
+        <select title="@{condition_type}" class="condition-select" name="attr_condition_type">
+         <option value="">Condition</option>
+         <option value="Bad Luck">Bad Luck</option>
+         <option value="Dizzy">Dizzy</option>
+         <option value="Exhausted">Exhausted</option>
+         <option value="Fatigued">Fatigued</option>
+         <option value="Haste">Haste</option>
+         <option value="Nauseated">Nauseated</option>
+         <option value="Scared">Scared</option>
+         <option value="Sickened">Sickened</option>
+         <option value="Sleep">Sleep</option>
+         <option value="Slow">Slow</option>
+         <option value="Soaked">Soaked</option>
+         <option value="Stifle">Stifle</option>
+         <option value="Stunned">Stunned</option>
+        </select>
+        <input title="@{condition_duration}"
+               class="condition-duration-input"
+               type="text" name="attr_condition_duration"
+               placeholder="Duration / source"/>
+       </div>
+       <div title="@{condition_effect}"
+            class="condition-effect-display">
+        <span name="attr_condition_effect"></span></div>
+      </div>
+     </fieldset>
+    </div>
+    <div class="temporary-effects-strip">
+     <label><input title="@{haste}" type="checkbox" name="attr_haste" value="1"/> Hasted</label>
+     <label><input title="@{slow}" type="checkbox" name="attr_slow" value="1"/> Slowed</label>
+    </div>
+   </div>
+  </div>
  </div>
  <div class="main-right">
   <div class="hp-armor-block">
@@ -495,9 +537,98 @@
     </div>
    </div>
   </div>
-  <div class="column-header grcsa">Notes</div>
-  <div>
-   <textarea name="attr_Main-Notes" placeholder="Pertinent information, notes, and bonuses..."/>
+  <div class="vitals-resistances-block">
+   <div class="column-header">Vitals and Resistances</div>
+   <div class="vitals-resistances-content">
+    <div class="vitals-rest-row">
+     <span>Rest:</span>
+     <button type="action" class="Small-Button vitals-rest-button" name="act_rest">Rest</button>
+    </div>
+    <div class="vitals-death-save-row">
+     <span>Death Saves:&nbsp;&nbsp;</span>
+     <!--<button type="action" class="Small-Button vitals-death-save-button" name="act_deathsave">Roll</button>-->
+     <label><input class="death-save-checkbox"
+                   title="@{death_save_1}"
+                   type="checkbox"
+                   name="attr_death_save_1"
+                   value="1"/> First Fail</label>
+     <label><input class="death-save-checkbox"
+                   title="@{death_save_2}"
+                   type="checkbox"
+                   name="attr_death_save_2"
+                   value="1"/> Second Fail</label>
+     <label><input class="death-save-checkbox"
+                   title="@{death_save_3}"
+                   type="checkbox"
+                   name="attr_death_save_3"
+                   value="1"/> Death</label>
+    </div>
+    <div class="vitals-repeat-columns">
+     <div class="vitals-repeat-section">
+      <div class="vitals-subheader">Damage Reduction</div>
+      <fieldset class="repeating_damagereduction">
+       <div class="damage-reduction-row">
+        <input title="@{damage_reduction_value}" class="vitals-small-number" type="number" name="attr_damage_reduction_value"/>
+        <span>/</span>
+        <input title="@{damage_reduction_bypass}" class="vitals-bypass-input" type="text" name="attr_damage_reduction_bypass" placeholder="Bypass"/>
+       </div>
+      </fieldset>
+     </div>
+     <div class="vitals-repeat-section">
+      <div class="vitals-subheader">Resistance</div>
+      <fieldset class="repeating_resistance">
+       <div class="resistance-row">
+        <select title="@{resistance_type}" class="vitals-element-select" name="attr_resistance_type">
+         <option value="Cold">Cold</option>
+         <option value="Corrosive">Corrosive</option>
+         <option value="Desiccation">Desiccation</option>
+         <option value="Electric">Electric</option>
+         <option value="Entropic">Entropic</option>
+         <option value="Force">Force</option>
+         <option value="Heat">Heat</option>
+         <option value="Holy">Holy</option>
+         <option value="Negative">Negative</option>
+         <option value="Positive">Positive</option>
+         <option value="Unholy">Unholy</option>
+        </select>
+        <input title="@{resistance_value}" class="vitals-small-number" type="number" name="attr_resistance_value"/>
+       </div>
+      </fieldset>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="column-header grcsa main-notes-header">Notes</div>
+  <div class="main-notes-body">
+   <textarea class="main-notes-textarea" name="attr_Main-Notes" placeholder="Pertinent information, notes, and bonuses..."></textarea>
+  </div>
+ </div>
+</div>
+<!--</editor-fold>-->
+
+<!--<editor-fold desc="Bio Tab"-->
+<div class="sheet-bio">
+ <div class="column-header">Biography and Details</div>
+ <div class="ggrid">
+  <div class="grc1 main-bio-left">
+   <div class="column-header-dark">Biography</div>
+   <div class="bio-text-box">
+    <textarea title="@{biography}" name="attr_biography"></textarea>
+   </div>
+   <div class="column-header-dark">Journal</div>
+   <div class="bio-text-box">
+    <textarea title="@{journal}" name="attr_journal"></textarea>
+   </div>
+  </div>
+  <div class="grc2 main-bio-right">
+   <div class="column-header-dark">Family</div>
+   <div class="bio-text-box">
+    <textarea title="@{family}" name="attr_family"></textarea>
+   </div>
+   <div class="column-header-dark">Contacts</div>
+   <div class="bio-text-box">
+    <textarea title="@{contacts}" name="attr_contacts"></textarea>
+   </div>
   </div>
  </div>
 </div>
@@ -550,7 +681,7 @@
     <div><input title="@{TotalPossibleSkillPoints}" type="number" name="attr_TotalPossibleSkillPoints" readonly/></div>
    </div>
    <div class="grc8">
-    <div>Unspent Skill Point</div>
+    <div>Unspent Skill Points</div>
     <div><input title="@{RemainingSkillPoints}" type="number" name="attr_RemainingSkillPoints" readonly/></div>
    </div>
   </div>
@@ -558,6 +689,7 @@
    <div class="grc1 bottom-border-div">
     <div class="column-header">Species Info/Traits</div>
     <div>Versatile?<input type="checkbox" name="attr_Versatile"/></div>
+    <div>Mystic?<input type="checkbox" name="attr_mystic" value="1"/></div>
     <div>
      <fieldset class="repeating_DTA1">
       <div class="column-header-dark">
@@ -572,6 +704,7 @@
    </div>
    <div class="grc2 wrapped-div">
     <div class="column-header">Definitions</div>
+    <div class="definition-flag">Diffuse Background?<input title="@{diffuse_background}" type="checkbox" name="attr_diffuse_background" value="1"/></div>
     <div class="titleblock_stat" style="font-size: medium">Primary</div>
     <div class="column-header"><input title="@{primarydefinitionname}" class="DTA-name" type="text" name="attr_primarydefinitionname" placeholder="<Primary Definition here>"></div>
     <div><textarea title="@{primarydescription}" name="attr_primarydescription" placeholder="<Description here>"></textarea></div>
@@ -609,7 +742,7 @@
  <div class="sheet-repeating-fields">
   <fieldset class="repeating_feats">
    <input type="hidden" class="feats-toggle" name="attr_minfeatval" value="0"/>
-   <div class="feats_title"><button style="color:black" type="action" class="Small-Button" name="act_minfeats">-</button><input type="text" name="attr_featsname" placeholder="<Feat name here>">
+   <div class="feats_title"><button style="color:black" type="action" class="Small-Button" name="act_minfeats">-</button><input type="text" name="attr_featsname" placeholder="<Enter Feat Name Here>">
    </div>
    <div class="feats_description">
     <textarea name="attr_featsdescription" placeholder="<Description here>"></textarea>
@@ -655,7 +788,7 @@
     <div class="grr2">
      <div class="ggrid">
       <div class="grr1 column-header-dark">
-       <input class="resourceName" title="Resource Name" type="text" name="attr_resourceName" placeholder="Grace, Focus,  Etc..."/>
+       <input class="resourceName" title="Resource Name" type="text" name="attr_resourceName" placeholder="Grace, Focus, etc..."/>
       </div>
       <div class="grr2">
        Remaining:&nbsp;
@@ -673,15 +806,30 @@
    <div class="grc1">
     <div class="column-header">Abilities</div>
     <fieldset class="repeating_abilities">
-     <div class="midline-right-div ggrid">
+     <input type="hidden" name="attr_grant_key"/>
+     <input type="hidden" class="grant-hidden" name="attr_grant_hidden" value="0"/>
+     <div class="midline-right-div ggrid grant-row">
       <div class="row-header-dark grr1">
-       <div>
+       <div class="ability-title-row">
         <button type="action" class="Small-Button" name="act_minabilitytog">-</button>
-        <input type="text" class="Ability-name" name="attr_abilityname" placeholder="<Ability Name Here>"/>
+        <input type="hidden" class="grant-available" name="attr_source_available" value="1"/>
+        <input type="text" class="Ability-name" name="attr_abilityname" placeholder="<Enter Ability Name Here>"/>
         <button type="roll" name="roll_ability_card" value="@{abilityroll}"></button>
        </div>
-       <div class="grr2 titleblock" style="font-size: small; font-weight: normal; margin-bottom: 2px">
-        Use(s): <input class="standard-input" type="text" name="attr_userdescription" placeholder="per day"/>
+       <div class="row-header-dark grr2">
+        <span class="grant-meta">
+         HD <input class="grant-level-input"
+                   title="@{granted_level}"
+                   type="number" name="attr_granted_level"
+                   placeholder="#" readonly/>
+         Source <input class="grant-source-input"
+                       title="@{granted_source}"
+                       type="text" name="attr_granted_source"
+                       placeholder="Manual" readonly/>
+         </span>
+       </div>
+       <div class="grr3 titleblock" style="font-size: small; font-weight: normal; margin-bottom: 2px">
+        Uses: <input class="standard-input" type="text" name="attr_userdescription" placeholder="per day"/>
         Max Uses: <input class="standard-input" type="text" name="attr_uses"/>
         Resource: <input title="Resource Name" class="standard-input" type="text" name="attr_resourceNameCard"/>
         <input type="hidden" name="attr_abilityroll"/>
@@ -754,11 +902,29 @@
    <div class="grc2">
     <div class="column-header">Feats</div>
     <fieldset class="repeating_feats">
-     <div class="column-header-dark">
-      <button style="color:black" type="action" class="Small-Button" name="act_minfeats">-</button><input class="Ability-name" type="text" name="attr_featsname" placeholder="<Feat name here>">
+     <input type="hidden" name="attr_grant_key"/>
+     <input type="hidden" class="grant-hidden" name="attr_grant_hidden" value="0"/>
+     <div class ="row-header-dark grant-row grr1">
+      <div class="feat-title-row grant-row">
+       <button style="color:black" type="action" class="Small-Button" name="act_minfeats">-</button>
+       <input type="hidden" class="grant-available" name="attr_source_available" value="1"/>
+       <input class="feat-name" type="text" name="attr_featsname" placeholder="<Enter Feat Name Here>">
+      </div>
+      <div class="grr2 column-header-dark">
+       <span class="grant-meta">
+        HD <input class="grant-level-input"
+                  title="@{granted_level}"
+                  type="number"
+                  name="attr_granted_level"
+                  placeholder="#" readonly/>
+        Source <input class="grant-source-input"
+                      title="@{granted_source}"
+                      type="text" name="attr_granted_source"
+                      placeholder="Manual" readonly/></span>
+      </div>
      </div>
      <input type="hidden" class="feats-toggle" name="attr_minfeatval" value="0"/>
-     <div class="feats_description">
+     <div class="feats_description grant-row">
       <textarea name="attr_featsdescription" placeholder="<Description here>"></textarea>
      </div>
     </fieldset>
@@ -772,22 +938,22 @@
 <div class="sheet-spells">
  <div class="gridarea">
   <div class="titleblock">
-   <h3 style="color:white">Spell Casting</h3>
+   <h3 style="color:white">Spellcasting</h3>
    <div class="titleblock_stat">
-     Primary Mental Attribute(PMA): <select title="@{PMA}" name="attr_PMA" value="" class="fixed-select">
-     <option value="@{strmod}">Str</option>
-     <option value="@{dexmod}">Dex</option>
-     <option value="@{wismod}">Wis</option>
-     <option value="@{intmod}">Int</option>
-     <option value="@{chamod}">Cha</option>
-    </select><br>
-     Caster Level: <input title="@{cl}" type="number" name="attr_cl" readonly/>
-     Spell Penetration Bonus:<input title="@{spellpenetrationbonus}" type="number" name="attr_spellpenetrationbonus" value="0">
-     Spell Proficiency: <input title="@{SpellProf}" type="number" name="attr_SpellProf" readonly/><br>
-     Close Range: <input title="@{CloseRange}" type="number" name="attr_CloseRange" readonly/>
-     Medium Range: <input title="@{MediumRange}" type="number" name="attr_MediumRange" readonly/>
-     Long: <input title="@{LongRange}" type="number" name="attr_LongRange" readonly/>
-    </div>
+    Primary Mental Attribute (PMA): <select title="@{PMA}" name="attr_PMA" value="" class="fixed-select">
+    <option value="@{strmod}">Str</option>
+    <option value="@{dexmod}">Dex</option>
+    <option value="@{wismod}">Wis</option>
+    <option value="@{intmod}">Int</option>
+    <option value="@{chamod}">Cha</option>
+   </select><br>
+    Caster Level: <input title="@{cl}" type="number" name="attr_cl" readonly/>
+    Spell Penetration Bonus:<input title="@{spellpenetrationbonus}" type="number" name="attr_spellpenetrationbonus" value="0">
+    Spell Proficiency: <input title="@{SpellProf}" type="number" name="attr_SpellProf" readonly/><br>
+    Close Range: <input title="@{CloseRange}" type="number" name="attr_CloseRange" readonly/>
+    Medium Range: <input title="@{MediumRange}" type="number" name="attr_MediumRange" readonly/>
+    Long: <input title="@{LongRange}" type="number" name="attr_LongRange" readonly/>
+   </div>
   </div>
   <div class="Column1"> <!--Left Column-->
    <div class="Spell-Level">
@@ -803,7 +969,7 @@
        <input type="hidden" class="spells-toggle" name="attr_spell0minimizetoggle" value="1"/>
        <div class="spelltitle">
         <button type="action" class="Small-Button" name="act_spell0minimize">-</button>
-        <button style="float:right" type="roll" name="act_rollspellcard" value="@{spellcard}"></button>
+        <button style="float:right" class="CRP_Button" title="Cast Spell" type="action" name="act_rollspellcard">t</button>
         <input type="text" name="attr_spellname" placeholder="<Spell Name Here>"/>
         <input type="hidden" name="attr_spellcard"/><br>
         <span style="float:left; color: #FFFFFF">
@@ -901,7 +1067,7 @@
        <input type="hidden" class="spells-toggle" name="attr_spell2minimizetoggle" value="1"/>
        <div class="spelltitle">
         <button type="action" class="Small-Button" name="act_spell2minimize">-</button>
-        <button style="float:right" type="roll" name="act_rollspellcard" value="@{spellcard}"></button>
+        <button style="float:right" class="CRP_Button" title="Cast Spell" type="action" name="act_rollspellcard">t</button>
         <input type="text" name="attr_spellname" placeholder="<Spell Name Here>"/>
         <input type="hidden" name="attr_spellcard"/><br>
         <span style="float:left; color: #FFFFFF">
@@ -1000,7 +1166,7 @@
        <input type="hidden" class="spells-toggle" name="attr_spell4minimizetoggle" value="1"/>
        <div class="spelltitle">
         <button type="action" class="Small-Button" name="act_spell4minimize">-</button>
-        <button style="float:right" type="roll" name="act_rollspellcard" value="@{spellcard}"></button>
+        <button style="float:right" class="CRP_Button" title="Cast Spell" type="action" name="act_rollspellcard">t</button>
         <input type="text" name="attr_spellname" placeholder="<Spell Name Here>"/>
         <input type="hidden" name="attr_spellcard"/><br>
         <span style="float:left; color: #FFFFFF">
@@ -1099,7 +1265,7 @@
        <input type="hidden" class="spells-toggle" name="attr_spell6minimizetoggle" value="1"/>
        <div class="spelltitle">
         <button type="action" class="Small-Button" name="act_spell6minimize">-</button>
-        <button style="float:right" type="roll" name="act_rollspellcard" value="@{spellcard}"></button>
+        <button style="float:right" class="CRP_Button" title="Cast Spell" type="action" name="act_rollspellcard">t</button>
         <input type="text" name="attr_spellname" placeholder="<Spell Name Here>"/>
         <input type="hidden" name="attr_spellcard"/><br>
         <span style="float:left; color: #FFFFFF">
@@ -1198,7 +1364,7 @@
        <input type="hidden" class="spells-toggle" name="attr_spell8minimizetoggle" value="1"/>
        <div class="spelltitle">
         <button type="action" class="Small-Button" name="act_spell8minimize">-</button>
-        <button style="float:right" type="roll" name="act_rollspellcard" value="@{spellcard}"></button>
+        <button style="float:right" class="CRP_Button" title="Cast Spell" type="action" name="act_rollspellcard">t</button>
         <input type="text" name="attr_spellname" placeholder="<Spell Name Here>"/>
         <input type="hidden" name="attr_spellcard"/><br>
         <span style="float:left; color: #FFFFFF">
@@ -1299,7 +1465,7 @@
        <input type="hidden" class="spells-toggle" name="attr_spell1minimizetoggle" value="1"/>
        <div class="spelltitle">
         <button type="action" class="Small-Button" name="act_spell1minimize">-</button>
-        <button style="float:right" type="roll" name="act_rollspellcard" value="@{spellcard}"></button>
+        <button style="float:right" class="CRP_Button" title="Cast Spell" type="action" name="act_rollspellcard">t</button>
         <input type="text" name="attr_spellname" placeholder="<Spell Name Here>"/>
         <input type="hidden" name="attr_spellcard"/><br>
         <span style="float:left; color: #FFFFFF">
@@ -1398,7 +1564,7 @@
        <input type="hidden" class="spells-toggle" name="attr_spell3minimizetoggle" value="1"/>
        <div class="spelltitle">
         <button type="action" class="Small-Button" name="act_spell3minimize">-</button>
-        <button style="float:right" type="roll" name="act_rollspellcard" value="@{spellcard}"></button>
+        <button style="float:right" class="CRP_Button" title="Cast Spell" type="action" name="act_rollspellcard">t</button>
         <input type="text" name="attr_spellname" placeholder="<Spell Name Here>"/>
         <input type="hidden" name="attr_spellcard"/><br>
         <span style="float:left; color: #FFFFFF">
@@ -1497,7 +1663,7 @@
        <input type="hidden" class="spells-toggle" name="attr_spell5minimizetoggle" value="1"/>
        <div class="spelltitle">
         <button type="action" class="Small-Button" name="act_spell5minimize">-</button>
-        <button style="float:right" type="roll" name="act_rollspellcard" value="@{spellcard}"></button>
+        <button style="float:right" class="CRP_Button" title="Cast Spell" type="action" name="act_rollspellcard">t</button>
         <input type="text" name="attr_spellname" placeholder="<Spell Name Here>"/>
         <input type="hidden" name="attr_spellcard"/><br>
         <span style="float:left; color: #FFFFFF">
@@ -1596,7 +1762,7 @@
        <input type="hidden" class="spells-toggle" name="attr_spell7minimizetoggle" value="1"/>
        <div class="spelltitle">
         <button type="action" class="Small-Button" name="act_spell7minimize">-</button>
-        <button style="float:right" type="roll" name="act_rollspellcard" value="@{spellcard}"></button>
+        <button style="float:right" class="CRP_Button" title="Cast Spell" type="action" name="act_rollspellcard">t</button>
         <input type="text" name="attr_spellname" placeholder="<Spell Name Here>"/>
         <input type="hidden" name="attr_spellcard"/><br>
         <span style="float:left; color: #FFFFFF">
@@ -1695,7 +1861,7 @@
        <input type="hidden" class="spells-toggle" name="attr_spell9minimizetoggle" value="1"/>
        <div class="spelltitle">
         <button type="action" class="Small-Button" name="act_spell9minimize">-</button>
-        <button style="float:right" type="roll" name="act_rollspellcard" value="@{spellcard}"></button>
+        <button style="float:right" class="CRP_Button" title="Cast Spell" type="action" name="act_rollspellcard">t</button>
         <input type="text" name="attr_spellname" placeholder="<Spell Name Here>"/>
         <input type="hidden" name="attr_spellcard"/><br>
         <span style="float:left; color: #FFFFFF">
@@ -1818,7 +1984,7 @@
     <td>Misc.</td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Acrobatics Trained}" type="checkbox" name="attr_AcrobaticsTrained"/></td>
+    <td ><input tabindex="101" title="@{Acrobatics Trained}" type="checkbox" name="attr_AcrobaticsTrained"/></td>
     <td>Acrobatics*</td>
     <td>Yes</td>
     <td>Str<input type="hidden" name="attr_KeyStr"/></td>
@@ -1829,11 +1995,11 @@
                 name="roll_Acrobatics-check"></button></td>
     <td><input title="@{AcrobaticsTotal}" type="number" readonly name="attr_AcrobaticsTotal"/></td>
     <td><input title="@{strmod}" type="number" readonly name="attr_strmod"/></td>
-    <td><input title="@{AcrobaticsSP}" type="number" name="attr_AcrobaticsSP"/></td>
-    <td><input title="@{AcrobaticsMisc}" type="number" name="attr_AcrobaticsMisc"/></td>
+    <td><input tabindex="201" title="@{AcrobaticsSP}" type="number" name="attr_AcrobaticsSP"/></td>
+    <td><input tabindex="301" title="@{AcrobaticsMisc}" type="number" name="attr_AcrobaticsMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{BalanceTrained}" type="checkbox" name="attr_BalanceTrained"/></td>
+    <td><input tabindex="102" title="@{BalanceTrained}" type="checkbox" name="attr_BalanceTrained"/></td>
     <td>Balance</td>
     <td>Yes</td>
     <td>Dex<input type="hidden" name="attr_KeyDex"/></td>
@@ -1844,11 +2010,11 @@
                 name="roll_Balance-check"></button></td>
     <td><input title="@{BalanceTotal}" type="number" readonly name="attr_BalanceTotal"/></td>
     <td><input title="@{dexmod}" type="number" readonly name="attr_dexmod"/></td>
-    <td><input title="@{BalanceSP}" type="number" name="attr_BalanceSP"/></td>
-    <td><input title="@{BalanceMisc}" type="number" name="attr_BalanceMisc"/></td>
+    <td><input tabindex="202" title="@{BalanceSP}" type="number" name="attr_BalanceSP"/></td>
+    <td><input tabindex="302" title="@{BalanceMisc}" type="number" name="attr_BalanceMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{BeguileTrained}" type="checkbox" name="attr_BeguileTrained"/></td>
+    <td><input tabindex="103" title="@{BeguileTrained}" type="checkbox" name="attr_BeguileTrained"/></td>
     <td>Beguile</td>
     <td>Yes</td>
     <td>Cha<input type="hidden" name="attr_KeyCha"/></td>
@@ -1859,11 +2025,11 @@
                 name="roll_Beguile-check"></button></td>
     <td><input title="@{BeguileTotal}" type="number" readonly name="attr_BeguileTotal"/></td>
     <td><input title="@{chamod}" type="number" readonly name="attr_chamod"/></td>
-    <td><input title="@{BeguileSP}" type="number" name="attr_BeguileSP"/></td>
-    <td><input title="@{BeguileMisc}" type="number" name="attr_BeguileMisc"/></td>
+    <td><input tabindex="203" title="@{BeguileSP}" type="number" name="attr_BeguileSP"/></td>
+    <td><input tabindex="303" title="@{BeguileMisc}" type="number" name="attr_BeguileMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{BushcraftTrained}" type="checkbox" name="attr_BushcraftTrained"/></td>
+    <td><input tabindex="104" title="@{BushcraftTrained}" type="checkbox" name="attr_BushcraftTrained"/></td>
     <td>Bushcraft</td>
     <td>No</td>
     <td>Wis<input type="hidden" name="attr_KeyWis"/></td>
@@ -1874,11 +2040,11 @@
                 name="roll_Bushcraft-check"></button></td>
     <td><input title="@{BushcraftTotal}" type="number" readonly name="attr_BushcraftTotal"/></td>
     <td><input title="@{wismod}" type="number" readonly name="attr_wismod"/></td>
-    <td><input title="@{BushcraftSP}" type="number" name="attr_BushcraftSP"/></td>
-    <td><input title="@{BushcraftMisc}" type="number" name="attr_BushcraftMisc"/></td>
+    <td><input tabindex="204" title="@{BushcraftSP}" type="number" name="attr_BushcraftSP"/></td>
+    <td><input tabindex="304" title="@{BushcraftMisc}" type="number" name="attr_BushcraftMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{ConcealTrained}" type="checkbox" name="attr_ConcealTrained"/></td>
+    <td><input tabindex="105" title="@{ConcealTrained}" type="checkbox" name="attr_ConcealTrained"/></td>
     <td>Conceal</td>
     <td>Yes</td>
     <td>Dex<input type="hidden" name="attr_KeyDex"/></td>
@@ -1889,11 +2055,11 @@
                 name="roll_Conceal-check"></button></td>
     <td><input title="@{ConcealTotal}" type="number" readonly name="attr_ConcealTotal"/></td>
     <td><input title="@{dexmod}" type="number" readonly name="attr_dexmod"/></td>
-    <td><input title="@{ConcealSP}" type="number" name="attr_ConcealSP"/></td>
-    <td><input title="@{ConcealMisc}" type="number" name="attr_ConcealMisc"/></td>
+    <td><input tabindex="205" title="@{ConcealSP}" type="number" name="attr_ConcealSP"/></td>
+    <td><input tabindex="305" title="@{ConcealMisc}" type="number" name="attr_ConcealMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{ConcentrationTrained}" type="checkbox" name="attr_ConcentrationTrained"/></td>
+    <td><input tabindex="106" title="@{ConcentrationTrained}" type="checkbox" name="attr_ConcentrationTrained"/></td>
     <td>Concentration</td>
     <td>Yes</td>
     <td>Con<input type="hidden" name="attr_KeyCon"/></td>
@@ -1904,11 +2070,11 @@
                 name="roll_Concentration-check"></button></td>
     <td><input title="@{ConcentrationTotal}" type="number" readonly name="attr_ConcentrationTotal"/></td>
     <td><input title="@{conmod}" type="number" readonly name="attr_conmod"/></td>
-    <td><input title="@{ConcentrationSP}" type="number" name="attr_ConcentrationSP"/></td>
-    <td><input title="@{ConcentrationMisc}" type="number" name="attr_ConcentrationMisc"/></td>
+    <td><input tabindex="206" title="@{ConcentrationSP}" type="number" name="attr_ConcentrationSP"/></td>
+    <td><input tabindex="306" title="@{ConcentrationMisc}" type="number" name="attr_ConcentrationMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{CounterfeitTrained}" type="checkbox" name="attr_CounterfeitTrained"/></td>
+    <td><input tabindex="107" title="@{CounterfeitTrained}" type="checkbox" name="attr_CounterfeitTrained"/></td>
     <td>Counterfeit</td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
@@ -1919,71 +2085,71 @@
                 name="roll_Counterfeit-check"></button></td>
     <td><input title="@{CounterfeitTotal}" type="number" readonly name="attr_CounterfeitTotal"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{CounterfeitSP}" type="number" name="attr_CounterfeitSP"/></td>
-    <td><input title="@{CounterfeitMisc}" type="number" name="attr_CounterfeitMisc"/></td>
+    <td><input tabindex="207" title="@{CounterfeitSP}" type="number" name="attr_CounterfeitSP"/></td>
+    <td><input tabindex="307" title="@{CounterfeitMisc}" type="number" name="attr_CounterfeitMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Craft1Trained}" type="checkbox" name="attr_Craft1Trained"/></td>
+    <td><input tabindex="108" title="@{Craft1Trained}" type="checkbox" name="attr_Craft1Trained"/></td>
     <td>Craft: <input title="@{Craft1Name}" type="text" name="attr_Craft1Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Craft1"
+                title="Craft 1"
                 type="roll"
                 value="&{template:custom}{{title=Craft: @{Craft1Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Craft1Total}]]}}"
                 name="roll_Craft1-check"></button></td>
     <td><input title="@{Craft1Total}" type="number" readonly name="attr_Craft1Total"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Craft1SP}" type="number" name="attr_Craft1SP"/></td>
-    <td><input title="@{Craft1Misc}" type="number" name="attr_Craft1Misc"/></td>
+    <td><input tabindex="208" title="@{Craft1SP}" type="number" name="attr_Craft1SP"/></td>
+    <td><input tabindex="308" title="@{Craft1Misc}" type="number" name="attr_Craft1Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Craft2Trained}" type="checkbox" name="attr_Craft2Trained"/></td>
+    <td><input tabindex="109" title="@{Craft2Trained}" type="checkbox" name="attr_Craft2Trained"/></td>
     <td>Craft: <input title="@{Craft2Name}" type="text" name="attr_Craft2Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Craft2"
+                title="Craft 2"
                 type="roll"
                 value="&{template:custom}{{title=Craft: @{Craft2Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Craft2Total}]]}}"
                 name="roll_Craft2-check"></button></td>
     <td><input title="@{Craft2Total}" type="number" readonly name="attr_Craft2Total"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Craft2SP}" type="number" name="attr_Craft2SP"/></td>
-    <td><input title="@{Craft2Misc}" type="number" name="attr_Craft2Misc"/></td>
+    <td><input tabindex="209" title="@{Craft2SP}" type="number" name="attr_Craft2SP"/></td>
+    <td><input tabindex="309" title="@{Craft2Misc}" type="number" name="attr_Craft2Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Craft3Trained}" type="checkbox" name="attr_Craft3Trained"/></td>
+    <td><input tabindex="110" title="@{Craft3Trained}" type="checkbox" name="attr_Craft3Trained"/></td>
     <td>Craft: <input title="@{Craft3Name}" type="text" name="attr_Craft3Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Craft3"
+                title="Craft 3"
                 type="roll"
                 value="&{template:custom}{{title=Craft: @{Craft3Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Craft3Total}]]}}"
                 name="roll_Craft3-check"></button></td>
     <td><input title="@{Craft3Total}" type="number" readonly name="attr_Craft3Total"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Craft3SP}" type="number" name="attr_Craft3SP"/></td>
-    <td><input title="@{Craft3Misc}" type="number" name="attr_Craft3Misc"/></td>
+    <td><input tabindex="210" title="@{Craft3SP}" type="number" name="attr_Craft3SP"/></td>
+    <td><input tabindex="310" title="@{Craft3Misc}" type="number" name="attr_Craft3Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{DiscernIntentTrained}" type="checkbox" name="attr_DiscernIntentTrained"/></td>
+    <td><input tabindex="111" title="@{DiscernIntentTrained}" type="checkbox" name="attr_DiscernIntentTrained"/></td>
     <td>Discern Intent</td>
     <td>Yes</td>
     <td>Wis<input type="hidden" name="attr_KeyWis"/></td>
     <td><button class="button"
-                title="DiscernIntent"
+                title="Discern Intent"
                 type="roll"
                 value="&{template:custom}{{title=Discern Intent}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{DiscernIntentTotal}]]}}"
                 name="roll_DiscernIntent-check"></button></td>
     <td><input title="@{DiscernIntentTotal}" type="number" readonly name="attr_DiscernIntentTotal"/></td>
     <td><input title="@{wismod}" type="number" readonly name="attr_wismod"/></td>
-    <td><input title="@{DiscernIntentSP}" type="number" name="attr_DiscernIntentSP"/></td>
-    <td><input title="@{DiscernIntentMisc}" type="number" name="attr_DiscernIntentMisc"/></td>
+    <td><input tabindex="211" title="@{DiscernIntentSP}" type="number" name="attr_DiscernIntentSP"/></td>
+    <td><input tabindex="311" title="@{DiscernIntentMisc}" type="number" name="attr_DiscernIntentMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{DiplomacyTrained}" type="checkbox" name="attr_DiplomacyTrained"/></td>
+    <td><input tabindex="112" title="@{DiplomacyTrained}" type="checkbox" name="attr_DiplomacyTrained"/></td>
     <td>Diplomacy</td>
     <td>Yes</td>
     <td>Cha<input type="hidden" name="attr_KeyCha"/></td>
@@ -1994,11 +2160,11 @@
                 name="roll_Diplomacy-check"></button></td>
     <td><input title="@{DiplomacyTotal}" type="number" readonly name="attr_DiplomacyTotal"/></td>
     <td><input title="@{chamod}" type="number" readonly name="attr_chamod"/></td>
-    <td><input title="@{DiplomacySP}" type="number" name="attr_DiplomacySP"/></td>
-    <td><input title="@{DiplomacyMisc}" type="number" name="attr_DiplomacyMisc"/></td>
+    <td><input tabindex="212" title="@{DiplomacySP}" type="number" name="attr_DiplomacySP"/></td>
+    <td><input tabindex="312" title="@{DiplomacyMisc}" type="number" name="attr_DiplomacyMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{DisguiseTrained}" type="checkbox" name="attr_DisguiseTrained"/></td>
+    <td><input tabindex="113" title="@{DisguiseTrained}" type="checkbox" name="attr_DisguiseTrained"/></td>
     <td>Disguise</td>
     <td>Yes</td>
     <td>Cha<input type="hidden" name="attr_KeyCha"/></td>
@@ -2009,41 +2175,41 @@
                 name="roll_Disguise-check"></button></td>
     <td><input title="@{DisguiseTotal}" type="number" readonly name="attr_DisguiseTotal"/></td>
     <td><input title="@{chamod}" type="number" readonly name="attr_chamod"/></td>
-    <td><input title="@{DisguiseSP}" type="number" name="attr_DisguiseSP"/></td>
-    <td><input title="@{DisguiseMisc}" type="number" name="attr_DisguiseMisc"/></td>
+    <td><input tabindex="213" title="@{DisguiseSP}" type="number" name="attr_DisguiseSP"/></td>
+    <td><input tabindex="313" title="@{DisguiseMisc}" type="number" name="attr_DisguiseMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{EscapeArtistTrained}" type="checkbox" name="attr_EscapeArtistTrained"/></td>
+    <td><input tabindex="114" title="@{EscapeArtistTrained}" type="checkbox" name="attr_EscapeArtistTrained"/></td>
     <td>Escape Artist</td>
     <td>Yes</td>
     <td>Dex<input type="hidden" name="attr_KeyDex"/></td>
     <td><button class="button"
                 title="Escape Artist"
                 type="roll"
-                value="&{template:custom}{{title=EscapeArtist}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{EscapeArtistTotal}]]}}"
+                value="&{template:custom}{{title=Escape Artist}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{EscapeArtistTotal}]]}}"
                 name="roll_EscapeArtist-check"></button></td>
     <td><input title="@{EscapeArtistTotal}" type="number" readonly name="attr_EscapeArtistTotal"/></td>
     <td><input title="@{dexmod}" type="number" readonly name="attr_dexmod"/></td>
-    <td><input title="@{EscapeArtistSP}" type="number" name="attr_EscapeArtistSP"/></td>
-    <td><input title="@{EscapeArtistMisc}" type="number" name="attr_EscapeArtistMisc"/></td>
+    <td><input tabindex="214" title="@{EscapeArtistSP}" type="number" name="attr_EscapeArtistSP"/></td>
+    <td><input tabindex="314" title="@{EscapeArtistMisc}" type="number" name="attr_EscapeArtistMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{GatherInformationTrained}" type="checkbox" name="attr_GatherInformationTrained"/></td>
+    <td><input tabindex="115" title="@{GatherInformationTrained}" type="checkbox" name="attr_GatherInformationTrained"/></td>
     <td>Gather Information</td>
     <td>Yes</td>
     <td>Cha<input type="hidden" name="attr_KeyCha"/></td>
     <td><button class="button"
                 title="Gather Information"
                 type="roll"
-                value="&{template:custom}{{title=GatherInformation}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{GatherInformationTotal}]]}}"
+                value="&{template:custom}{{title=Gather Information}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{GatherInformationTotal}]]}}"
                 name="roll_GatherInformation-check"></button></td>
     <td><input title="@{GatherInformationTotal}" type="number" readonly name="attr_GatherInformationTotal"/></td>
     <td><input title="@{chamod}" type="number" readonly name="attr_chamod"/></td>
-    <td><input title="@{GatherInformationSP}" type="number" name="attr_GatherInformationSP"/></td>
-    <td><input title="@{GatherInformationMisc}" type="number" name="attr_GatherInformationMisc"/></td>
+    <td><input tabindex="215" title="@{GatherInformationSP}" type="number" name="attr_GatherInformationSP"/></td>
+    <td><input tabindex="315" title="@{GatherInformationMisc}" type="number" name="attr_GatherInformationMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{HaggleTrained}" type="checkbox" name="attr_HaggleTrained"/></td>
+    <td><input tabindex="116" title="@{HaggleTrained}" type="checkbox" name="attr_HaggleTrained"/></td>
     <td>Haggle</td>
     <td>Yes</td>
     <td>Cha<input type="hidden" name="attr_KeyCha"/></td>
@@ -2052,13 +2218,13 @@
                 type="roll"
                 value="&{template:custom}{{title=Haggle}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{HaggleTotal}]]}}"
                 name="roll_Haggle-check"></button></td>
-    <td><input title="@{HattleTotal}" type="number" readonly name="attr_HaggleTotal"/></td>
+    <td><input title="@{HaggleTotal}" type="number" readonly name="attr_HaggleTotal"/></td>
     <td><input title="@{chamod}" type="number" readonly name="attr_chamod"/></td>
-    <td><input title="@{HaggleSP}" type="number" name="attr_HaggleSP"/></td>
-    <td><input title="@{HaggleMisc}" type="number" name="attr_HaggleMisc"/></td>
+    <td><input tabindex="216" title="@{HaggleSP}" type="number" name="attr_HaggleSP"/></td>
+    <td><input tabindex="316" title="@{HaggleMisc}" type="number" name="attr_HaggleMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{HealTrained}" type="checkbox" name="attr_HealTrained"/></td>
+    <td><input tabindex="117" title="@{HealTrained}" type="checkbox" name="attr_HealTrained"/></td>
     <td>Heal</td>
     <td>No</td>
     <td>Wis<input type="hidden" name="attr_KeyWis"/></td>
@@ -2069,11 +2235,11 @@
                 name="roll_Heal-check"></button></td>
     <td><input title="@{HealTotal}" type="number" readonly name="attr_HealTotal"/></td>
     <td><input title="@{wismod}" type="number" readonly name="attr_wismod"/></td>
-    <td><input title="@{HealSP}" type="number" name="attr_HealSP"/></td>
-    <td><input title="@{HealMisc}" type="number" name="attr_HealMisc"/></td>
+    <td><input tabindex=217"" title="@{HealSP}" type="number" name="attr_HealSP"/></td>
+    <td><input tabindex="317" title="@{HealMisc}" type="number" name="attr_HealMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input type="checkbox" name="attr_IntimidateTrained"/></td>
+    <td><input tabindex="118" type="checkbox" name="attr_IntimidateTrained"/></td>
     <td>Intimidate</td>
     <td>Yes</td>
     <td>Cha<input title="@{KeyCha}" type="hidden" name="attr_KeyCha"/></td>
@@ -2084,11 +2250,11 @@
                 name="roll_Intimidate-check"></button></td>
     <td><input title="@{IntimidateTotal}" type="number" readonly name="attr_IntimidateTotal"/></td>
     <td><input title="@{chamod}" type="number" readonly name="attr_chamod"/></td>
-    <td><input title="@{IntimidateSP}" type="number" name="attr_IntimidateSP"/></td>
-    <td><input title="@{IntimidateMisc}" type="number" name="attr_IntimidateMisc"/></td>
+    <td><input tabindex="218" title="@{IntimidateSP}" type="number" name="attr_IntimidateSP"/></td>
+    <td><input tabindex="318" title="@{IntimidateMisc}" type="number" name="attr_IntimidateMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{InvestigateTrained}" type="checkbox" name="attr_InvestigateTrained"/></td>
+    <td><input tabindex="119" title="@{InvestigateTrained}" type="checkbox" name="attr_InvestigateTrained"/></td>
     <td>Investigate</td>
     <td>Yes</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
@@ -2099,101 +2265,101 @@
                 name="roll_Investigate-check"></button></td>
     <td><input title="@{InvestigateTotal}" type="number" readonly name="attr_InvestigateTotal"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{InvestigateSP}" type="number" name="attr_InvestigateSP"/></td>
-    <td><input title="@{InvestigateMisc}" type="number" name="attr_InvestigateMisc"/></td>
+    <td><input tabindex="219" title="@{InvestigateSP}" type="number" name="attr_InvestigateSP"/></td>
+    <td><input tabindex="319" title="@{InvestigateMisc}" type="number" name="attr_InvestigateMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Knowledge1Trained}" type="checkbox" name="attr_Knowledge1Trained"/></td>
+    <td><input tabindex="120" title="@{Knowledge1Trained}" type="checkbox" name="attr_Knowledge1Trained"/></td>
     <td>Knowledge <input title="@{Knowledge1Name}" type="text" name="attr_Knowledge1Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Knowledge1"
+                title="Knowledge 1"
                 type="roll"
                 value="&{template:custom}{{title=Knowledge: @{Knowledge1Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Knowledge1Total}]]}}"
                 name="roll_Knowledge1-check"></button></td>
     <td><input title="@{Knowledge1Total}" type="number" readonly name="attr_Knowledge1Total"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Knowledge1SP}" type="number" name="attr_Knowledge1SP"/></td>
-    <td><input title="@{Knowledge1Misc}" type="number" name="attr_Knowledge1Misc"/></td>
+    <td><input tabindex="220" title="@{Knowledge1SP}" type="number" name="attr_Knowledge1SP"/></td>
+    <td><input tabindex="320" title="@{Knowledge1Misc}" type="number" name="attr_Knowledge1Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Knowledge2Trained}" type="checkbox" name="attr_Knowledge2Trained"/></td>
+    <td><input tabindex="121" title="@{Knowledge2Trained}" type="checkbox" name="attr_Knowledge2Trained"/></td>
     <td>Knowledge <input title="@{Knowledge2Name}" type="text" name="attr_Knowledge2Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Knowledge2"
+                title="Knowledge 2"
                 type="roll"
                 value="&{template:custom}{{title=Knowledge: @{Knowledge2Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Knowledge2Total}]]}}"
                 name="roll_Knowledge2-check"></button></td>
     <td><input title="@{Knowledge2Total}" type="number" readonly name="attr_Knowledge2Total"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Knowledge2SP}" type="number" name="attr_Knowledge2SP"/></td>
-    <td><input title="@{Knowledge2Misc}" type="number" name="attr_Knowledge2Misc"/></td>
+    <td><input tabindex="221" title="@{Knowledge2SP}" type="number" name="attr_Knowledge2SP"/></td>
+    <td><input tabindex="321" title="@{Knowledge2Misc}" type="number" name="attr_Knowledge2Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Knowledge3Trained}" type="checkbox" name="attr_Knowledge3Trained"/></td>
+    <td><input tabindex="122" title="@{Knowledge3Trained}" type="checkbox" name="attr_Knowledge3Trained"/></td>
     <td>Knowledge <input title="@{Knowledge3Name}" type="text" name="attr_Knowledge3Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Knowledge3"
+                title="Knowledge 3"
                 type="roll"
                 value="&{template:custom}{{title=Knowledge: @{Knowledge3Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Knowledge3Total}]]}}"
                 name="roll_Knowledge3-check"></button></td>
     <td><input title="@{Knowledge3Total}" type="number" readonly name="attr_Knowledge3Total"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Knowledge3SP}" type="number" name="attr_Knowledge3SP"/></td>
-    <td><input title="@{Knowledge3Misc}" type="number" name="attr_Knowledge3Misc"/></td>
+    <td><input tabindex="222" title="@{Knowledge3SP}" type="number" name="attr_Knowledge3SP"/></td>
+    <td><input tabindex="322" title="@{Knowledge3Misc}" type="number" name="attr_Knowledge3Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Knowledge4Trained}" type="checkbox" name="attr_Knowledge4Trained"/></td>
+    <td><input tabindex="123" title="@{Knowledge4Trained}" type="checkbox" name="attr_Knowledge4Trained"/></td>
     <td>Knowledge <input title="@{Knowledge4Name}" type="text" name="attr_Knowledge4Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Knowledge4"
+                title="Knowledge 4"
                 type="roll"
                 value="&{template:custom}{{title=Knowledge: @{Knowledge4Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Knowledge4Total}]]}}"
                 name="roll_Knowledge4-check"></button></td>
     <td><input title="@{Knowledge4Total}" type="number" readonly name="attr_Knowledge4Total"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Knowledge4SP}" type="number" name="attr_Knowledge4SP"/></td>
-    <td><input title="@{Knowledge4Misc}" type="number" name="attr_Knowledge4Misc"/></td>
+    <td><input tabindex="223" title="@{Knowledge4SP}" type="number" name="attr_Knowledge4SP"/></td>
+    <td><input tabindex="323" title="@{Knowledge4Misc}" type="number" name="attr_Knowledge4Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Knowledge5Trained}" type="checkbox" name="attr_Knowledge5Trained"/></td>
+    <td><input tabindex="124" title="@{Knowledge5Trained}" type="checkbox" name="attr_Knowledge5Trained"/></td>
     <td>Knowledge <input title="@{Knowledge5Name}" type="text" name="attr_Knowledge5Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Knowledge5"
+                title="Knowledge 5"
                 type="roll"
                 value="&{template:custom}{{title=Knowledge: @{Knowledge5Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Knowledge5Total}]]}}"
                 name="roll_Knowledge5-check"></button></td>
     <td><input title="@{Knowledge5Total}" type="number" readonly name="attr_Knowledge5Total"/></td>
     <td><input title="@{int}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Knowledge5SP}" type="number" name="attr_Knowledge5SP"/></td>
-    <td><input title="@{Knowledge5Misc}" type="number" name="attr_Knowledge5Misc"/></td>
+    <td><input tabindex="224" title="@{Knowledge5SP}" type="number" name="attr_Knowledge5SP"/></td>
+    <td><input tabindex="324" title="@{Knowledge5Misc}" type="number" name="attr_Knowledge5Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Knowledge6Trained}" type="checkbox" name="attr_Knowledge6Trained"/></td>
+    <td><input tabindex="125" title="@{Knowledge6Trained}" type="checkbox" name="attr_Knowledge6Trained"/></td>
     <td>Knowledge <input title="@{Knowledge6Name}" type="text" name="attr_Knowledge6Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Knowledge6"
+                title="Knowledge 6"
                 type="roll"
                 value="&{template:custom}{{title=Knowledge: @{Knowledge6Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Knowledge6Total}]]}}"
                 name="roll_Knowledge6-check"></button></td>
     <td><input title="@{Knowledge6Total}" type="number" readonly name="attr_Knowledge6Total"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Knowledge6SP}" type="number" name="attr_Knowledge6SP"/></td>
-    <td><input title="@{Knowledge6Misc}" type="number" name="attr_Knowledge6Misc"/></td>
+    <td><input tabindex="225" title="@{Knowledge6SP}" type="number" name="attr_Knowledge6SP"/></td>
+    <td><input tabindex="325" title="@{Knowledge6Misc}" type="number" name="attr_Knowledge6Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{ListenTrained}" type="checkbox" name="attr_ListenTrained"/></td>
+    <td><input tabindex="126" title="@{ListenTrained}" type="checkbox" name="attr_ListenTrained"/></td>
     <td>Listen</td>
     <td>Yes</td>
     <td>Wis<input type="hidden" name="attr_KeyWis"/></td>
@@ -2204,11 +2370,11 @@
                 name="roll_Listen-check"></button></td>
     <td><input title="@{ListenTotal}" type="number" readonly name="attr_ListenTotal"/></td>
     <td><input title="@{wismod}" type="number" readonly name="attr_wismod"/></td>
-    <td><input title="@{ListenSP}" type="number" name="attr_ListenSP"/></td>
-    <td><input title="@{ListenMisc}" type="number" name="attr_ListenMisc"/></td>
+    <td><input tabindex="226" title="@{ListenSP}" type="number" name="attr_ListenSP"/></td>
+    <td><input tabindex="326" title="@{ListenMisc}" type="number" name="attr_ListenMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{LockpickingTrained}" type="checkbox" name="attr_LockpickingTrained"/></td>
+    <td><input tabindex="127" title="@{LockpickingTrained}" type="checkbox" name="attr_LockpickingTrained"/></td>
     <td>Lockpicking</td>
     <td>No</td>
     <td>Dex<input type="hidden" name="attr_KeyDex"/></td>
@@ -2219,100 +2385,100 @@
                 name="roll_Lockpicking-check"></button></td>
     <td><input title="@{LockpickingTotal}" type="number" readonly name="attr_LockpickingTotal"/></td>
     <td><input title="@{dexmod}" type="number" readonly name="attr_dexmod"/></td>
-    <td><input title="@{LockpickingSP}" type="number" name="attr_LockpickingSP"/></td>
-    <td><input title="@{LockpickingMisc}" type="number" name="attr_LockpickingMisc"/></td>
+    <td><input tabindex="227" title="@{LockpickingSP}" type="number" name="attr_LockpickingSP"/></td>
+    <td><input tabindex="327" title="@{LockpickingMisc}" type="number" name="attr_LockpickingMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{MoveSilentlyTrained}" type="checkbox" name="attr_MoveSilentlyTrained"/></td>
+    <td><input tabindex="128" title="@{MoveSilentlyTrained}" type="checkbox" name="attr_MoveSilentlyTrained"/></td>
     <td>Move Silently*</td>
     <td>Yes</td>
     <td>Dex<input type="hidden" name="attr_KeyDex"/></td>
     <td><button class="button"
-                title="MoveSilently"
+                title="Move Silently"
                 type="roll"
-                value="&{template:custom}{{title=MoveSilently}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{MoveSilentlyTotal}]]}}"
+                value="&{template:custom}{{title=Move Silently}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{MoveSilentlyTotal}]]}}"
                 name="roll_MoveSilently-check"></button></td>
     <td><input title="@{MoveSilentlyTotal}" type="number" readonly name="attr_MoveSilentlyTotal"/></td>
     <td><input title="@{dexmod}" type="number" readonly name="attr_dexmod"/></td>
-    <td><input title="@{MoveSilentlySP}" type="number" name="attr_MoveSilentlySP"/></td>
-    <td><input title="@{MoveSilentlyMisc}" type="number" name="attr_MoveSilentlyMisc"/></td>
+    <td><input tabindex="228" title="@{MoveSilentlySP}" type="number" name="attr_MoveSilentlySP"/></td>
+    <td><input tabindex="328" title="@{MoveSilentlyMisc}" type="number" name="attr_MoveSilentlyMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Perform1Trained}" type="checkbox" name="attr_Perform1Trained"/></td>
+    <td><input tabindex="129" title="@{Perform1Trained}" type="checkbox" name="attr_Perform1Trained"/></td>
     <td>Perform <input title="@{Perform1Name}" type="text" name="attr_Perform1Name"/></td>
     <td>No</td>
     <td>Cha<input type="hidden" name="attr_KeyCha"/></td>
     <td><button class="button"
-                title="Perform1"
+                title="Perform 1"
                 type="roll"
                 value="&{template:custom}{{title=Perform: @{Perform1Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Perform1Total}]]}}"
                 name="roll_Perform1-check"></button></td>
     <td><input title="@{Perform1Total}" type="number" readonly name="attr_Perform1Total"/></td>
     <td><input title="@{chamod}" type="number" readonly name="attr_chamod"/></td>
-    <td><input title="@{Perform1SP}" type="number" name="attr_Perform1SP"/></td>
-    <td><input title="@{Perform1Misc}" type="number" name="attr_Perform1Misc"/></td>
+    <td><input tabindex="229" title="@{Perform1SP}" type="number" name="attr_Perform1SP"/></td>
+    <td><input tabindex="329" title="@{Perform1Misc}" type="number" name="attr_Perform1Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Perform2Trained}" type="checkbox" name="attr_Perform2Trained"/></td>
+    <td><input tabindex="130" title="@{Perform2Trained}" type="checkbox" name="attr_Perform2Trained"/></td>
     <td>Perform <input title="@{Perform2Name}" type="text" name="attr_Perform2Name"/></td>
     <td>No</td>
     <td>Cha<input type="hidden" name="attr_KeyCha"/></td>
     <td><button class="button"
-                title="Perform2"
+                title="Perform 2"
                 type="roll"
                 value="&{template:custom}{{title=Perform: @{Perform2Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Perform2Total}]]}}"
                 name="roll_Perform2-check"></button></td>
     <td><input title="@{Perform2Total}" type="number" readonly name="attr_Perform2Total"/></td>
     <td><input title="@{chamod}" type="number" readonly name="attr_chamod"/></td>
-    <td><input title="@{Perform2SP}" type="number" name="attr_Perform2SP"/></td>
-    <td><input title="@{Perform2Misc}" type="number" name="attr_Perform2Misc"/></td>
+    <td><input tabindex="230" title="@{Perform2SP}" type="number" name="attr_Perform2SP"/></td>
+    <td><input tabindex="330" title="@{Perform2Misc}" type="number" name="attr_Perform2Misc"/></td>
    <tr class="hoverskill">
-    <td><input title="@{Perform3Trained}" type="checkbox" name="attr_Perform3Trained"/></td>
+    <td><input tabindex="131" title="@{Perform3Trained}" type="checkbox" name="attr_Perform3Trained"/></td>
     <td>Perform <input title="@{Perform3Name}" type="text" name="attr_Perform3Name"/></td>
     <td>No</td>
     <td>Cha<input type="hidden" name="attr_KeyCha"/></td>
     <td><button class="button"
-                title="Perform3"
+                title="Perform 3"
                 type="roll"
                 value="&{template:custom}{{title=Perform: @{Perform3Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Perform3Total}]]}}"
                 name="roll_Perform3-check"></button></td>
     <td><input title="@{Perform3Total}" type="number" readonly name="attr_Perform3Total"/></td>
     <td><input title="@{chamod}" type="number" readonly name="attr_chamod"/></td>
-    <td><input title="@{Perform3SP}" type="number" name="attr_Perform3SP"/></td>
-    <td><input title="@{Perform3Misc}" type="number" name="attr_Perform3Misc"/></td>
+    <td><input tabindex="231" title="@{Perform3SP}" type="number" name="attr_Perform3SP"/></td>
+    <td><input tabindex="331" title="@{Perform3Misc}" type="number" name="attr_Perform3Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Profession1Trained}" type="checkbox" name="attr_Profession1Trained"/></td>
+    <td><input tabindex="132" title="@{Profession1Trained}" type="checkbox" name="attr_Profession1Trained"/></td>
     <td>Profession <input title="@{Profession1Name}" type="text" name="attr_Profession1Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Profession1"
+                title="Profession 1"
                 type="roll"
                 value="&{template:custom}{{title=Profession: @{Profession1Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Profession1Total}]]}}"
                 name="roll_Profession1-check"></button></td>
     <td><input title="@{Profession1Total}" type="number" readonly name="attr_Profession1Total"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Profession1SP}" type="number" name="attr_Profession1SP"/></td>
-    <td><input title="@{Profession1Misc}" type="number" name="attr_Profession1Misc"/></td>
+    <td><input tabindex="232" title="@{Profession1SP}" type="number" name="attr_Profession1SP"/></td>
+    <td><input tabindex="332" title="@{Profession1Misc}" type="number" name="attr_Profession1Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{Profession2Trained}" type="checkbox" name="attr_Profession2Trained"/></td>
+    <td><input tabindex="133" title="@{Profession2Trained}" type="checkbox" name="attr_Profession2Trained"/></td>
     <td>Profession <input title="@{Profession2Name}" type="text" name="attr_Profession2Name"/></td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="Profession2"
+                title="Profession 2"
                 type="roll"
                 value="&{template:custom}{{title=Profession: @{Profession2Name}}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{Profession2Total}]]}}"
                 name="roll_Profession2-check"></button></td>
     <td><input title="@{Profession2Total}" type="number" readonly name="attr_Profession2Total"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{Profession2SP}" type="number" name="attr_Profession2SP"/></td>
-    <td><input title="@{Profession2Misc}" type="number" name="attr_Profession2Misc"/></td>
+    <td><input tabindex="233" title="@{Profession2SP}" type="number" name="attr_Profession2SP"/></td>
+    <td><input tabindex="333" title="@{Profession2Misc}" type="number" name="attr_Profession2Misc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{RideTrained}" type="checkbox" name="attr_RideTrained"/></td>
+    <td><input tabindex="134" title="@{RideTrained}" type="checkbox" name="attr_RideTrained"/></td>
     <td>Ride*</td>
     <td>Yes</td>
     <td>Dex<input type="hidden" name="attr_KeyDex"/></td>
@@ -2323,26 +2489,26 @@
                 name="roll_Ride-check"></button></td>
     <td><input title="@{RideTotal}" type="number" readonly name="attr_RideTotal"/></td>
     <td><input title="@{dexmod}" type="number" readonly name="attr_dexmod"/></td>
-    <td><input title="@{RideSP}" type="number" name="attr_RideSP"/></td>
-    <td><input title="@{RideMisc}" type="number" name="attr_RideMisc"/></td>
+    <td><input tabindex="234" title="@{RideSP}" type="number" name="attr_RideSP"/></td>
+    <td><input tabindex="334" title="@{RideMisc}" type="number" name="attr_RideMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{SleightOfHandTrained}" type="checkbox" name="attr_SleightOfHandTrained"/></td>
+    <td><input tabindex="135" title="@{SleightOfHandTrained}" type="checkbox" name="attr_SleightOfHandTrained"/></td>
     <td>Sleight Of Hand</td>
     <td>Yes</td>
     <td>Dex<input type="hidden" name="attr_KeyDex"/></td>
     <td><button class="button"
-                title="SleightOfHand"
+                title="Sleight of Hand"
                 type="roll"
-                value="&{template:custom}{{title=SleightOfHand}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{SleightOfHandTotal}]]}}"
+                value="&{template:custom}{{title=Sleight of Hand}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{SleightOfHandTotal}]]}}"
                 name="roll_SleightOfHand-check"></button></td>
     <td><input title="@{SleightOfHandTotal}" type="number" readonly name="attr_SleightOfHandTotal"/></td>
     <td><input title="@{dexmod}" type="number" readonly name="attr_dexmod"/></td>
-    <td><input title="@{SleightOfHandSP}" type="number" name="attr_SleightOfHandSP"/></td>
-    <td><input title="@{SleightOfHandMisc}" type="number" name="attr_SleightOfHandMisc"/></td>
+    <td><input tabindex="235" title="@{SleightOfHandSP}" type="number" name="attr_SleightOfHandSP"/></td>
+    <td><input tabindex="335" title="@{SleightOfHandMisc}" type="number" name="attr_SleightOfHandMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{SpotTrained}" type="checkbox" name="attr_SpotTrained"/></td>
+    <td><input tabindex="136" title="@{SpotTrained}" type="checkbox" name="attr_SpotTrained"/></td>
     <td>Spot</td>
     <td>Yes</td>
     <td>Wis<input type="hidden" name="attr_KeyWis"/></td>
@@ -2353,26 +2519,26 @@
                 name="roll_Spot-check"></button></td>
     <td><input title="@{SpotTotal}" type="number" readonly name="attr_SpotTotal"/></td>
     <td><input title="@{wismod}" type="number" readonly name="attr_wismod"/></td>
-    <td><input title="@{SpotSP}" type="number" name="attr_SpotSP"/></td>
-    <td><input title="@{SpotMisc}" type="number" name="attr_SpotMisc"/></td>
+    <td><input tabindex="236" title="@{SpotSP}" type="number" name="attr_SpotSP"/></td>
+    <td><input tabindex="336" title="@{SpotMisc}" type="number" name="attr_SpotMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{SabotageDeviceTrained}" type="checkbox" name="attr_SabotageDeviceTrained"/></td>
-    <td>SabotageDevice</td>
+    <td><input tabindex="137" title="@{SabotageDeviceTrained}" type="checkbox" name="attr_SabotageDeviceTrained"/></td>
+    <td>Sabotage Device</td>
     <td>No</td>
     <td>Int<input type="hidden" name="attr_KeyInt"/></td>
     <td><button class="button"
-                title="SabotageDevice"
+                title="Sabotage Device"
                 type="roll"
-                value="&{template:custom}{{title=SabotageDevice}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{SabotageDeviceTotal}]]}}"
+                value="&{template:custom}{{title=Sabotage Device}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{SabotageDeviceTotal}]]}}"
                 name="roll_SabotageDevice-check"></button></td>
     <td><input title="@{SabotageDeviceTotal}" type="number" readonly name="attr_SabotageDeviceTotal"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_intmod"/></td>
-    <td><input title="@{SabotageDeviceSP}" type="number" name="attr_SabotageDeviceSP"/></td>
-    <td><input title="@{SabotageDeviceMisc}" type="number" name="attr_SabotageDeviceMisc"/></td>
+    <td><input tabindex="237" title="@{SabotageDeviceSP}" type="number" name="attr_SabotageDeviceSP"/></td>
+    <td><input tabindex="337" title="@{SabotageDeviceMisc}" type="number" name="attr_SabotageDeviceMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{SwinTrained}" type="checkbox" name="attr_SwimTrained"/></td>
+    <td><input tabindex="138" title="@{SwimTrained}" type="checkbox" name="attr_SwimTrained"/></td>
     <td>Swim*</td>
     <td>Yes</td>
     <td>Str<input type="hidden" name="attr_KeyStr"/></td>
@@ -2383,23 +2549,23 @@
                 name="roll_Swim-check"></button></td>
     <td><input title="@{SwimTotal}" type="number" readonly name="attr_SwimTotal"/></td>
     <td><input title="@{strmod}" type="number" readonly name="attr_strmod"/></td>
-    <td><input title="@{SwimSP}" type="number" name="attr_SwimSP"/></td>
-    <td><input title="@{SwimMisc}" type="number" name="attr_SwimMisc"/></td>
+    <td><input tabindex="238" title="@{SwimSP}" type="number" name="attr_SwimSP"/></td>
+    <td><input tabindex="338" title="@{SwimMisc}" type="number" name="attr_SwimMisc"/></td>
    </tr>
    <tr class="hoverskill">
-    <td><input title="@{UseRopeTrained}" type="checkbox" name="attr_UseRopeTrained"/></td>
+    <td><input tabindex="139" title="@{UseRopeTrained}" type="checkbox" name="attr_UseRopeTrained"/></td>
     <td>Use Rope</td>
     <td>Yes</td>
     <td>Dex<input type="hidden" name="attr_KeyDex"/></td>
     <td><button class="button"
-                title="UseRope"
+                title="Use Rope"
                 type="roll"
-                value="&{template:custom}{{title=UseRope}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{UseRopeTotal}]]}}"
+                value="&{template:custom}{{title=Use Rope}}{{subtitle=@{character_name}}}{{Result:= [[1d20+@{UseRopeTotal}]]}}"
                 name="roll_UseRope-check"></button></td>
     <td><input title="@{UseRopeTotal}" type="number" readonly name="attr_UseRopeTotal"/></td>
     <td><input title="@{intmod}" type="number" readonly name="attr_dexmod"/></td>
-    <td><input title="@{UseRopeSP}" type="number" name="attr_UseRopeSP"/></td>
-    <td><input title="@{UseRopeMisc}" type="number" name="attr_UseRopeMisc"/></td>
+    <td><input tabindex="239" title="@{UseRopeSP}" type="number" name="attr_UseRopeSP"/></td>
+    <td><input tabindex="339" title="@{UseRopeMisc}" type="number" name="attr_UseRopeMisc"/></td>
    </tr>
   </table>
  </div>
@@ -2471,9 +2637,18 @@
        <button type="action" name="act_fullattackconfirm3"></button>
        <button type="action" name="act_fullattackconfirm4"></button>
        <button type="action" name="act_fullattackconfirm5"></button>
+       <button type="action" name="act_fullattackconfirm6"></button>
        <button type="action" name="act_singleattackdamage"></button>
        <button type="action" name="act_singleattackcritdamage"></button>
        <button type="action" name="act_singleattackconfirm"></button>
+       <button type="action" name="act_twintalonconfirm1"></button>
+       <button type="action" name="act_twintalonconfirm2"></button>
+       <button type="action" name="act_deadlyassaultconfirm1"></button>
+       <button type="action" name="act_deadlyassaultconfirm2"></button>
+       <button type="action" name="act_deadlyassaultconfirm3"></button>
+       <button type="action" name="act_deadlyassaultconfirm4"></button>
+       <button type="action" name="act_deadlyassaultconfirm5"></button>
+       <button type="action" name="act_deadlyassaultconfirm6"></button>
           <input type="hidden" name="attr_focus_points_used" value="1"/>
 
           <button type="action" name="act_focusattackdamage"></button>
@@ -2516,7 +2691,7 @@
        <div>Feat Damage:</div>
        <div>Imbuement Dice:</div>
        <div>Damage Type?</div>
-       <div>Two Handed?</div>
+       <div>Two-Handed?</div>
       </div>
       <div class="grc4 weapon-shrink">
        <div>
@@ -2579,7 +2754,7 @@
                 name="roll_attack1"
                 value=
                         "
-         &{template:custom}{{title=Critical Confirm}}{{subtitle= Attack 1}}{{with a=[[1d20cs>@{critlow}+@{BAB}[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have miscellaneous attack bonus?|0})]] to hit.}}
+         &{template:custom}{{title=Critical Confirmation}}{{subtitle= Attack 1}}{{with a=[[1d20cs>@{critlow}+@{BAB}[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have any miscellaneous attack bonuses?|0})]] to hit.}}
          "
         ></button>
        </div>
@@ -2590,7 +2765,7 @@
                 name="roll_attack2"
                 value=
                         "
-         &{template:custom}{{title=Critical Confirm:}}{{subtitle=Attack 2}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-5)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have miscellaneous attack bonus?|0})]] to hit.}}
+         &{template:custom}{{title=Critical Confirmation}}{{subtitle=Attack 2}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-5)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have any miscellaneous attack bonuses?|0})]] to hit.}}
          "
         ></button>
        </div>
@@ -2601,7 +2776,7 @@
                 name="roll_attack3"
                 value=
                         "
-        &{template:custom}{{title=Critical Confirm:}}{{subtitle= Attack 3}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-10)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have miscellaneous attack bonus?|0})]] to hit.}}
+        &{template:custom}{{title=Critical Confirmation}}{{subtitle= Attack 3}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-10)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have any miscellaneous attack bonuses?|0})]] to hit.}}
         "
         ></button>
        </div>
@@ -2612,7 +2787,7 @@
                 name="roll_attack4"
                 value=
                         "
-        &{template:custom}{{title=Critical Confirm:}}{{subtitle= Attack 4}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-15)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have miscellaneous attack bonus?|0})]] to hit.}}
+        &{template:custom}{{title=Critical Confirmation}}{{subtitle= Attack 4}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-15)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have any miscellaneous attack bonuses?|0})]] to hit.}}
         "
         ></button>
        </div>
@@ -2626,7 +2801,7 @@
       <input type="hidden" class="weapon-toggle" name="attr_weaponminimizetoggle" value="0"/>
       <div class="grr1 ggrid weapon-shrink">
        <input type="hidden" class="advancedweapon-toggle" name="attr_advancedweaponminimizetoggle" value="0"/>
-       <div class="advancedweapon-shrink column-header" style="grid-column: 1/5;border-radius: 0;font-size: small">Weapon Grand Master Bonus</div>
+       <div class="advancedweapon-shrink column-header" style="grid-column: 1/5;border-radius: 0;font-size: small">Weapon Grandmaster Bonus</div>
        <div class="grc1 advancedweapon-shrink">
         None <input type="radio" name="attr_grandmaster" value="0">
        </div>
@@ -2646,29 +2821,37 @@
        <input type="hidden" name="attr_twintalon"/>
        <div class="grc1 advancedweapon-shrink">
         <button
-                type="roll"
-                name="roll_twintalon"
-                value="@{twintalon}">
+                type="action"
+                name="act_twintalon">
          Twin Talon
         </button>
-       </div>
-       <div class="grc2 advancedweapon-shrink">
-        <input type="hidden" name="attr_crackshot"/>
         <button
+                style="display:none"
                 type="roll"
-                name="roll_crackshot"
-                value="@{crackshot}">
-         Crack Shot
-        </button>
+                name="roll_twintalon"
+                value="@{twintalon}"></button>
        </div>
+       <!--<div class="grc2 advancedweapon-shrink">
+      <input type="hidden" name="attr_crackshot"/>
+       <button
+               type="roll"
+               name="roll_crackshot"
+               value="@{crackshot}">
+        Crack Shot
+       </button>
+      </div>-->
        <div class="grc3 advancedweapon-shrink">
         <input type="hidden" name="attr_deadlyassault"/>
         <button
-                type="roll"
-                name="roll_deadlyassault"
-                value="@{deadlyassault}">
+                type="action"
+                name="act_deadlyassault">
          Deadly Assault
         </button>
+        <button
+                style="display:none"
+                type="roll"
+                name="roll_deadlyassault"
+                value="@{deadlyassault}"></button>
        </div>
        <div class="grc4 advancedweapon-shrink">
         <input type="hidden" name="attr_focusattack"/>
@@ -2713,9 +2896,18 @@
        <button type="action" name="act_fullattackconfirm3"></button>
        <button type="action" name="act_fullattackconfirm4"></button>
        <button type="action" name="act_fullattackconfirm5"></button>
+       <button type="action" name="act_fullattackconfirm6"></button>
        <button type="action" name="act_singleattackdamage"></button>
        <button type="action" name="act_singleattackcritdamage"></button>
        <button type="action" name="act_singleattackconfirm"></button>
+       <button type="action" name="act_twintalonconfirm1"></button>
+       <button type="action" name="act_twintalonconfirm2"></button>
+       <button type="action" name="act_deadlyassaultconfirm1"></button>
+       <button type="action" name="act_deadlyassaultconfirm2"></button>
+       <button type="action" name="act_deadlyassaultconfirm3"></button>
+       <button type="action" name="act_deadlyassaultconfirm4"></button>
+       <button type="action" name="act_deadlyassaultconfirm5"></button>
+       <button type="action" name="act_deadlyassaultconfirm6"></button>
           <input type="hidden" name="attr_focus_points_used" value="1"/>
 
           <button type="action" name="act_focusattackdamage"></button>
@@ -2758,7 +2950,7 @@
        <div>Feat Damage:</div>
        <div>Imbuement Dice:</div>
        <div>Damage Type?</div>
-       <div>Two Handed?</div>
+       <div>Two-Handed?</div>
       </div>
       <div class="grc4 weapon-shrink">
        <div>
@@ -2819,7 +3011,7 @@
                 name="roll_attack1"
                 value=
                         "
-         &{template:custom}{{title=Critical Confirm}}{{subtitle= Attack 1}}{{with a=[[1d20cs>@{critlow}+@{BAB}[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have miscellaneous attack bonus?|0})]] to hit.}}
+         &{template:custom}{{title=Critical Confirmation}}{{subtitle= Attack 1}}{{with a=[[1d20cs>@{critlow}+@{BAB}[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have any miscellaneous attack bonuses?|0})]] to hit.}}
          "
         ></button>
        </div>
@@ -2830,7 +3022,7 @@
                 name="roll_attack2"
                 value=
                         "
-         &{template:custom}{{title=Critical Confirm:}}{{subtitle=Attack 2}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-5)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have miscellaneous attack bonus?|0})]] to hit.}}
+         &{template:custom}{{title=Critical Confirmation}}{{subtitle=Attack 2}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-5)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have any miscellaneous attack bonuses?|0})]] to hit.}}
          "
         ></button>
        </div>
@@ -2841,7 +3033,7 @@
                 name="roll_attack3"
                 value=
                         "
-        &{template:custom}{{title=Critical Confirm:}}{{subtitle= Attack 3}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-10)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have miscellaneous attack bonus?|0})]] to hit.}}
+        &{template:custom}{{title=Critical Confirmation}}{{subtitle= Attack 3}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-10)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have any miscellaneous attack bonuses?|0})]] to hit.}}
         "
         ></button>
        </div>
@@ -2852,7 +3044,7 @@
                 name="roll_attack4"
                 value=
                         "
-        &{template:custom}{{title=Critical Confirm:}}{{subtitle= Attack 4}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-15)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have miscellaneous attack bonus?|0})]] to hit.}}
+        &{template:custom}{{title=Critical Confirmation}}{{subtitle= Attack 4}}{{with a=[[1d20cs>@{critlow}+(@{BAB}-15)[Base Attack]+@{weapontohit}[Key Ability]+@{bonustoattack}[Feats]+@{enhancetoattack}[Enhancement]+(0?{Do you have any miscellaneous attack bonuses?|0})]] to hit.}}
         "
         ></button>
        </div>
@@ -2866,7 +3058,7 @@
       <input type="hidden" class="weapon-toggle" name="attr_weaponminimizetoggle" value="0"/>
       <div class="grr1 ggrid weapon-shrink">
        <input type="hidden" class="advancedweapon-toggle" name="attr_advancedweaponminimizetoggle" value="0"/>
-       <div class="advancedweapon-shrink column-header" style="grid-column: 1/5;border-radius: 0;font-size: small">Weapon Grand Master Bonus</div>
+       <div class="advancedweapon-shrink column-header" style="grid-column: 1/5;border-radius: 0;font-size: small">Weapon Grandmaster Bonus</div>
        <div class="grc1 advancedweapon-shrink">
         None <input type="radio" name="attr_grandmaster" value="0">
        </div>
@@ -2886,13 +3078,17 @@
        <input type="hidden" name="attr_twintalon"/>
        <div class="grc1 advancedweapon-shrink">
         <button
-                type="roll"
-                name="roll_twintalon"
-                value="@{twintalon}">
+                type="action"
+                name="act_twintalon">
          Twin Talon
         </button>
+        <button
+                style="display:none"
+                type="roll"
+                name="roll_twintalon"
+                value="@{twintalon}"></button>
        </div>
-       <div class="grc2 advancedweapon-shrink">
+       <!--<div class="grc2 advancedweapon-shrink">
         <input type="hidden" name="attr_crackshot"/>
         <button
                 type="roll"
@@ -2900,15 +3096,19 @@
                 value="@{crackshot}">
          Crack Shot
         </button>
-       </div>
+       </div>-->
        <div class="grc3 advancedweapon-shrink">
         <input type="hidden" name="attr_deadlyassault"/>
         <button
-                type="roll"
-                name="roll_deadlyassault"
-                value="@{deadlyassault}">
+                type="action"
+                name="act_deadlyassault">
          Deadly Assault
         </button>
+        <button
+                style="display:none"
+                type="roll"
+                name="roll_deadlyassault"
+                value="@{deadlyassault}"></button>
        </div>
        <div class="grc4 advancedweapon-shrink">
         <input type="hidden" name="attr_focusattack"/>
@@ -3150,9 +3350,29 @@
             value="0"/>
     </div>
    </div>
+   <div class="settings-row">
+    <div class="settings-label">Skill Point(s) Modifier:</div>
+    <div class="settings-value">
+     <input title="@{skill_point_modifier}"
+            class="standard-input"
+            type="number"
+            name="attr_skill_point_modifier"
+            value="0"/>
+    </div>
+   </div>
   </div>
 
   <div class="settings-right">
+   <div class="settings-row">
+    <div class="settings-label">Automatic Feat/Ability Grants:</div>
+    <div class="settings-value">
+     <input title="@{enable_automatic_grants}"
+            type="checkbox"
+            name="attr_enable_automatic_grants"
+            value="1"/>
+    </div>
+   </div>
+
    <div class="settings-row">
     <div class="settings-label">No Constitution Score:</div>
     <div class="settings-value">
@@ -3254,6 +3474,15 @@
     {{#rollTotal() computed::attack5_next 1}}[Confirm Critical](~{{characterid}}|{{attack5_confirm_action}}){{/rollTotal() computed::attack5_next 1}}
    </div>
    {{/attack5}}
+   {{#attack6}}
+   <div class="sheet-key">{{attack6_label}}</div>
+   <div class="sheet-value">{{attack6}}</div>
+   <div class="sheet-key">Next Step</div>
+   <div class="sheet-value">
+    {{#rollTotal() computed::attack6_next 0}}[Damage](~{{characterid}}|{{attack6_damage_action}}){{/rollTotal() computed::attack6_next 0}}
+    {{#rollTotal() computed::attack6_next 1}}[Confirm Critical](~{{characterid}}|{{attack6_confirm_action}}){{/rollTotal() computed::attack6_next 1}}
+   </div>
+   {{/attack6}}
    {{/fullattack}}
    {{#fullattackconfirm}}
    <div class="sheet-key">Confirmation Roll</div>
@@ -3261,10 +3490,83 @@
    <div class="sheet-key">Damage</div>
    <div class="sheet-value">[Normal Damage](~{{characterid}}|{{confirm_normal_action}}) [Critical Damage](~{{characterid}}|{{confirm_critical_action}})</div>
    {{/fullattackconfirm}}
-   {{#allprops() title subtitle desc color characterid fullattack fullattackconfirm attack1 attack2 attack3 attack4 attack5 attack1_label attack2_label attack3_label attack4_label attack5_label attack1_next attack2_next attack3_next attack4_next attack5_next attack1_damage_action attack2_damage_action attack3_damage_action attack4_damage_action attack5_damage_action attack1_confirm_action attack2_confirm_action attack3_confirm_action attack4_confirm_action attack5_confirm_action confirm confirm_normal_action confirm_critical_action}}
+   {{#rest}}
+   <div class="sheet-key">Multiplier</div>
+   <div class="sheet-value">{{rest_multiplier}}</div>
+   <div class="sheet-key">HP Restored</div>
+   <div class="sheet-value">{{computed::rest_healing}}</div>
+   <div class="sheet-key">Current HP</div>
+   <div class="sheet-value">{{computed::rest_hp}} / {{computed::rest_hp_max}}</div>
+   {{/rest}}
+   {{#spellcast}}
+   {{#rollTotal() computed::spell_cast_allowed 1}}
+   <div class="sheet-key">Spell Level</div>
+   <div class="sheet-value">{{spell_base_level}}</div>
+   <div class="sheet-key">Slot Modifier</div>
+   <div class="sheet-value">{{spell_slot_modifier}}</div>
+   <div class="sheet-key">Slot Used</div>
+   <div class="sheet-value">{{computed::spell_effective_level}}</div>
+   {{#spell_components}}
+   <div class="sheet-key">Components</div>
+   <div class="sheet-value">{{spell_components}}</div>
+   {{/spell_components}}
+   {{#spell_range}}
+   <div class="sheet-key">Range</div>
+   <div class="sheet-value">{{spell_range}}</div>
+   {{/spell_range}}
+   {{#spell_casting_time}}
+   <div class="sheet-key">Casting Time</div>
+   <div class="sheet-value">{{spell_casting_time}}</div>
+   {{/spell_casting_time}}
+   {{#spell_effect}}
+   <div class="sheet-key">Effect</div>
+   <div class="sheet-value">{{spell_effect}}</div>
+   {{/spell_effect}}
+   {{#spell_duration}}
+   <div class="sheet-key">Duration</div>
+   <div class="sheet-value">{{spell_duration}}</div>
+   {{/spell_duration}}
+   {{#spell_save_label}}
+   <div class="sheet-key">{{spell_save_label}}</div>
+   <div class="sheet-value">{{spell_save_result}}</div>
+   {{/spell_save_label}}
+   {{#spell_effect_label}}
+   <div class="sheet-key">{{spell_effect_label}}</div>
+   <div class="sheet-value">{{spell_effect_result}}</div>
+   {{/spell_effect_label}}
+   {{#spell_penetration}}
+   <div class="sheet-key">Spell Penetration</div>
+   <div class="sheet-value">{{spell_penetration}}</div>
+   {{/spell_penetration}}
+   {{#spell_description}}
+   <div class="sheet-desc">{{spell_description}}</div>
+   {{/spell_description}}
+   {{/rollTotal() computed::spell_cast_allowed 1}}
+   {{#rollTotal() computed::spell_cast_allowed 0}}
+   <div class="sheet-key">Spell Level</div>
+   <div class="sheet-value">{{spell_base_level}}</div>
+   <div class="sheet-key">Slot Modifier</div>
+   <div class="sheet-value">{{spell_slot_modifier}}</div>
+   <div class="sheet-key">Required Slot</div>
+   <div class="sheet-value">{{computed::spell_effective_level}}</div>
+   {{#rollTotal() computed::spell_denial_code 1}}
+   <div class="sheet-desc">This spell cannot be cast with the selected slot modifier or metamagic because it would require a spell slot above level 9.</div>
+   {{/rollTotal() computed::spell_denial_code 1}}
+   {{#rollTotal() computed::spell_denial_code 2}}
+   <div class="sheet-desc">This spell cannot be cast with the selected slot modifier or metamagic because there are no remaining level {{computed::spell_effective_level}} spell uses available.</div>
+   {{/rollTotal() computed::spell_denial_code 2}}
+   {{#rollTotal() computed::spell_denial_code 3}}
+   <div class="sheet-desc">This spell has not been prepared for the day. Prepare it before casting, or mark it as Known if it should use spell slots directly.</div>
+   {{/rollTotal() computed::spell_denial_code 3}}
+   {{#rollTotal() computed::spell_denial_code 4}}
+   <div class="sheet-desc">This spell is not marked as Known or Memorized. Mark one of those options before casting it.</div>
+   {{/rollTotal() computed::spell_denial_code 4}}
+   {{/rollTotal() computed::spell_cast_allowed 0}}
+   {{/spellcast}}
+   {{#allprops() title subtitle desc color characterid fullattack fullattackconfirm rest deathsave rest_multiplier rest_summary rest_healing rest_hp rest_hp_max rest_death_save_removed attack1 attack2 attack3 attack4 attack5 attack6 attack1_label attack2_label attack3_label attack4_label attack5_label attack6_label attack1_next attack2_next attack3_next attack4_next attack5_next attack6_next attack1_damage_action attack2_damage_action attack3_damage_action attack4_damage_action attack5_damage_action attack6_damage_action attack1_confirm_action attack2_confirm_action attack3_confirm_action attack4_confirm_action attack5_confirm_action attack6_confirm_action confirm confirm_normal_action confirm_critical_action spellcast spell_base_level spell_slot_modifier spell_components spell_range spell_casting_time spell_effect spell_duration spell_save_label spell_save_result spell_effect_label spell_effect_result spell_penetration spell_description spell_cast_allowed spell_denial_code spell_effective_level}}
    <div class="sheet-key">{{key}}</div>
    <div class="sheet-value">{{value}}</div>
-   {{/allprops() title subtitle desc color characterid fullattack fullattackconfirm attack1 attack2 attack3 attack4 attack5 attack1_label attack2_label attack3_label attack4_label attack5_label attack1_next attack2_next attack3_next attack4_next attack5_next attack1_damage_action attack2_damage_action attack3_damage_action attack4_damage_action attack5_damage_action attack1_confirm_action attack2_confirm_action attack3_confirm_action attack4_confirm_action attack5_confirm_action confirm confirm_normal_action confirm_critical_action}}
+   {{/allprops() title subtitle desc color characterid fullattack fullattackconfirm rest deathsave rest_multiplier rest_summary rest_healing rest_hp rest_hp_max rest_death_save_removed attack1 attack2 attack3 attack4 attack5 attack6 attack1_label attack2_label attack3_label attack4_label attack5_label attack6_label attack1_next attack2_next attack3_next attack4_next attack5_next attack6_next attack1_damage_action attack2_damage_action attack3_damage_action attack4_damage_action attack5_damage_action attack6_damage_action attack1_confirm_action attack2_confirm_action attack3_confirm_action attack4_confirm_action attack5_confirm_action attack6_confirm_action confirm confirm_normal_action confirm_critical_action spellcast spell_base_level spell_slot_modifier spell_components spell_range spell_casting_time spell_effect spell_duration spell_save_label spell_save_result spell_effect_label spell_effect_result spell_penetration spell_description spell_cast_allowed spell_denial_code spell_effective_level}}
    {{#desc}}
    <div class="sheet-desc">{{desc}}</div>
    {{/desc}}
@@ -3669,10 +3971,11 @@
  const SKILL_POINT_ATTRS = SKILLS.map(skill => skill.sp);
 
  var checkmaxskillpoints = function() {
-  const attrs = SKILL_POINT_ATTRS.concat(["NatIntMod", "BaseSkillGrowth", "HD"]);
+  const attrs = SKILL_POINT_ATTRS.concat(["NatIntMod", "BaseSkillGrowth", "HD","skill_point_modifier"]);
   getAttrs(attrs, function(values) {
    const currentSkillPoints = SKILL_POINT_ATTRS.reduce((sum, attr) => sum + num(values, attr), 0);
-   const maxSkillPoints = (num(values, "HD") + 3) * (num(values, "NatIntMod") + num(values, "BaseSkillGrowth"));
+   const maxSkillPoints = (num(values, "HD") + 3) * (num(values, "NatIntMod") + num(values, "BaseSkillGrowth")) +
+           num(values,"skill_point_modifier");
    setAttrs({
     TotalPossibleSkillPoints: maxSkillPoints,
     RemainingSkillPoints: maxSkillPoints - currentSkillPoints
@@ -3680,13 +3983,14 @@
   });
  };
 
- on(watch(["Specialty", "AttackCurve", "Versatile", "skill_growth_modifier"]), function(){
-  getAttrs(["Specialty", "AttackCurve", "Versatile", "skill_growth_modifier"], function(values){
+ on(watch(["skill_point_modifier"]), checkmaxskillpoints);
+
+ on(watch(["Specialty", "AttackCurve", "Versatile", "skill_growth_modifier","skill_point_modifier"]), function(){
+  getAttrs(["Specialty", "AttackCurve", "Versatile", "skill_growth_modifier", "skill_point_modifier"], function(values){
    let attack = 2;
    let specialty = 0;
    let versatile = 0;
    let skill_growth_modifier = num(values, "skill_growth_modifier");
-
    if(values.AttackCurve === "Medium") attack = 4;
    if(values.Specialty === "Specialist") specialty = 4;
    if(values.Specialty === "Generalist") specialty = 2;
@@ -3828,9 +4132,151 @@
  });
  //</editor-fold>
 
+ //<editor-fold desc="Conditions">
+
+ const TTD_CONDITIONS = [
+  {
+   name: "Bad Luck",
+   legacyAttr: "condition_bad_luck",
+   effect: "Damage rolls are treated as their minimum result."
+  },
+  {
+   name: "Dizzy",
+   legacyAttr: "condition_dizzy",
+   effect: "Casting requires a Concentration check with DC 10 + HD + spell level. Moving requires a Balance check with " +
+           "DC 15 or the creature falls prone; running raises this to DC 25. Melee attacks take a -2 circumstance penalty."
+  },
+  {
+   name: "Exhausted",
+   legacyAttr: "condition_exhausted",
+   effect: "May either move or take a standard action each round. Ground speed is halved. Takes a -3 dodge penalty to " +
+           "AC and Reflex saves."
+  },
+  {
+   name: "Fatigued",
+   legacyAttr: "condition_fatigued",
+   effect: "Cannot charge or double-move. Excessively tiring activity causes the creature to become Exhausted. Takes a " +
+           "-1 dodge penalty to AC and Reflex saves."
+  },
+  {
+   name: "Haste",
+   legacyAttr: "condition_haste",
+   effect: "Speed is doubled or increased by 30 ft, whichever results in the lower speed. Gains a +1 bonus to attacks, " +
+           "AC, and Reflex saves. While hasted, the creature may make 1 additional attack per round. This is " +
+           "automatically calculated for you."
+  },
+  {
+   name: "Nauseated",
+   legacyAttr: "condition_nauseated",
+   effect: "Each round: 33% chance to lose the action vomiting, 33% chance to require a Balance check with DC 18 or fall " +
+           "prone, and 33% chance to act normally."
+  },
+  {
+   name: "Scared",
+   legacyAttr: "condition_scared",
+   effect: "Against the source of fear, takes -2 on attack rolls and Will saves, prefers to stay out of range, and becomes " +
+           "more compliant unless a greater fear takes priority."
+  },
+  {
+   name: "Sickened",
+   legacyAttr: "condition_sickened",
+   effect: "Takes -2 to all rolls. Movement speed is reduced by 10 ft."
+  },
+  {
+   name: "Sleep",
+   legacyAttr: "condition_sleep",
+   effect: "Temporarily unconscious. Noise with Listen DC 15 or higher gives the creature a chance to wake on a successful " +
+           "Listen check. Takes -5 to Listen while asleep."
+  },
+  {
+   name: "Slow",
+   legacyAttr: "condition_slow",
+   effect: "Speed is halved or reduced to 15 ft, whichever is slower. Takes a -1 penalty to attacks, AC, and Reflex saves. " +
+           "While slowed, the creature can make only 1 attack per round. This is automatically calculated for you."
+  },
+  {
+   name: "Soaked",
+   legacyAttr: "condition_soaked",
+   effect: "Electric spells gain vulnerability. Electric resistance is lost, immunity becomes resistance, and electric " +
+           "absorption heals by the vulnerable damage amount."
+  },
+  {
+   name: "Stifle",
+   legacyAttr: "condition_stifle",
+   effect: "Cannot act while left alone. May dodge, defend, or protect themselves if attacked. Magical stifle grants another " +
+           "immediate Will save after an offensive action. Reactive skills take a -4 circumstance penalty. Not flat-footed."
+  },
+  {
+   name: "Stunned",
+   legacyAttr: "condition_stunned",
+   effect: "Drops weapons, cannot take standard actions, and threatens no squares. May move at half speed. Takes a -2 " +
+           "dodge penalty to AC and Reflex saves, and -4 to Acrobatics, Balance, Investigate, Listen, and Spot."
+  }
+ ];
+
+ const TTD_CONDITION_EFFECTS = TTD_CONDITIONS.reduce(function(map, condition) {
+  map[condition.name] = condition.effect;
+  return map;
+ }, {});
+
+ const setConditionEffectForRow = function(rowId, values, attrsToSet) {
+  const typeAttr = `repeating_conditions_${rowId}_condition_type`;
+  const effectAttr = `repeating_conditions_${rowId}_condition_effect`;
+  const conditionType = str(values, typeAttr);
+  attrsToSet[effectAttr] = TTD_CONDITION_EFFECTS[conditionType] || "";
+ };
+
+ const updateConditionEffects = function(callback) {
+  getSectionIDs("repeating_conditions", function(rowIds) {
+   const attrsToGet = rowIds.map(rowId => `repeating_conditions_${rowId}_condition_type`);
+
+   getAttrs(attrsToGet, function(values) {
+    const attrsToSet = {};
+
+    rowIds.forEach(rowId => {
+     setConditionEffectForRow(rowId, values, attrsToSet);
+    });
+
+    if(Object.keys(attrsToSet).length > 0) {
+     setAttrs(attrsToSet, typeof callback === "function" ? callback : undefined);
+     return;
+    }
+
+    if(typeof callback === "function") callback();
+   });
+  });
+ };
+
+ const updateConditionEffectFromEvent = function(eventInfo) {
+  const source = eventInfo && eventInfo.sourceAttribute ? eventInfo.sourceAttribute : "";
+  const match = source.match(/repeating_conditions_([^_]+)_condition_type/);
+
+  if(!match) {
+   updateConditionEffects();
+   return;
+  }
+
+  const rowId = match[1];
+  const typeAttr = `repeating_conditions_${rowId}_condition_type`;
+
+  getAttrs([typeAttr], function(values) {
+   const attrsToSet = {};
+   setConditionEffectForRow(rowId, values, attrsToSet);
+   setAttrs(attrsToSet);
+  });
+ };
+
+ on("change:repeating_conditions:condition_type", updateConditionEffectFromEvent);
+ on("sheet:opened", function() {
+  updateConditionEffects();
+ });
+
+ //</editor-fold>
+
  //<editor-fold desc="Button-Tabs"
 
- const inputlist = ["Crown", "Face", "Neck", "Shoulders", "Ring1", "Ring2", "Hands", "Forearms", "UpperArms", "Torso", "Waist", "Feet"];
+ const inputlist = ["Crown", "Face", "Neck", "Shoulders", "Ring1", "Ring2", "Hands", "Forearms", "UpperArms", "Torso",
+  "Waist", "Feet"];
  inputlist.forEach(input =>{
   on(`change:${input.toLowerCase()}`, function(){
    getAttrs([input], function(values){
@@ -3842,7 +4288,7 @@
  });
 
  const buttonlist = ["main", "skills", "gear", "definitions", "abilities", "spells", "accessories", "inventory", "profitloss",
- "settings"];
+  "settings","bio"];
  buttonlist.forEach(button => {
   on(`clicked:${button}`, function() {
    setAttrs({
@@ -3919,6 +4365,208 @@
     hp_max: total,
     NLD_max: total,
    });
+  });
+ });
+
+ //</editor-fold>
+
+ //<editor-fold desc="Rest Button">
+
+ const REST_SPELL_LEVELS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+ const REST_MULTIPLIER_QUERY = "?{Rest multiplier|1x,1|1.5x,1.5|2x,2|3x,3}";
+
+ const restRollResultTotal = function(rollResult, fallback = 0) {
+  if(rollResult && rollResult.result !== undefined) {
+   const parsed = parseFloat(rollResult.result);
+   return isNaN(parsed) ? fallback : parsed;
+  }
+
+  if(rollResult && rollResult.total !== undefined) {
+   const parsed = parseFloat(rollResult.total);
+   return isNaN(parsed) ? fallback : parsed;
+  }
+
+  return fallback;
+ };
+
+ const resetRepeatingCurrentFromMax = function(section, currentAttr, maxAttr, attrsToSet, callback) {
+  getSectionIDs(section, function(rowIds) {
+   const attrsToGet = [];
+
+   rowIds.forEach(rowId => {
+    attrsToGet.push(`${section}_${rowId}_${maxAttr}`);
+   });
+
+   getAttrs(attrsToGet, function(values) {
+    rowIds.forEach(rowId => {
+     const maxValue = values[`${section}_${rowId}_${maxAttr}`];
+
+     if(maxValue !== undefined && maxValue !== "") {
+      attrsToSet[`${section}_${rowId}_${currentAttr}`] = maxValue;
+     }
+    });
+
+    callback();
+   });
+  });
+ };
+
+ const REST_RESOURCE_EXCLUSIONS = [
+  "heme"
+ ];
+
+ const normalizeRestResourceName = function(value) {
+  return String(value || "").replace(/\s+/g, "").toLowerCase();
+ };
+
+ const restShouldSkipResource = function(value) {
+  return REST_RESOURCE_EXCLUSIONS.includes(normalizeRestResourceName(value));
+ };
+
+ const resetRestResources = function(attrsToSet, callback) {
+  getSectionIDs("repeating_resources", function(rowIds) {
+   const attrsToGet = [];
+
+   rowIds.forEach(rowId => {
+    attrsToGet.push(`repeating_resources_${rowId}_resourceName`);
+    attrsToGet.push(`repeating_resources_${rowId}_resourceNumber_max`);
+   });
+
+   getAttrs(attrsToGet, function(values) {
+    rowIds.forEach(rowId => {
+     const resourceName = values[`repeating_resources_${rowId}_resourceName`];
+     const maxValue = values[`repeating_resources_${rowId}_resourceNumber_max`];
+
+     if(restShouldSkipResource(resourceName)) return;
+
+     if(maxValue !== undefined && maxValue !== "") {
+      attrsToSet[`repeating_resources_${rowId}_resourceNumber`] = maxValue;
+     }
+    });
+
+    callback();
+   });
+  });
+ };
+
+ const resetRestRepeatingPools = function(attrsToSet, callback) {
+  resetRestResources(attrsToSet, function() {
+   resetRepeatingCurrentFromMax("repeating_abilities", "userdescription", "uses", attrsToSet, callback);
+  });
+ };
+
+ const deathSaveIsChecked = function(value) {
+  return value === "1" || value === 1 || value === true || value === "on" || value === "yes";
+ };
+
+ const applyRestDeathSaveRecovery = function(values, attrsToSet) {
+  if(deathSaveIsChecked(values.death_save_3)) return 3;
+
+  if(deathSaveIsChecked(values.death_save_2)) {
+   attrsToSet.death_save_2 = "0";
+   return 2;
+  }
+
+  if(deathSaveIsChecked(values.death_save_1)) {
+   attrsToSet.death_save_1 = "0";
+   return 1;
+  }
+
+  return 0;
+ };
+
+ const rollRestingForever = function() {
+  startRoll(
+          `&{template:custom}{{title=Dead}}{{subtitle=@{character_name}}}` +
+          `{{Status=Dead}}{{desc=@{character_name} is dead and now resting forever.}}`,
+          function(roll) {
+           finishRoll(roll.rollId);
+          }
+  );
+ };
+
+ on("clicked:rest", function() {
+  getAttrs(["death_save_3"], function(deathValues) {
+   if(deathSaveIsChecked(deathValues.death_save_3)) {
+    rollRestingForever();
+    return;
+   }
+
+   startRoll(
+           `&{template:custom}{{title=Rest}}{{subtitle=@{character_name}}}` +
+           `{{rest=1}}{{rest_multiplier=[[${REST_MULTIPLIER_QUERY}]]}}` +
+           `{{rest_healing=[[0]]}}{{rest_hp=[[0]]}}{{rest_hp_max=[[0]]}}` +
+           `{{desc=Spell uses, ability uses, and resources reset to maximum. `+
+           `One non-terminal death save failure is cleared. One point of ability damage is reduced from every attribute.}}`,
+           function(roll) {
+            const multiplier = restRollResultTotal(roll.results.rest_multiplier, 1);
+            const attrsToGet = ["hp", "hp_max", "HD", "conmod", "death_save_1", "death_save_2"];
+
+            REST_SPELL_LEVELS.forEach(level => {
+             attrsToGet.push(`${level}perday`);
+            });
+
+            getAttrs(attrsToGet, function(values) {
+             const currentHp = num(values, "hp", 0);
+             const maxHp = Math.max(0, num(values, "hp_max", 0));
+             const hd = Math.max(0, num(values, "HD", 0));
+             const constitutionModifier = Math.max(1, num(values, "conmod", 0));
+             const restHealing = Math.max(0, Math.floor(hd * constitutionModifier * multiplier));
+             const newHp = Math.min(maxHp, currentHp + restHealing);
+             const actualHealing = Math.max(0, newHp - currentHp);
+             const attrsToSet = {
+              hp: newHp
+             };
+             const deathSaveRemoved = applyRestDeathSaveRecovery(values, attrsToSet);
+
+             REST_SPELL_LEVELS.forEach(level => {
+              const perDay = values[`${level}perday`];
+
+              if(perDay !== undefined && perDay !== "") {
+               attrsToSet[`${level}remaining`] = perDay;
+              }
+             });
+
+             resetRestRepeatingPools(attrsToSet, function() {
+              setAttrs(attrsToSet, function() {
+               finishRoll(roll.rollId, {
+                rest_healing: actualHealing,
+                rest_hp: newHp,
+                rest_hp_max: maxHp,
+                rest_death_save_removed: deathSaveRemoved
+               });
+              });
+             });
+            });
+           }
+   );
+  });
+ });
+
+ on("clicked:deathsave", function() {
+  getAttrs(["death_save_1", "death_save_2", "death_save_3"], function(values) {
+   if(deathSaveIsChecked(values.death_save_3)) {
+    startRoll(
+            `&{template:custom}{{title=Death Save}}{{subtitle=@{character_name}}}` +
+            `{{Status=Dead}}{{desc=@{character_name} is dead and is now sleeping forever.}}`,
+            function(roll) {
+             finishRoll(roll.rollId);
+            }
+    );
+    return;
+   }
+
+   const checkedFailures = ["death_save_1", "death_save_2", "death_save_3"].reduce(function(total, attr) {
+    return total + (deathSaveIsChecked(values[attr]) ? 1 : 0);
+   }, 0);
+
+   startRoll(
+           `&{template:custom}{{title=Death Save}}{{subtitle=@{character_name}}}` +
+           `{{Death Save=[[1d20]]}}{{Current Failures=${checkedFailures} / 3}}`,
+           function(roll) {
+            finishRoll(roll.rollId);
+           }
+   );
   });
  });
 
@@ -4172,7 +4820,7 @@
   }
   if(spellResistance === "1") {
    macro += `{{Spell Penetration=[[1d20+@{cl}+@{spellpenetrationbonus}+`+
-           `(0?{Do you have any Spell penetration Bonuses?|0})]]}}`;
+           `(0?{Do you have any spell penetration bonuses?|0})]]}}`;
   }
 
   return macro + `{{desc= @{spelldescription}}}`;
@@ -4203,6 +4851,319 @@
   });
  });
 
+ const SPELL_CAST_LEVELS = [0,1,2,3,4,5,6,7,8,9];
+ const SPELL_SLOT_LEVELS = [1,2,3,4,5,6,7,8,9];
+ const SPELL_MAX_SLOT_LEVEL = 9;
+ const SPELL_SLOT_MODIFIER_QUERY = "?{Spell Slot Modifier / Metamagic|0,0|1,1|2,2|3,3|4,4}";
+ const SPELL_DENIAL = {
+  NONE: 0,
+  TOO_HIGH: 1,
+  NO_USES: 2,
+  NOT_PREPARED: 3,
+  NOT_AVAILABLE: 4
+ };
+
+ const spellCheckboxIsChecked = function(value) {
+  return value === "1" || value === 1 || value === true || value === "on" || value === "yes";
+ };
+
+ const spellPreparedCount = function(value) {
+  const parsed = parseInt(value, 10);
+  return isNaN(parsed) ? 0 : Math.max(0, parsed);
+ };
+
+ const spellRollResultTotal = function(rollResult, fallback = 0) {
+  if(rollResult && rollResult.result !== undefined) {
+   const parsed = parseFloat(rollResult.result);
+   return isNaN(parsed) ? fallback : parsed;
+  }
+
+  if(rollResult && rollResult.total !== undefined) {
+   const parsed = parseFloat(rollResult.total);
+   return isNaN(parsed) ? fallback : parsed;
+  }
+
+  return fallback;
+ };
+
+ const normalizeSpellSlotModifier = function(value) {
+  let modifier = parseInt(value, 10);
+  if(isNaN(modifier)) modifier = 0;
+  modifier = Math.max(0, modifier);
+  modifier = Math.min(4, modifier);
+  return modifier;
+ };
+
+ const spellUsesRemaining = function(level, values) {
+  if(level === 0) return Infinity;
+
+  const remainingAttr = `${level}remaining`;
+  const perDayAttr = `${level}perday`;
+  const remainingValue = values[remainingAttr];
+
+  if(remainingValue === undefined || remainingValue === null || remainingValue === "") {
+   return Math.max(0, spellPreparedCount(values[perDayAttr]));
+  }
+
+  return Math.max(0, spellPreparedCount(remainingValue));
+ };
+
+ const getSpellRowIdFromEvent = function(level, eventInfo) {
+  const source = eventInfo && (eventInfo.sourceAttribute || eventInfo.sourceButton || "");
+  const match = source.match(new RegExp(`repeating_spells-${level}_([^_]+)_`));
+  return match ? match[1] : "";
+ };
+
+ const spellRowAttr = function(level, rowId, attr) {
+  if(rowId) return `repeating_spells-${level}_${rowId}_${attr}`;
+  return `repeating_spells-${level}_${attr}`;
+ };
+
+ const spellRowValue = function(values, level, rowId, attr, fallback = "") {
+  const fullAttr = spellRowAttr(level, rowId, attr);
+  const contextualAttr = `repeating_spells-${level}_${attr}`;
+
+  if(values[fullAttr] !== undefined && values[fullAttr] !== null) return values[fullAttr];
+  if(values[contextualAttr] !== undefined && values[contextualAttr] !== null) return values[contextualAttr];
+
+  return fallback;
+ };
+
+ const spellTemplateText = function(value, fallback = "") {
+  const text = String(value === undefined || value === null || value === "" ? fallback : value);
+
+  return text
+          .replace(/\{\{/g, "&#123;&#123;")
+          .replace(/\}\}/g, "&#125;&#125;");
+ };
+
+ const spellPmaValue = function(values) {
+  const pmaMap = {
+   "@{strmod}": "strmod",
+   "@{dexmod}": "dexmod",
+   "@{wismod}": "wismod",
+   "@{intmod}": "intmod",
+   "@{chamod}": "chamod"
+  };
+
+  return num(values, pmaMap[str(values, "PMA")], 0);
+ };
+
+ const buildDynamicSpellCard = function(level, values, rowId) {
+  const save = spellRowValue(values, level, rowId, "spellsaving", "No");
+  const saveSuccess = spellTemplateText(spellRowValue(values, level, rowId, "savesucces"));
+  const dcMod = int(values, spellRowAttr(level, rowId, "spelldcmod"), int(values, `repeating_spells-${level}_spelldcmod`, 0));
+  const type = spellRowValue(values, level, rowId, "category", "0");
+  const harmless = spellTemplateText(spellRowValue(values, level, rowId, "harmless").replace("0", ""));
+  const spellResistance = spellRowValue(values, level, rowId, "sr");
+  const spellName = spellTemplateText(spellRowValue(values, level, rowId, "spellname", "Unnamed Spell"));
+  const school = spellTemplateText(spellRowValue(values, level, rowId, "school", "Spell"));
+  const components = spellTemplateText(spellRowValue(values, level, rowId, "components"));
+  const range = spellTemplateText(spellRowValue(values, level, rowId, "range"));
+  const castingTime = spellTemplateText(spellRowValue(values, level, rowId, "castingtime"));
+  const effect = spellTemplateText(spellRowValue(values, level, rowId, "effect"));
+  const duration = spellTemplateText(spellRowValue(values, level, rowId, "duration"));
+  const description = spellTemplateText(spellRowValue(values, level, rowId, "spelldescription"));
+  const diceNumber = spellRowValue(values, level, rowId, "dicenum", "0") || "0";
+  const diceType = spellRowValue(values, level, rowId, "dicetype", "d6") || "d6";
+  const spellProf = num(values, "SpellProf", 0);
+  const pma = spellPmaValue(values);
+  const cl = num(values, "cl", 0);
+  const spellPenetrationBonus = num(values, "spellpenetrationbonus", 0);
+
+  let macro = `&{template:custom}{{title=${spellName}}}{{subtitle=${school}}}{{spellcast=1}}`+
+          `{{spell_base_level=${level}}}{{spell_slot_modifier=[[${SPELL_SLOT_MODIFIER_QUERY}]]}}`+
+          `{{spell_cast_allowed=[[0]]}}{{spell_denial_code=[[0]]}}{{spell_effective_level=[[0]]}}`+
+          `{{spell_components=${components}}}{{spell_range=${range}}}{{spell_casting_time=${castingTime}}}`+
+          `{{spell_effect=${effect}}}{{spell_duration=${duration}}}`;
+
+  if(save !== "No") {
+   macro += `{{spell_save_label=${save} Save}}`+
+           `{{spell_save_result=DC [[10+${dcMod}+${pma}+${level}+${spellProf}]]${saveSuccess}${harmless}}}`;
+  }
+
+  if(type !== "0") {
+   macro += `{{spell_effect_label=${spellTemplateText(type)}}}`+
+           `{{spell_effect_result=[[${diceNumber}${diceType}+(${diceNumber}*${spellProf})]]}}`;
+  }
+
+  if(spellResistance === "1") {
+   macro += `{{spell_penetration=[[1d20+${cl}+${spellPenetrationBonus}+`+
+           `(0?{Do you have any spell penetration bonuses?|0})]]}}`;
+  }
+
+  return macro + `{{spell_description=${description}}}`;
+ };
+
+ const rollSpellNotice = function(title, subtitle, desc) {
+  startRoll(
+          `&{template:custom}{{title=${spellTemplateText(title)}}}{{subtitle=${spellTemplateText(subtitle, "Spell")}}}`+
+          `{{desc=${spellTemplateText(desc)}}}`,
+          function(roll) {
+           finishRoll(roll.rollId);
+          }
+  );
+ };
+
+ const finishSpellCardRoll = function(macro, attrsToSet, computedValues) {
+  startRoll(macro, function(roll) {
+   const computed = typeof computedValues === "function"
+           ? computedValues(roll)
+           : (computedValues || { spell_cast_allowed: 1, spell_denial_code: SPELL_DENIAL.NONE });
+
+   if(attrsToSet && Object.keys(attrsToSet).length > 0) {
+    setAttrs(attrsToSet, function() {
+     finishRoll(roll.rollId, computed);
+    });
+    return;
+   }
+
+   finishRoll(roll.rollId, computed);
+  });
+ };
+
+ const finishResolvedSpellCast = function(roll, attrsToSet, computedValues) {
+  if(attrsToSet && Object.keys(attrsToSet).length > 0) {
+   setAttrs(attrsToSet, function() {
+    finishRoll(roll.rollId, computedValues);
+   });
+   return;
+  }
+
+  finishRoll(roll.rollId, computedValues);
+ };
+
+ const castSpellForLevel = function(level, eventInfo) {
+  const rowId = getSpellRowIdFromEvent(level, eventInfo);
+  const rowAttrs = [
+   "spellsaving",
+   "category",
+   "savesucces",
+   "harmless",
+   "sr",
+   "spelldcmod",
+   "known",
+   "memorized",
+   "prepared",
+   "spellname",
+   "school",
+   "components",
+   "range",
+   "castingtime",
+   "effect",
+   "duration",
+   "dicenum",
+   "dicetype",
+   "spelldescription"
+  ].map(attr => spellRowAttr(level, rowId, attr));
+  const slotAttrs = [];
+
+  SPELL_SLOT_LEVELS.forEach(slotLevel => {
+   slotAttrs.push(`${slotLevel}perday`);
+   slotAttrs.push(`${slotLevel}remaining`);
+  });
+
+  const attrs = rowAttrs.concat(slotAttrs).concat([
+   "PMA",
+   "strmod",
+   "dexmod",
+   "wismod",
+   "intmod",
+   "chamod",
+   "SpellProf",
+   "cl",
+   "spellpenetrationbonus"
+  ]);
+
+  getAttrs(attrs, function(values) {
+   const spellName = spellRowValue(values, level, rowId, "spellname", "this spell");
+   const macro = buildDynamicSpellCard(level, values, rowId);
+
+   startRoll(macro, function(roll) {
+    const slotModifier = normalizeSpellSlotModifier(spellRollResultTotal(roll.results.spell_slot_modifier, 0));
+    const effectiveLevel = level + slotModifier;
+    const computed = {
+     spell_cast_allowed: 0,
+     spell_denial_code: SPELL_DENIAL.NONE,
+     spell_effective_level: effectiveLevel
+    };
+
+    const deny = function(code) {
+     computed.spell_cast_allowed = 0;
+     computed.spell_denial_code = code;
+     finishResolvedSpellCast(roll, {}, computed);
+    };
+
+    const spendSlotAndFinish = function(attrsToSet) {
+     if(effectiveLevel > 0) {
+      const remaining = spellUsesRemaining(effectiveLevel, values);
+
+      if(remaining <= 0) {
+       deny(SPELL_DENIAL.NO_USES);
+       return;
+      }
+
+      attrsToSet[`${effectiveLevel}remaining`] = Math.max(0, remaining - 1);
+     }
+
+     computed.spell_cast_allowed = 1;
+     computed.spell_denial_code = SPELL_DENIAL.NONE;
+     finishResolvedSpellCast(roll, attrsToSet, computed);
+    };
+
+    if(level === 0) {
+     if(effectiveLevel > SPELL_MAX_SLOT_LEVEL) {
+      deny(SPELL_DENIAL.TOO_HIGH);
+      return;
+     }
+
+     spendSlotAndFinish({});
+     return;
+    }
+
+    const memorized = spellCheckboxIsChecked(spellRowValue(values, level, rowId, "memorized"));
+    const known = spellCheckboxIsChecked(spellRowValue(values, level, rowId, "known"));
+
+    if(!memorized && !known) {
+     deny(SPELL_DENIAL.NOT_AVAILABLE);
+     return;
+    }
+
+    if(memorized) {
+     const prepared = spellPreparedCount(spellRowValue(values, level, rowId, "prepared"));
+
+     if(prepared <= 0) {
+      deny(SPELL_DENIAL.NOT_PREPARED);
+      return;
+     }
+
+     if(effectiveLevel > SPELL_MAX_SLOT_LEVEL) {
+      deny(SPELL_DENIAL.TOO_HIGH);
+      return;
+     }
+
+     spendSlotAndFinish({
+      [spellRowAttr(level, rowId, "prepared")]: prepared - 1
+     });
+     return;
+    }
+
+    if(effectiveLevel > SPELL_MAX_SLOT_LEVEL) {
+     deny(SPELL_DENIAL.TOO_HIGH);
+     return;
+    }
+
+    spendSlotAndFinish({});
+   });
+  });
+ };
+
+ SPELL_CAST_LEVELS.forEach(level => {
+  on(`clicked:repeating_spells-${level}:rollspellcard`, function(eventInfo) {
+   castSpellForLevel(level, eventInfo);
+  });
+ });
+
  on(watch(["HD", "MagicCurve"]), function(){
   getAttrs(["HD", "MagicCurve"], function(values){
    let SP = 0;
@@ -4228,9 +5189,728 @@
 
  // <editor-fold desc="Ability Info Calculations">
 
- on("change:repeating_abilities:minimizeability change_repeating_abilities:absavethrow " +
-         "change:repeating_abilities:abilitytype change:repeating_abilities:abilitysrconfirm " +
-         "change:repeating_abilities:asprof change:repeating_abilities", function(){
+ // Automatic grant rows are generated from exact grant keys, not from total row counts.
+ // This keeps Universal, ancestry/background, and progression grants from masking one another.
+ const UNIVERSAL_SOURCE_NAME = "Universal";
+ const VERSATILE_SOURCE_NAME = "Versatile";
+ const DIFFUSE_BACKGROUND_SOURCE_NAME = "Diffuse Background";
+ const MYSTIC_SOURCE_NAME = "Mystic";
+ const NULL_COMBATANT_SOURCE_NAME = "Null Combatant";
+ const NULL_GENERALIST_SOURCE_NAME = "Null Generalist";
+ const NULL_SPECIALIST_SOURCE_NAME = "Null Specialist";
+ const BASIC_COMBATANT_SOURCE_NAME = "Basic Combatant";
+ const BASIC_GENERALIST_SOURCE_NAME = "Basic Generalist";
+ const BASIC_SPECIALIST_SOURCE_NAME = "Basic Specialist";
+ const STANDARD_COMBATANT_SOURCE_NAME = "Standard Combatant";
+ const STANDARD_GENERALIST_SOURCE_NAME = "Standard Generalist";
+ const STANDARD_SPECIALIST_SOURCE_NAME = "Standard Specialist";
+ const ADVANCED_COMBATANT_SOURCE_NAME = "Advanced Combatant";
+ const ADVANCED_GENERALIST_SOURCE_NAME = "Advanced Generalist";
+ const ADVANCED_SPECIALIST_SOURCE_NAME = "Advanced Specialist";
+
+ const levelsOneThenStep = function(hd, firstStepLevel, step) {
+  const levels = [];
+  if(hd >= 1) levels.push(1);
+  for(let level = firstStepLevel; level <= hd; level += step) {
+   levels.push(level);
+  }
+  return levels;
+ };
+
+ const levelsStartingAt = function(hd, start, step) {
+  const levels = [];
+  for(let level = start; level <= hd; level += step) {
+   levels.push(level);
+  }
+  return levels;
+ };
+
+ const universalFeatLevels = function(hd) {
+  const levels = [];
+  if(hd >= 1) levels.push(1);
+  for(let level = 3; level <= hd; level += 3) {
+   levels.push(level);
+  }
+  return levels;
+ };
+
+ const universalAbilityLevels = function(hd) {
+  return levelsOneThenStep(hd, 10, 10);
+ };
+
+ const nullCombatantFeatLevels = function(hd) {
+  return levelsOneThenStep(hd, 2, 2);
+ };
+
+ const nullGeneralistFeatLevels = function(hd) {
+  return levelsStartingAt(hd, 2, 4);
+ };
+
+ const nullGeneralistAbilityLevels = function(hd) {
+  return levelsOneThenStep(hd, 4, 4);
+ };
+
+ const nullSpecialistAbilityLevels = function(hd) {
+  return levelsOneThenStep(hd, 2, 2);
+ };
+
+ const basicCombatantFeatLevels = function(hd) {
+  return levelsOneThenStep(hd, 4, 3);
+ };
+
+ const basicGeneralistFeatLevels = function(hd) {
+  return levelsStartingAt(hd, 4, 6);
+ };
+
+ const basicGeneralistAbilityLevels = function(hd) {
+  return levelsOneThenStep(hd, 7, 6);
+ };
+
+ const basicSpecialistAbilityLevels = function(hd) {
+  return levelsOneThenStep(hd, 4, 3);
+ };
+
+ const standardCombatantFeatLevels = function(hd) {
+  const levels = [];
+  if(hd >= 1) levels.push(1);
+  if(hd >= 4) levels.push(4);
+  for(let level = 12; level <= hd; level += 4) {
+   levels.push(level);
+  }
+  return levels;
+ };
+
+ const standardGeneralistFeatLevels = function(hd) {
+  const levels = [];
+  if(hd >= 4) levels.push(4);
+  for(let level = 16; level <= hd; level += 4) {
+   levels.push(level);
+  }
+  return levels;
+ };
+
+ const standardGeneralistAbilityLevels = function(hd) {
+  return levelsOneThenStep(hd, 8, 8);
+ };
+
+ const standardSpecialistAbilityLevels = function(hd) {
+  const levels = [];
+  if(hd >= 1) levels.push(1);
+  if(hd >= 4) levels.push(4);
+  for(let level = 12; level <= hd; level += 4) {
+   levels.push(level);
+  }
+  return levels;
+ };
+
+ const advancedCombatantFeatLevels = function(hd) {
+  return levelsOneThenStep(hd, 5, 5);
+ };
+
+ const advancedGeneralistFeatLevels = function(hd) {
+  return levelsStartingAt(hd, 5, 10);
+ };
+
+ const advancedGeneralistAbilityLevels = function(hd) {
+  return levelsOneThenStep(hd, 10, 10);
+ };
+
+ const advancedSpecialistAbilityLevels = function(hd) {
+  return levelsOneThenStep(hd, 5, 5);
+ };
+
+ const normalizeGrantSource = function(value) {
+  return String(value || "").trim().toLowerCase();
+ };
+
+ const normalizeGrantName = function(value) {
+  return String(value || "").trim().toLowerCase();
+ };
+
+ const grantIsChecked = function(value) {
+  return value === "1" || value === 1 || value === true || value === "on" || value === "yes";
+ };
+
+ const hasDiffuseBackground = function(values) {
+  return grantIsChecked(values.diffuse_background) ||
+          normalizeGrantName(values.primarydefinitionname) === "diffuse background";
+ };
+
+ const keyLevelFromPrefix = function(key, keyPrefix) {
+  if(!key || key.indexOf(keyPrefix) !== 0) return null;
+  const level = parseInt(key.slice(keyPrefix.length), 10);
+  return isNaN(level) ? null : level;
+ };
+
+ const genericSourceAvailability = function(currentHD, grantedLevel) {
+  const level = parseInt(grantedLevel, 10);
+  if(isNaN(level) || level <= 0) return "1";
+  return currentHD >= level ? "1" : "0";
+ };
+
+ const makeGrantSpec = function(key, source, level, name, description, available, hidden = false) {
+  return { key, source, level, name, description, available, hidden };
+ };
+
+ const GENERATED_FEAT_NAME = "<Enter Feat Name Here>";
+ const GENERATED_ABILITY_NAME = "<Enter Ability Name Here>";
+ const MAX_AUTOMATIC_GRANT_HD = 20;
+
+ const generatedGrantNameForSection = function(def) {
+  return def.section === "repeating_abilities" ? GENERATED_ABILITY_NAME : GENERATED_FEAT_NAME;
+ };
+
+ const shouldReplaceGeneratedGrantName = function(def, currentName) {
+  const name = String(currentName || "").trim();
+
+  if(!name) return true;
+  if(name === GENERATED_FEAT_NAME || name === GENERATED_ABILITY_NAME) return false;
+
+  if(def.section === "repeating_feats") {
+   return /^(Universal|Versatile Bonus|Diffuse Background Bonus|Null Combatant|Null Generalist|Basic Combatant|Basic Generalist|Standard Combatant|Standard Generalist|Advanced Combatant|Advanced Generalist) Feat(?: \(HD \d+\))?$/.test(name);
+  }
+
+  if(def.section === "repeating_abilities") {
+   return /^(Universal|Mystic|Null Generalist|Null Specialist|Basic Generalist|Basic Specialist|Standard Generalist|Standard Specialist|Advanced Generalist|Advanced Specialist) Ability(?: \(HD \d+\))?$/.test(name);
+  }
+
+  return false;
+ };
+
+ const progressionSourceMatches = function(context, magicCurve, specialty) {
+  return normalizeGrantName(context.magicCurve) === normalizeGrantName(magicCurve) &&
+          normalizeGrantName(context.specialty) === normalizeGrantName(specialty);
+ };
+
+ const GRANT_SECTIONS = [
+  {
+   section: "repeating_feats",
+   nameAttr: "featsname",
+   descriptionAttr: "featsdescription",
+   universalKeyPrefix: "universal_feat_hd_",
+   universalName: level => GENERATED_FEAT_NAME,
+   universalDescription: level => `Universal feat slot gained at HD ${level}. Replace this text with the selected feat.`,
+   conditionalGrants: [
+    {
+     key: "versatile_bonus_feat",
+     source: VERSATILE_SOURCE_NAME,
+     level: 1,
+     name: GENERATED_FEAT_NAME,
+     description: "Bonus feat gained from the Versatile species option. Replace this text with the selected feat.",
+     isExpected: context => context.versatile
+    },
+    {
+     key: "diffuse_background_bonus_feat",
+     source: DIFFUSE_BACKGROUND_SOURCE_NAME,
+     level: 1,
+     name: GENERATED_FEAT_NAME,
+     description: "Bonus feat gained from the Diffuse Background primary definition. Replace this text with the selected feat.",
+     isExpected: context => context.diffuseBackground
+    }
+   ],
+   progressionGrants: [
+    {
+     keyPrefix: "null_combatant_feat_hd_",
+     source: NULL_COMBATANT_SOURCE_NAME,
+     magicCurve: "None",
+     specialty: "Combatant",
+     levels: nullCombatantFeatLevels,
+     name: level => GENERATED_FEAT_NAME,
+     description: level => `Null Combatant feat slot gained at HD ${level}. Replace this text with the selected feat.`
+    },
+    {
+     keyPrefix: "null_generalist_feat_hd_",
+     source: NULL_GENERALIST_SOURCE_NAME,
+     magicCurve: "None",
+     specialty: "Generalist",
+     levels: nullGeneralistFeatLevels,
+     name: level => GENERATED_FEAT_NAME,
+     description: level => `Null Generalist feat slot gained at HD ${level}. Replace this text with the selected feat.`
+    },
+    {
+     keyPrefix: "basic_combatant_feat_hd_",
+     source: BASIC_COMBATANT_SOURCE_NAME,
+     magicCurve: "Basic",
+     specialty: "Combatant",
+     levels: basicCombatantFeatLevels,
+     name: level => GENERATED_FEAT_NAME,
+     description: level => `Basic Combatant feat slot gained at HD ${level}. Replace this text with the selected feat.`
+    },
+    {
+     keyPrefix: "basic_generalist_feat_hd_",
+     source: BASIC_GENERALIST_SOURCE_NAME,
+     magicCurve: "Basic",
+     specialty: "Generalist",
+     levels: basicGeneralistFeatLevels,
+     name: level => GENERATED_FEAT_NAME,
+     description: level => `Basic Generalist feat slot gained at HD ${level}. Replace this text with the selected feat.`
+    },
+    {
+     keyPrefix: "standard_combatant_feat_hd_",
+     source: STANDARD_COMBATANT_SOURCE_NAME,
+     magicCurve: "Standard",
+     specialty: "Combatant",
+     levels: standardCombatantFeatLevels,
+     name: level => GENERATED_FEAT_NAME,
+     description: level => `Standard Combatant feat slot gained at HD ${level}. Replace this text with the selected feat.`
+    },
+    {
+     keyPrefix: "standard_generalist_feat_hd_",
+     source: STANDARD_GENERALIST_SOURCE_NAME,
+     magicCurve: "Standard",
+     specialty: "Generalist",
+     levels: standardGeneralistFeatLevels,
+     name: level => GENERATED_FEAT_NAME,
+     description: level => `Standard Generalist feat slot gained at HD ${level}. Replace this text with the selected feat.`
+    },
+    {
+     keyPrefix: "advanced_combatant_feat_hd_",
+     source: ADVANCED_COMBATANT_SOURCE_NAME,
+     magicCurve: "Advanced",
+     specialty: "Combatant",
+     levels: advancedCombatantFeatLevels,
+     name: level => GENERATED_FEAT_NAME,
+     description: level => `Advanced Combatant feat slot gained at HD ${level}. Replace this text with the selected feat.`
+    },
+    {
+     keyPrefix: "advanced_generalist_feat_hd_",
+     source: ADVANCED_GENERALIST_SOURCE_NAME,
+     magicCurve: "Advanced",
+     specialty: "Generalist",
+     levels: advancedGeneralistFeatLevels,
+     name: level => GENERATED_FEAT_NAME,
+     description: level => `Advanced Generalist feat slot gained at HD ${level}. Replace this text with the selected feat.`
+    }
+   ],
+   universalLevels: universalFeatLevels
+  },
+  {
+   section: "repeating_abilities",
+   nameAttr: "abilityname",
+   descriptionAttr: "abilitydescriptiontext",
+   universalKeyPrefix: "universal_ability_hd_",
+   universalName: level => GENERATED_ABILITY_NAME,
+   universalDescription: level => `Universal ability slot gained at HD ${level}. Replace this text with the selected ability.`,
+   conditionalGrants: [
+    {
+     key: "mystic_bonus_ability",
+     source: MYSTIC_SOURCE_NAME,
+     level: 1,
+     name: GENERATED_ABILITY_NAME,
+     description: "Bonus ability gained from the Mystic species option. Replace this text with the selected ability.",
+     isExpected: context => context.mystic
+    }
+   ],
+   progressionGrants: [
+    {
+     keyPrefix: "null_generalist_ability_hd_",
+     source: NULL_GENERALIST_SOURCE_NAME,
+     magicCurve: "None",
+     specialty: "Generalist",
+     levels: nullGeneralistAbilityLevels,
+     name: level => GENERATED_ABILITY_NAME,
+     description: level => `Null Generalist ability slot gained at HD ${level}. Replace this text with the selected ability.`
+    },
+    {
+     keyPrefix: "null_specialist_ability_hd_",
+     source: NULL_SPECIALIST_SOURCE_NAME,
+     magicCurve: "None",
+     specialty: "Specialist",
+     levels: nullSpecialistAbilityLevels,
+     name: level => GENERATED_ABILITY_NAME,
+     description: level => `Null Specialist ability slot gained at HD ${level}. Replace this text with the selected ability.`
+    },
+    {
+     keyPrefix: "basic_generalist_ability_hd_",
+     source: BASIC_GENERALIST_SOURCE_NAME,
+     magicCurve: "Basic",
+     specialty: "Generalist",
+     levels: basicGeneralistAbilityLevels,
+     name: level => GENERATED_ABILITY_NAME,
+     description: level => `Basic Generalist ability slot gained at HD ${level}. Replace this text with the selected ability.`
+    },
+    {
+     keyPrefix: "basic_specialist_ability_hd_",
+     source: BASIC_SPECIALIST_SOURCE_NAME,
+     magicCurve: "Basic",
+     specialty: "Specialist",
+     levels: basicSpecialistAbilityLevels,
+     name: level => GENERATED_ABILITY_NAME,
+     description: level => `Basic Specialist ability slot gained at HD ${level}. Replace this text with the selected ability.`
+    },
+    {
+     keyPrefix: "standard_generalist_ability_hd_",
+     source: STANDARD_GENERALIST_SOURCE_NAME,
+     magicCurve: "Standard",
+     specialty: "Generalist",
+     levels: standardGeneralistAbilityLevels,
+     name: level => GENERATED_ABILITY_NAME,
+     description: level => `Standard Generalist ability slot gained at HD ${level}. Replace this text with the selected ability.`
+    },
+    {
+     keyPrefix: "standard_specialist_ability_hd_",
+     source: STANDARD_SPECIALIST_SOURCE_NAME,
+     magicCurve: "Standard",
+     specialty: "Specialist",
+     levels: standardSpecialistAbilityLevels,
+     name: level => GENERATED_ABILITY_NAME,
+     description: level => `Standard Specialist ability slot gained at HD ${level}. Replace this text with the selected ability.`
+    },
+    {
+     keyPrefix: "advanced_generalist_ability_hd_",
+     source: ADVANCED_GENERALIST_SOURCE_NAME,
+     magicCurve: "Advanced",
+     specialty: "Generalist",
+     levels: advancedGeneralistAbilityLevels,
+     name: level => GENERATED_ABILITY_NAME,
+     description: level => `Advanced Generalist ability slot gained at HD ${level}. Replace this text with the selected ability.`
+    },
+    {
+     keyPrefix: "advanced_specialist_ability_hd_",
+     source: ADVANCED_SPECIALIST_SOURCE_NAME,
+     magicCurve: "Advanced",
+     specialty: "Specialist",
+     levels: advancedSpecialistAbilityLevels,
+     name: level => GENERATED_ABILITY_NAME,
+     description: level => `Advanced Specialist ability slot gained at HD ${level}. Replace this text with the selected ability.`
+    }
+   ],
+   universalLevels: universalAbilityLevels
+  }
+ ];
+
+ const buildUniversalGrantSpec = function(def, level, context) {
+  const overGrantCap = level > MAX_AUTOMATIC_GRANT_HD;
+
+  return makeGrantSpec(
+          `${def.universalKeyPrefix}${level}`,
+          UNIVERSAL_SOURCE_NAME,
+          level,
+          def.universalName(level),
+          def.universalDescription(level),
+          !overGrantCap && context.currentHD >= level,
+          overGrantCap
+  );
+ };
+
+ const buildProgressionGrantSpec = function(progression, level, context) {
+  const sourceMatches = progressionSourceMatches(context, progression.magicCurve, progression.specialty);
+  const overGrantCap = level > MAX_AUTOMATIC_GRANT_HD;
+
+  return makeGrantSpec(
+          `${progression.keyPrefix}${level}`,
+          progression.source,
+          level,
+          progression.name(level),
+          progression.description(level),
+          !overGrantCap && context.currentHD >= level && sourceMatches,
+          overGrantCap || !sourceMatches
+  );
+ };
+
+ const buildExpectedGrantSpecs = function(def, context) {
+  const automaticGrantHD = Math.min(context.currentHD, MAX_AUTOMATIC_GRANT_HD);
+  const specs = def.universalLevels(automaticGrantHD).map(level => buildUniversalGrantSpec(def, level, context));
+
+  (def.conditionalGrants || []).forEach(grant => {
+   if(grant.isExpected(context)) {
+    specs.push(makeGrantSpec(
+            grant.key,
+            grant.source,
+            grant.level,
+            grant.name,
+            grant.description,
+            context.currentHD >= grant.level
+    ));
+   }
+  });
+
+  (def.progressionGrants || []).forEach(progression => {
+   if(!progressionSourceMatches(context, progression.magicCurve, progression.specialty)) return;
+
+   progression.levels(automaticGrantHD).forEach(level => {
+    specs.push(buildProgressionGrantSpec(progression, level, context));
+   });
+  });
+
+  return specs;
+ };
+
+ const grantSpecFromKey = function(def, key, context) {
+  const universalLevel = keyLevelFromPrefix(key, def.universalKeyPrefix);
+  if(universalLevel) return buildUniversalGrantSpec(def, universalLevel, context);
+
+  const conditional = (def.conditionalGrants || []).find(grant => grant.key === key);
+  if(conditional) {
+   return makeGrantSpec(
+           conditional.key,
+           conditional.source,
+           conditional.level,
+           conditional.name,
+           conditional.description,
+           context.currentHD >= conditional.level && conditional.isExpected(context)
+   );
+  }
+
+  for(const progression of (def.progressionGrants || [])) {
+   const progressionLevel = keyLevelFromPrefix(key, progression.keyPrefix);
+   if(progressionLevel) return buildProgressionGrantSpec(progression, progressionLevel, context);
+  }
+
+  return null;
+ };
+
+ const inferGrantKeyFromMetadata = function(def, values, prefix) {
+  const source = normalizeGrantSource(values[`${prefix}granted_source`]);
+  const level = int(values, `${prefix}granted_level`, 0);
+
+  if(source === normalizeGrantSource(UNIVERSAL_SOURCE_NAME) && level > 0) {
+   return `${def.universalKeyPrefix}${level}`;
+  }
+
+  const conditional = (def.conditionalGrants || []).find(grant =>
+          source === normalizeGrantSource(grant.source)
+  );
+
+  if(conditional) return conditional.key;
+
+  const progression = (def.progressionGrants || []).find(grant =>
+          source === normalizeGrantSource(grant.source)
+  );
+
+  if(progression && level > 0) return `${progression.keyPrefix}${level}`;
+
+  return "";
+ };
+
+ const grantSortLevel = function(value) {
+  const level = parseInt(value, 10);
+  return isNaN(level) || level <= 0 ? 999999 : level;
+ };
+
+ const grantSortSourceRank = function(source) {
+  const normalized = normalizeGrantSource(source);
+
+  // HD is always the primary sort. This rank is only a tie-breaker inside the same HD.
+  if(normalized === normalizeGrantSource(UNIVERSAL_SOURCE_NAME)) return 0;
+  if(normalized) return 10;
+  return 50;
+ };
+
+ const buildGrantReporder = function(rows) {
+  return rows
+          .slice()
+          .sort((left, right) => {
+           const leftLevel = grantSortLevel(left.level);
+           const rightLevel = grantSortLevel(right.level);
+
+           // Primary: HD, lowest to highest.
+           if(leftLevel !== rightLevel) return leftLevel - rightLevel;
+
+           // Secondary: within the same HD, Universal goes first.
+           if(left.sourceRank !== right.sourceRank) return left.sourceRank - right.sourceRank;
+
+           // Tertiary: preserve existing order as much as possible.
+           return left.originalIndex - right.originalIndex;
+          })
+          .map(row => row.rowId)
+          .join(',');
+ };
+
+ const setGrantReporderAfterRowsExist = function(def, orderRows, duplicateRowIds, callback) {
+  // Intentionally do not write _reporder for automatic feat/ability grants.
+  // Writing _reporder_repeating_feats or _reporder_repeating_abilities makes Roll20
+  // snap the repeating sections back into the worker's sorted order after HD,
+  // progression, grant metadata, or row changes. New grant rows can still be
+  // created, updated, hidden, and de-duplicated; existing row order is left alone.
+  if(callback) callback();
+ };
+
+ const updateGrantedRowsForSection = function(def, context, callback) {
+  getSectionIDs(def.section, function(rowIds) {
+   const attrsToGet = [];
+
+   rowIds.forEach(rowId => {
+    attrsToGet.push(`${def.section}_${rowId}_grant_key`);
+    attrsToGet.push(`${def.section}_${rowId}_granted_level`);
+    attrsToGet.push(`${def.section}_${rowId}_granted_source`);
+    attrsToGet.push(`${def.section}_${rowId}_grant_hidden`);
+    attrsToGet.push(`${def.section}_${rowId}_${def.nameAttr}`);
+   });
+
+   getAttrs(attrsToGet, function(values) {
+    const attrsToSet = {};
+    const existingGrantKeys = {};
+    const duplicateRowsToRemove = [];
+    const duplicateRowIds = {};
+    const orderRows = [];
+
+    rowIds.forEach((rowId, originalIndex) => {
+     const prefix = `${def.section}_${rowId}_`;
+     let key = str(values, `${prefix}grant_key`);
+
+     if(!key) {
+      key = inferGrantKeyFromMetadata(def, values, prefix);
+      if(key) attrsToSet[`${prefix}grant_key`] = key;
+     }
+
+     const spec = grantSpecFromKey(def, key, context);
+
+     if(spec) {
+      if(existingGrantKeys[spec.key]) {
+       duplicateRowsToRemove.push(`${def.section}_${rowId}`);
+       duplicateRowIds[rowId] = true;
+       return;
+      }
+
+      existingGrantKeys[spec.key] = true;
+      attrsToSet[`${prefix}granted_level`] = spec.level;
+      attrsToSet[`${prefix}granted_source`] = spec.source;
+      attrsToSet[`${prefix}source_available`] = spec.available ? "1" : "0";
+      attrsToSet[`${prefix}grant_hidden`] = spec.hidden ? "1" : "0";
+
+      if(shouldReplaceGeneratedGrantName(def, values[`${prefix}${def.nameAttr}`])) {
+       attrsToSet[`${prefix}${def.nameAttr}`] = generatedGrantNameForSection(def);
+      }
+
+      orderRows.push({
+       rowId,
+       level: grantSortLevel(spec.level),
+       sourceRank: grantSortSourceRank(spec.source),
+       source: spec.source,
+       originalIndex
+      });
+      return;
+     }
+
+     const manualLevel = int(values, `${prefix}granted_level`, 0);
+     const manualSource = str(values, `${prefix}granted_source`);
+
+     attrsToSet[`${prefix}source_available`] = genericSourceAvailability(
+             context.currentHD,
+             manualLevel
+     );
+     attrsToSet[`${prefix}grant_hidden`] = "0";
+
+     orderRows.push({
+      rowId,
+      level: grantSortLevel(manualLevel),
+      sourceRank: grantSortSourceRank(manualSource),
+      source: manualSource,
+      originalIndex
+     });
+    });
+
+    if(context.enableAutomaticGrants) {
+     buildExpectedGrantSpecs(def, context).forEach(spec => {
+      if(existingGrantKeys[spec.key]) return;
+
+      const rowId = generateRowID();
+      const prefix = `${def.section}_${rowId}_`;
+
+      existingGrantKeys[spec.key] = true;
+      attrsToSet[`${prefix}grant_key`] = spec.key;
+      attrsToSet[`${prefix}${def.nameAttr}`] = spec.name;
+      attrsToSet[`${prefix}${def.descriptionAttr}`] = spec.description;
+      attrsToSet[`${prefix}granted_level`] = spec.level;
+      attrsToSet[`${prefix}granted_source`] = spec.source;
+      attrsToSet[`${prefix}source_available`] = spec.available ? "1" : "0";
+      attrsToSet[`${prefix}grant_hidden`] = spec.hidden ? "1" : "0";
+
+      orderRows.push({
+       rowId,
+       level: grantSortLevel(spec.level),
+       sourceRank: grantSortSourceRank(spec.source),
+       source: spec.source,
+       originalIndex: orderRows.length + rowIds.length
+      });
+     });
+    }
+
+    duplicateRowsToRemove.forEach(rowName => {
+     removeRepeatingRow(rowName);
+    });
+
+    if(Object.keys(attrsToSet).length > 0) {
+     setAttrs(attrsToSet, function() {
+      setGrantReporderAfterRowsExist(def, orderRows, duplicateRowIds, callback);
+     });
+    } else {
+     setGrantReporderAfterRowsExist(def, orderRows, duplicateRowIds, callback);
+    }
+   });
+  });
+ };
+
+ const updateGrantSectionsSequentially = function(context, index, callback) {
+  if(index >= GRANT_SECTIONS.length) {
+   if(callback) callback();
+   return;
+  }
+
+  updateGrantedRowsForSection(GRANT_SECTIONS[index], context, function() {
+   updateGrantSectionsSequentially(context, index + 1, callback);
+  });
+ };
+
+ const updateAutomaticGrants = function(callback) {
+  getAttrs(["HD", "MagicCurve", "Specialty", "Versatile", "mystic", "diffuse_background", "primarydefinitionname", "enable_automatic_grants"], function(values) {
+   const isNewSheet = values.HD === "" || values.HD === undefined;
+   const autoEnableNewSheet = isNewSheet && !grantIsChecked(values.enable_automatic_grants);
+
+   const context = {
+    currentHD: Math.max(0, int(values, "HD", 0)),
+    magicCurve: str(values, "MagicCurve"),
+    specialty: str(values, "Specialty"),
+    versatile: grantIsChecked(values.Versatile),
+    mystic: grantIsChecked(values.mystic),
+    diffuseBackground: hasDiffuseBackground(values),
+    enableAutomaticGrants: grantIsChecked(values.enable_automatic_grants) || autoEnableNewSheet
+   };
+
+   const finishUpdate = function() {
+    updateGrantSectionsSequentially(context, 0, callback);
+   };
+
+   if(autoEnableNewSheet) {
+    setAttrs({ enable_automatic_grants: "1" }, finishUpdate);
+    return;
+   }
+
+   finishUpdate();
+  });
+ };
+
+ let automaticGrantsRunning = false;
+ let automaticGrantsQueued = false;
+
+ const queueUpdateAutomaticGrants = function() {
+  if(automaticGrantsRunning) {
+   automaticGrantsQueued = true;
+   return;
+  }
+
+  automaticGrantsRunning = true;
+  updateAutomaticGrants(function() {
+   automaticGrantsRunning = false;
+
+   if(automaticGrantsQueued) {
+    automaticGrantsQueued = false;
+    queueUpdateAutomaticGrants();
+   }
+  });
+ };
+
+ on("change:hd change:magiccurve change:specialty change:versatile change:mystic change:diffuse_background change:primarydefinitionname change:enable_automatic_grants sheet:opened change:repeating_feats:granted_level change:repeating_feats:granted_source change:repeating_feats:grant_key change:repeating_feats:grant_hidden change:repeating_abilities:granted_level change:repeating_abilities:granted_source change:repeating_abilities:grant_key change:repeating_abilities:grant_hidden remove:repeating_feats remove:repeating_abilities", function() {
+  queueUpdateAutomaticGrants();
+ });
+
+ on("change:repeating_abilities:minimizeability " +
+         "change:repeating_abilities:absavethrow " +
+         "change:repeating_abilities:abilitytype " +
+         "change:repeating_abilities:abilitysrconfirm " +
+         "change:repeating_abilities:asprof " +
+         "change:repeating_abilities:abilityname", function(){
   getAttrs(["repeating_abilities_absavethrow","repeating_abilities_abilitytype",
    "repeating_abilities_abilitysrconfirm","repeating_abilities_asprof"],function(values){
    let savethrow = (values.repeating_abilities_absavethrow);
@@ -4251,7 +5931,7 @@
    }
    if(sr === "1"){
     Macro = Macro + `{{Spell Resistance=[[1d20+@{HD}+@{spellpenetrationbonus}+`+
-            `(0?{Do you have any Spell penetration Bonuses?|0})]]}}`;
+            `(0?{Do you have any spell penetration bonuses?|0})]]}}`;
    }
    Macro = Macro + `{{desc=@{abilitydescriptiontext}}}`
    setAttrs({
@@ -4321,9 +6001,9 @@
     let mincrit = parseFloat(values[`repeating_weapons${col}_critlow`]) || 0;
     let grandmaster = parseFloat(values[`repeating_weapons${col}_grandmaster`]) || 0;
     let BAB = parseFloat(values[`repeating_weapons${col}_weaponbab`]);
-    let Macro = `&{template:custom}{{title=Attack(s)}}{{subtitle=@{character_name}'s @{weaponname}}}`+
+    let Macro = `&{template:custom}{{title=Attacks}}{{subtitle=@{character_name}'s @{weaponname}}}`+
             `{{First Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]+@{weapontohit}[Key Attribute]+${featbonus}`+
-            `[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})-@{slow}[slow]]]}}`;
+            `[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})-@{slow}[Slow]]]}}`;
     if(values[`repeating_weapons${col}_weaponhaste`] === `1`){
      Macro = Macro + `{{Haste Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]+@{weapontohit}[Key Attribute]` +
              `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})]]}}`;
@@ -4487,6 +6167,8 @@
   ];
  };
 
+ const MAX_ATTACK_CARD_ATTACKS = 6;
+
  const buildFullAttackSequence = function(baseAttack, hasteToggle, slowToggle, grandmaster) {
   const slowed = isChecked(slowToggle);
   const attacks = [
@@ -4509,7 +6191,42 @@
    }
   }
 
-  return attacks.slice(0, 5);
+  return attacks.slice(0, MAX_ATTACK_CARD_ATTACKS);
+ };
+
+ const buildDeadlyAssaultSequence = function(baseAttack, slowToggle, grandmaster) {
+  const slowed = isChecked(slowToggle);
+  const slowPenalty = slowed ? 1 : 0;
+  const attacks = [
+   { label: "Deadly Assault Bonus 1", base: baseAttack, slowPenalty },
+   { label: "Deadly Assault Bonus 2", base: baseAttack, slowPenalty },
+   { label: "First Attack", base: baseAttack, slowPenalty }
+  ];
+
+  // Deadly Assault is still a full attack, but Haste does not add an attack.
+  // Slow suppresses the normal iterative attacks; the two Deadly Assault bonus attacks remain.
+  if(!slowed) {
+   if(baseAttack - 5 > 0 || grandmaster === 2) {
+    attacks.push({ label: "Second Attack", base: grandmaster === 2 ? baseAttack : baseAttack - 5, slowPenalty: 0 });
+   }
+   if(baseAttack - 10 > 0 || grandmaster === 3) {
+    attacks.push({ label: "Third Attack", base: grandmaster === 3 ? baseAttack - 5 : baseAttack - 10, slowPenalty: 0 });
+   }
+   if(baseAttack - 15 > 0 || grandmaster === 4) {
+    attacks.push({ label: "Fourth Attack", base: grandmaster === 4 ? baseAttack - 10 : baseAttack - 15, slowPenalty: 0 });
+   }
+  }
+
+  return attacks.slice(0, MAX_ATTACK_CARD_ATTACKS);
+ };
+
+ const buildTwinTalonSequence = function(baseAttack, slowToggle) {
+  const slowPenalty = isChecked(slowToggle) ? 1 : 0;
+
+  return [
+   { label: "Twin Talon 1", base: baseAttack, slowPenalty },
+   { label: "Twin Talon 2", base: baseAttack, slowPenalty }
+  ];
  };
 
  const buildFullAttackData = function(col, values, eventInfo) {
@@ -4540,9 +6257,25 @@
    twoHanded: isChecked(values[`${prefix}twohanded`]),
    damageType: rollTerm(values[`${prefix}weapondamagtype`], ""),
    storedNormalDamage: rollTerm(values[`${prefix}weapondamage`], ""),
-   storedCriticalDamage: rollTerm(values[`${prefix}critweapondamage`], "")
+   storedCriticalDamage: rollTerm(values[`${prefix}critweapondamage`], ""),
+   baseAttack,
+   hasteToggle,
+   slowToggle,
+   grandmaster
   };
   data.attacks = buildFullAttackSequence(baseAttack, hasteToggle, slowToggle, grandmaster);
+  return data;
+ };
+
+ const buildDeadlyAssaultData = function(col, values, eventInfo) {
+  const data = buildFullAttackData(col, values, eventInfo);
+  data.attacks = buildDeadlyAssaultSequence(data.baseAttack, data.slowToggle, data.grandmaster);
+  return data;
+ };
+
+ const buildTwinTalonData = function(col, values, eventInfo) {
+  const data = buildFullAttackData(col, values, eventInfo);
+  data.attacks = buildTwinTalonSequence(data.baseAttack, data.slowToggle);
   return data;
  };
 
@@ -4555,8 +6288,8 @@
   return expression;
  };
 
- const buildFullAttackMacro = function(data) {
-  let macro = `&{template:custom}{{title=Full Attack}}{{subtitle=${data.characterName}'s ${data.weaponName}}}`+
+ const buildFullAttackMacro = function(data, title = "Full Attack", description = "") {
+  let macro = `&{template:custom}{{title=${title}}}{{subtitle=${data.characterName}'s ${data.weaponName}}}`+
           `{{fullattack=1}}{{characterid=@{character_id}}}`;
   data.attacks.forEach((attack, index) => {
    const attackNumber = index + 1;
@@ -4568,6 +6301,9 @@
    macro += `{{attack${index + 1}_label=${attack.label}}}`;
    macro += `{{attack${index + 1}=[[${buildFullAttackExpression(data, attack)}]]}}`;
   });
+  if(description) {
+   macro += `{{desc=${description}}}`;
+  }
   return macro;
  };
 
@@ -4637,211 +6373,241 @@
   });
  };
 
+ const rollDeadlyAssaultConfirmation = function(col, attackIndex, eventInfo) {
+  getAttrs(getFullAttackAttrs(col), function(values) {
+   const data = buildDeadlyAssaultData(col, values, eventInfo);
+   const attack = data.attacks[attackIndex - 1] || data.attacks[0];
+   const normalAction = makeFullAttackActionTarget(data.section, data.rowId, "fullattackdamage");
+   const criticalAction = makeFullAttackActionTarget(data.section, data.rowId, "fullattackcritdamage");
+   const macro = `&{template:custom}{{title=Deadly Assault Critical Confirmation}}{{subtitle=${data.characterName}'s ${data.weaponName} - `+
+           `${attack.label}}}{{fullattackconfirm=1}}{{characterid=@{character_id}}}{{confirm_normal_action=${normalAction}}}`+
+           `{{confirm_critical_action=${criticalAction}}}{{confirm=[[${buildFullAttackExpression(data, attack)}]]}}`;
+   startRoll(macro, function(roll) {
+    finishRoll(roll.rollId);
+   });
+  });
+ };
+
+ const rollTwinTalonConfirmation = function(col, attackIndex, eventInfo) {
+  getAttrs(getFullAttackAttrs(col), function(values) {
+   const data = buildTwinTalonData(col, values, eventInfo);
+   const attack = data.attacks[attackIndex - 1] || data.attacks[0];
+   const normalAction = makeFullAttackActionTarget(data.section, data.rowId, "fullattackdamage");
+   const criticalAction = makeFullAttackActionTarget(data.section, data.rowId, "fullattackcritdamage");
+   const macro = `&{template:custom}{{title=Twin Talon Critical Confirmation}}{{subtitle=${data.characterName}'s ${data.weaponName} - `+
+           `${attack.label}}}{{fullattackconfirm=1}}{{characterid=@{character_id}}}{{confirm_normal_action=${normalAction}}}`+
+           `{{confirm_critical_action=${criticalAction}}}{{confirm=[[${buildFullAttackExpression(data, attack)}]]}}`;
+   startRoll(macro, function(roll) {
+    finishRoll(roll.rollId);
+   });
+  });
+ };
+
  const FOCUS_POINTS_QUERY = "?{Focus Points Spent|1|2|3|4}";
 
  const clampFocusPoints = function(value) {
-     let focusPoints = parseInt(value, 10);
-     if(isNaN(focusPoints)) focusPoints = 1;
-     focusPoints = Math.max(1, focusPoints);
-     focusPoints = Math.min(4, focusPoints);
-     return focusPoints;
+  let focusPoints = parseInt(value, 10);
+  if(isNaN(focusPoints)) focusPoints = 1;
+  focusPoints = Math.max(1, focusPoints);
+  focusPoints = Math.min(4, focusPoints);
+  return focusPoints;
  };
 
  const rollResultTotal = function(rollResult, fallback = 0) {
-     if(rollResult && rollResult.result !== undefined) {
-         const parsed = parseFloat(rollResult.result);
-         return isNaN(parsed) ? fallback : parsed;
-     }
+  if(rollResult && rollResult.result !== undefined) {
+   const parsed = parseFloat(rollResult.result);
+   return isNaN(parsed) ? fallback : parsed;
+  }
 
-     if(rollResult && rollResult.total !== undefined) {
-         const parsed = parseFloat(rollResult.total);
-         return isNaN(parsed) ? fallback : parsed;
-     }
+  if(rollResult && rollResult.total !== undefined) {
+   const parsed = parseFloat(rollResult.total);
+   return isNaN(parsed) ? fallback : parsed;
+  }
 
-     return fallback;
+  return fallback;
  };
 
  const focusRowAttr = function(data, attr) {
-     if(data.rowId) return `repeating_${data.section}_${data.rowId}_${attr}`;
-     return `repeating_${data.section}_${attr}`;
+  if(data.rowId) return `repeating_${data.section}_${data.rowId}_${attr}`;
+  return `repeating_${data.section}_${attr}`;
  };
 
  const getFocusAttackAttrs = function(col) {
-     return getFullAttackAttrs(col).concat([
-         `repeating_weapons${col}_focus_points_used`
-     ]);
+  return getFullAttackAttrs(col).concat([
+   `repeating_weapons${col}_focus_points_used`
+  ]);
  };
 
  const buildFocusAttackData = function(col, values, eventInfo) {
-     const data = buildFullAttackData(col, values, eventInfo);
-     const prefix = `repeating_weapons${col}_`;
+  const data = buildFullAttackData(col, values, eventInfo);
+  const prefix = `repeating_weapons${col}_`;
 
-     data.focusPointsUsed = clampFocusPoints(values[`${prefix}focus_points_used`]);
+  data.focusPointsUsed = clampFocusPoints(values[`${prefix}focus_points_used`]);
 
-     return data;
+  return data;
  };
 
  const buildFocusAttackExpression = function(data, attack, focusPointsTerm) {
-     let expression =
-         `1d20cs>${data.critLow}` +
-         `+${attack.base}[Base Attack]` +
-         `+${data.attackKey}[Key Attribute]` +
-         `+${data.featAttack}[Feat Bonuses]` +
-         `+${data.enhancement}[Enhancement]` +
-         `+(${focusPointsTerm}*3)[Focus]` +
-         `+(0?{Do you have any miscellaneous bonuses?|0})[Misc.]`;
+  let expression =
+          `1d20cs>${data.critLow}` +
+          `+${attack.base}[Base Attack]` +
+          `+${data.attackKey}[Key Attribute]` +
+          `+${data.featAttack}[Feat Bonuses]` +
+          `+${data.enhancement}[Enhancement]` +
+          `+(${focusPointsTerm}*3)[Focus]` +
+          `+(0?{Do you have any miscellaneous bonuses?|0})[Misc.]`;
 
-     if(attack.slowPenalty) {
-         expression += `-${attack.slowPenalty}[Slow]`;
-     }
+  if(attack.slowPenalty) {
+   expression += `-${attack.slowPenalty}[Slow]`;
+  }
 
-     return expression;
+  return expression;
  };
 
  const buildFocusAttackMacro = function(data) {
-     const attack = data.attacks[0] || {
-         label: "Focus Attack",
-         base: 0,
-         slowPenalty: 0
-     };
+  const attack = data.attacks[0] || {
+   label: "Focus Attack",
+   base: 0,
+   slowPenalty: 0
+  };
 
-     const damageAction = makeFullAttackActionTarget(data.section, data.rowId, "focusattackdamage");
-     const confirmAction = makeFullAttackActionTarget(data.section, data.rowId, "focusattackconfirm");
+  const damageAction = makeFullAttackActionTarget(data.section, data.rowId, "focusattackdamage");
+  const confirmAction = makeFullAttackActionTarget(data.section, data.rowId, "focusattackconfirm");
 
-     let macro =
-         `&{template:custom}` +
-         `{{title=Focus Attack}}` +
-         `{{subtitle=${data.characterName}'s ${data.weaponName}}}` +
-         `{{fullattack=1}}` +
-         `{{characterid=@{character_id}}}` +
-         `{{Focus Points=[[${FOCUS_POINTS_QUERY}]]}}` +
-         `{{attack1_next=[[0]]}}` +
-         `{{attack1_damage_action=${damageAction}}}` +
-         `{{attack1_confirm_action=${confirmAction}}}` +
-         `{{attack1_label=Focus Attack}}` +
-         `{{attack1=[[${buildFocusAttackExpression(data, attack, FOCUS_POINTS_QUERY)}]]}}`;
+  let macro =
+          `&{template:custom}` +
+          `{{title=Focus Attack}}` +
+          `{{subtitle=${data.characterName}'s ${data.weaponName}}}` +
+          `{{fullattack=1}}` +
+          `{{characterid=@{character_id}}}` +
+          `{{Focus Points=[[${FOCUS_POINTS_QUERY}]]}}` +
+          `{{attack1_next=[[0]]}}` +
+          `{{attack1_damage_action=${damageAction}}}` +
+          `{{attack1_confirm_action=${confirmAction}}}` +
+          `{{attack1_label=Focus Attack}}` +
+          `{{attack1=[[${buildFocusAttackExpression(data, attack, FOCUS_POINTS_QUERY)}]]}}`;
 
-     return macro;
+  return macro;
  };
 
  const buildFocusDamageMacro = function(data, critical = false) {
-     const focusPoints = clampFocusPoints(data.focusPointsUsed);
-     const focusDamageBonus = focusPoints * 3;
-     const focusedDiceNumber = `[[${data.diceNumber}+${focusPoints}]]`;
-     const magicDamageType = data.damageType ? data.damageType : "energy";
-     const miscDamage = `(0?{Do you have any miscellaneous bonuses?|0})[Misc.]`;
-     const focusPointText = focusPoints === 1 ? "focus point" : "focus points";
+  const focusPoints = clampFocusPoints(data.focusPointsUsed);
+  const focusDamageBonus = focusPoints * 3;
+  const focusedDiceNumber = `[[${data.diceNumber}+${focusPoints}]]`;
+  const magicDamageType = data.damageType ? data.damageType : "energy";
+  const miscDamage = `(0?{Do you have any miscellaneous bonuses?|0})[Misc.]`;
+  const focusPointText = focusPoints === 1 ? "focus point" : "focus points";
 
-     if(!critical) {
-         let macro =
-             `&{template:custom}` +
-             `{{title=Focus Damage}}` +
-             `{{subtitle=${data.characterName}'s ${data.weaponName}}}`;
+  if(!critical) {
+   let macro =
+           `&{template:custom}` +
+           `{{title=Focus Damage}}` +
+           `{{subtitle=${data.characterName}'s ${data.weaponName}}}`;
 
-         if(data.twoHanded) {
-             macro +=
-                 `{{desc=${data.characterName} spends ${focusPoints} ${focusPointText} and deals ` +
-                 `[[${focusedDiceNumber}${data.diceType}` +
-                 `+[[floor(${data.damageKey}*1.5)]][Ability]` +
-                 `+${data.featDamage}[Feats/Other]` +
-                 `+${data.enhancement}[Enhancement]` +
-                 `+${focusDamageBonus}[Focus]` +
-                 `+${miscDamage}]] physical damage`;
-         } else {
-             macro +=
-                 `{{desc=${data.characterName} spends ${focusPoints} ${focusPointText} and deals ` +
-                 `[[${focusedDiceNumber}${data.diceType}` +
-                 `+[[${data.damageKey}]][Ability]` +
-                 `+${data.featDamage}[Feats/Other]` +
-                 `+${data.enhancement}[Enhancement]` +
-                 `+${focusDamageBonus}[Focus]` +
-                 `+${miscDamage}]] physical damage`;
-         }
+   if(data.twoHanded) {
+    macro +=
+            `{{desc=${data.characterName} spends ${focusPoints} ${focusPointText} and deals ` +
+            `[[${focusedDiceNumber}${data.diceType}` +
+            `+[[floor(${data.damageKey}*1.5)]][Ability]` +
+            `+${data.featDamage}[Feats/Other]` +
+            `+${data.enhancement}[Enhancement]` +
+            `+${focusDamageBonus}[Focus]` +
+            `+${miscDamage}]] physical damage`;
+   } else {
+    macro +=
+            `{{desc=${data.characterName} spends ${focusPoints} ${focusPointText} and deals ` +
+            `[[${focusedDiceNumber}${data.diceType}` +
+            `+[[${data.damageKey}]][Ability]` +
+            `+${data.featDamage}[Feats/Other]` +
+            `+${data.enhancement}[Enhancement]` +
+            `+${focusDamageBonus}[Focus]` +
+            `+${miscDamage}]] physical damage`;
+   }
 
-         if(data.magicDice) {
-             macro += ` and [[${data.magicDice}[${magicDamageType}]]] ${magicDamageType} damage`;
-         }
+   if(data.magicDice) {
+    macro += ` and [[${data.magicDice}[${magicDamageType}]]] ${magicDamageType} damage`;
+   }
 
-         macro += ` with ${data.weaponName}.}}`;
+   macro += ` with ${data.weaponName}.}}`;
 
-         return macro;
-     }
+   return macro;
+  }
 
-     let macro =
-         `&{template:custom}` +
-         `{{title=Focus Critical Damage}}` +
-         `{{subtitle=${data.characterName}'s ${data.weaponName}}}`;
+  let macro =
+          `&{template:custom}` +
+          `{{title=Focus Critical Damage}}` +
+          `{{subtitle=${data.characterName}'s ${data.weaponName}}}`;
 
-     if(data.twoHanded) {
-         macro +=
-             `{{desc=${data.characterName} spends ${focusPoints} ${focusPointText} and deals an astonishing ` +
-             `[[[[(${data.diceNumber}+${focusPoints})*${data.criticalMultiplier}]]${data.diceType}` +
-             `+[[(floor(${data.damageKey}*1.5)*${data.criticalMultiplier})]][Ability]` +
-             `+[[(${data.featDamage}*${data.criticalMultiplier})]][Feats/Other]` +
-             `+[[(${data.enhancement}*${data.criticalMultiplier})]][Enhancement]` +
-             `+[[(${focusDamageBonus}*${data.criticalMultiplier})]][Focus]` +
-             `+${miscDamage}]]`;
-     } else {
-         macro +=
-             `{{desc=${data.characterName} spends ${focusPoints} ${focusPointText} and deals an astonishing ` +
-             `[[[[(${data.diceNumber}+${focusPoints})*${data.criticalMultiplier}]]${data.diceType}` +
-             `+[[(floor(${data.damageKey})*${data.criticalMultiplier})]][Ability]` +
-             `+[[(${data.featDamage}*${data.criticalMultiplier})]][Feats/Other]` +
-             `+[[(${data.enhancement}*${data.criticalMultiplier})]][Enhancement]` +
-             `+[[(${focusDamageBonus}*${data.criticalMultiplier})]][Focus]` +
-             `+${miscDamage}]]`;
-     }
+  if(data.twoHanded) {
+   macro +=
+           `{{desc=${data.characterName} spends ${focusPoints} ${focusPointText} and deals an astonishing ` +
+           `[[[[(${data.diceNumber}+${focusPoints})*${data.criticalMultiplier}]]${data.diceType}` +
+           `+[[(floor(${data.damageKey}*1.5)*${data.criticalMultiplier})]][Ability]` +
+           `+[[(${data.featDamage}*${data.criticalMultiplier})]][Feats/Other]` +
+           `+[[(${data.enhancement}*${data.criticalMultiplier})]][Enhancement]` +
+           `+[[(${focusDamageBonus}*${data.criticalMultiplier})]][Focus]` +
+           `+${miscDamage}]]`;
+  } else {
+   macro +=
+           `{{desc=${data.characterName} spends ${focusPoints} ${focusPointText} and deals an astonishing ` +
+           `[[[[(${data.diceNumber}+${focusPoints})*${data.criticalMultiplier}]]${data.diceType}` +
+           `+[[(floor(${data.damageKey})*${data.criticalMultiplier})]][Ability]` +
+           `+[[(${data.featDamage}*${data.criticalMultiplier})]][Feats/Other]` +
+           `+[[(${data.enhancement}*${data.criticalMultiplier})]][Enhancement]` +
+           `+[[(${focusDamageBonus}*${data.criticalMultiplier})]][Focus]` +
+           `+${miscDamage}]]`;
+  }
 
-     if(data.magicDice) {
-         macro += ` + [[${data.magicDice}[${magicDamageType}]]] ${magicDamageType} damage`;
-     }
+  if(data.magicDice) {
+   macro += ` + [[${data.magicDice}[${magicDamageType}]]] ${magicDamageType} damage`;
+  }
 
-     if(data.bonusCriticalDice) {
-         macro += ` + [[${data.bonusCriticalDice}[Bonus Dice]]] bonus damage`;
-     }
+  if(data.bonusCriticalDice) {
+   macro += ` + [[${data.bonusCriticalDice}[Bonus Dice]]] bonus damage`;
+  }
 
-     macro += ` with ${data.weaponName}.}}`;
+  macro += ` with ${data.weaponName}.}}`;
 
-     return macro;
+  return macro;
  };
 
  const rollFocusDamage = function(col, critical, eventInfo) {
-     getAttrs(getFocusAttackAttrs(col), function(values) {
-         const data = buildFocusAttackData(col, values, eventInfo);
-         const macro = buildFocusDamageMacro(data, critical);
+  getAttrs(getFocusAttackAttrs(col), function(values) {
+   const data = buildFocusAttackData(col, values, eventInfo);
+   const macro = buildFocusDamageMacro(data, critical);
 
-         startRoll(macro, function(roll) {
-             finishRoll(roll.rollId);
-         });
-     });
+   startRoll(macro, function(roll) {
+    finishRoll(roll.rollId);
+   });
+  });
  };
 
  const rollFocusAttackConfirmation = function(col, eventInfo) {
-     getAttrs(getFocusAttackAttrs(col), function(values) {
-         const data = buildFocusAttackData(col, values, eventInfo);
-         const attack = data.attacks[0] || {
-             label: "Focus Attack",
-             base: 0,
-             slowPenalty: 0
-         };
+  getAttrs(getFocusAttackAttrs(col), function(values) {
+   const data = buildFocusAttackData(col, values, eventInfo);
+   const attack = data.attacks[0] || {
+    label: "Focus Attack",
+    base: 0,
+    slowPenalty: 0
+   };
 
-         const normalAction = makeFullAttackActionTarget(data.section, data.rowId, "focusattackdamage");
-         const criticalAction = makeFullAttackActionTarget(data.section, data.rowId, "focusattackcritdamage");
+   const normalAction = makeFullAttackActionTarget(data.section, data.rowId, "focusattackdamage");
+   const criticalAction = makeFullAttackActionTarget(data.section, data.rowId, "focusattackcritdamage");
 
-         const macro =
-             `&{template:custom}` +
-             `{{title=Focus Critical Confirmation}}` +
-             `{{subtitle=${data.characterName}'s ${data.weaponName}}}` +
-             `{{fullattackconfirm=1}}` +
-             `{{characterid=@{character_id}}}` +
-             `{{confirm_normal_action=${normalAction}}}` +
-             `{{confirm_critical_action=${criticalAction}}}` +
-             `{{confirm=[[${buildFocusAttackExpression(data, attack, data.focusPointsUsed)}]]}}`;
+   const macro =
+           `&{template:custom}` +
+           `{{title=Focus Critical Confirmation}}` +
+           `{{subtitle=${data.characterName}'s ${data.weaponName}}}` +
+           `{{fullattackconfirm=1}}` +
+           `{{characterid=@{character_id}}}` +
+           `{{confirm_normal_action=${normalAction}}}` +
+           `{{confirm_critical_action=${criticalAction}}}` +
+           `{{confirm=[[${buildFocusAttackExpression(data, attack, data.focusPointsUsed)}]]}}`;
 
-         startRoll(macro, function(roll) {
-             finishRoll(roll.rollId);
-         });
-     });
+   startRoll(macro, function(roll) {
+    finishRoll(roll.rollId);
+   });
+  });
  };
 
  WeaponCol.forEach(col => {
@@ -4897,46 +6663,116 @@
    rollWeaponDamageFromFullAttack(col, true, eventInfo);
   });
 
-  for(let attackIndex = 1; attackIndex <= 5; attackIndex++) {
+  on(`clicked:repeating_weapons${col}:twintalon`, function(eventInfo) {
+   getAttrs(getFullAttackAttrs(col), function(values) {
+    const data = buildTwinTalonData(col, values, eventInfo);
+    let macro = buildFullAttackMacro(
+            data,
+            "Twin Talon",
+            "Twin Talon makes two attacks at the highest attack bonus. After resolving the attacks, if either one deals damage, the target must make a Fortitude save against its Wound DC. On a failed save, the target receives a wound."
+    );
+
+    data.attacks.forEach((attack, index) => {
+     const attackNumber = index + 1;
+     macro = macro.replace(
+             makeFullAttackActionTarget(data.section, data.rowId, `fullattackconfirm${attackNumber}`),
+             makeFullAttackActionTarget(data.section, data.rowId, `twintalonconfirm${attackNumber}`)
+     );
+    });
+
+    startRoll(macro, function(roll) {
+     const computed = {};
+     data.attacks.forEach((attack, index) => {
+      const key = `attack${index + 1}`;
+      const naturalDie = getFirstDie(roll.results[key]);
+      computed[`${key}_next`] = naturalDie >= data.critLow ? 1 : 0;
+     });
+     finishRoll(roll.rollId, computed);
+    });
+   });
+  });
+
+  for(let attackIndex = 1; attackIndex <= 2; attackIndex++) {
+   on(`clicked:repeating_weapons${col}:twintalonconfirm${attackIndex}`, function(eventInfo) {
+    rollTwinTalonConfirmation(col, attackIndex, eventInfo);
+   });
+  }
+
+  on(`clicked:repeating_weapons${col}:deadlyassault`, function(eventInfo) {
+   getAttrs(getFullAttackAttrs(col), function(values) {
+    const data = buildDeadlyAssaultData(col, values, eventInfo);
+    let macro = buildFullAttackMacro(
+            data,
+            "Deadly Assault",
+            "Deadly Assault is a full-round action. It adds two attacks at the highest attack bonus, does not gain an extra attack from Haste, and retains its two bonus attacks while Slowed."
+    );
+
+    data.attacks.forEach((attack, index) => {
+     const attackNumber = index + 1;
+     macro = macro.replace(
+             makeFullAttackActionTarget(data.section, data.rowId, `fullattackconfirm${attackNumber}`),
+             makeFullAttackActionTarget(data.section, data.rowId, `deadlyassaultconfirm${attackNumber}`)
+     );
+    });
+
+    startRoll(macro, function(roll) {
+     const computed = {};
+     data.attacks.forEach((attack, index) => {
+      const key = `attack${index + 1}`;
+      const naturalDie = getFirstDie(roll.results[key]);
+      computed[`${key}_next`] = naturalDie >= data.critLow ? 1 : 0;
+     });
+     finishRoll(roll.rollId, computed);
+    });
+   });
+  });
+
+  for(let attackIndex = 1; attackIndex <= MAX_ATTACK_CARD_ATTACKS; attackIndex++) {
+   on(`clicked:repeating_weapons${col}:deadlyassaultconfirm${attackIndex}`, function(eventInfo) {
+    rollDeadlyAssaultConfirmation(col, attackIndex, eventInfo);
+   });
+  }
+
+  for(let attackIndex = 1; attackIndex <= MAX_ATTACK_CARD_ATTACKS; attackIndex++) {
    on(`clicked:repeating_weapons${col}:fullattackconfirm${attackIndex}`, function(eventInfo) {
     rollFullAttackConfirmation(col, attackIndex, eventInfo);
    });
   }
-     on(`clicked:repeating_weapons${col}:focusattack`, function(eventInfo) {
-         getAttrs(getFocusAttackAttrs(col), function(values) {
-             const data = buildFocusAttackData(col, values, eventInfo);
-             const macro = buildFocusAttackMacro(data);
+  on(`clicked:repeating_weapons${col}:focusattack`, function(eventInfo) {
+   getAttrs(getFocusAttackAttrs(col), function(values) {
+    const data = buildFocusAttackData(col, values, eventInfo);
+    const macro = buildFocusAttackMacro(data);
 
-             startRoll(macro, function(roll) {
-                 const naturalDie = getFirstDie(roll.results.attack1);
-                 const focusPoints = clampFocusPoints(rollResultTotal(roll.results["Focus Points"], 1));
+    startRoll(macro, function(roll) {
+     const naturalDie = getFirstDie(roll.results.attack1);
+     const focusPoints = clampFocusPoints(rollResultTotal(roll.results["Focus Points"], 1));
 
-                 const computed = {
-                     attack1_next: naturalDie >= data.critLow ? 1 : 0
-                 };
+     const computed = {
+      attack1_next: naturalDie >= data.critLow ? 1 : 0
+     };
 
-                 const attrsToSet = {
-                     [focusRowAttr(data, "focus_points_used")]: focusPoints
-                 };
+     const attrsToSet = {
+      [focusRowAttr(data, "focus_points_used")]: focusPoints
+     };
 
-                 setAttrs(attrsToSet, function() {
-                     finishRoll(roll.rollId, computed);
-                 });
-             });
-         });
+     setAttrs(attrsToSet, function() {
+      finishRoll(roll.rollId, computed);
      });
+    });
+   });
+  });
 
-     on(`clicked:repeating_weapons${col}:focusattackdamage`, function(eventInfo) {
-         rollFocusDamage(col, false, eventInfo);
-     });
+  on(`clicked:repeating_weapons${col}:focusattackdamage`, function(eventInfo) {
+   rollFocusDamage(col, false, eventInfo);
+  });
 
-     on(`clicked:repeating_weapons${col}:focusattackcritdamage`, function(eventInfo) {
-         rollFocusDamage(col, true, eventInfo);
-     });
+  on(`clicked:repeating_weapons${col}:focusattackcritdamage`, function(eventInfo) {
+   rollFocusDamage(col, true, eventInfo);
+  });
 
-     on(`clicked:repeating_weapons${col}:focusattackconfirm`, function(eventInfo) {
-         rollFocusAttackConfirmation(col, eventInfo);
-     });
+  on(`clicked:repeating_weapons${col}:focusattackconfirm`, function(eventInfo) {
+   rollFocusAttackConfirmation(col, eventInfo);
+  });
  });
  // </editor-fold>
 
@@ -5037,17 +6873,13 @@
     let mincrit = parseFloat(values[`repeating_weapons${col}_critlow`]) || 0;
     let BAB = parseFloat(values[`repeating_weapons${col}_weaponbab`]);
     let Macro = `&{template:custom}{{title=Twin Talon}}{{subtitle=@{character_name}'s @{weaponname}}}`+
-            `{{First Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]-2[Twin Talon Penalty]+@{weapontohit}[Key Attribute]`+
-            `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})-@{slow}[slow]]]}}`+
-            `{{Second Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]-2[Twin Talon Penalty]+@{weapontohit}[Key Attribute]`+
-            `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})-@{slow}[slow]]]}}`;
-    if(values[`repeating_weapons${col}_weaponhaste`] === `1`){
-     Macro = Macro + `{{Haste Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]-2[Twin Talon Penalty]+@{weapontohit}[Key Attribute]` +
-             `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})]]}}`;
-    }
-    Macro = Macro + `{{desc=If damage is dealt, target must make a fortitude save against their wound DC. This roll has a ` +
-            `-2 circumstance penalty for each attack that dealt damage. If they fail, they receive a normal [*wound*]` +
-            `(https://tabletopdefined.com/Afflictions/#wound). On a second failure the wound becomes the severe variant.}}`
+            `{{First Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]+@{weapontohit}[Key Attribute]`+
+            `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})-@{slow}[Slow]]]}}`+
+            `{{Second Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]+@{weapontohit}[Key Attribute]`+
+            `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})-@{slow}[Slow]]]}}`+
+            `{{desc=Twin Talon makes two attacks at the highest attack bonus. After resolving the attacks, if either one `+
+            `deals damage, the target must make a Fortitude save against its Wound DC. On a failed save, the target `+
+            `receives a wound.}}`;
     let toSetAttrs = {};
     toSetAttrs[`repeating_weapons${col}_twintalon`] = Macro;
     setAttrs(toSetAttrs);
@@ -5071,10 +6903,10 @@
     let Macro = `&{template:custom}{{title=Crack Shot}}{{subtitle=@{character_name}'s @{weaponname}}}`+
             `{{Bonus Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]-2[Crack Shot Penalty]+@{weapontohit}[Key Attribute]`+
             `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})-@{slow}`+
-            `[slow]]]}}`+
+            `[Slow]]]}}`+
             `{{First Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]-2[Crack Shot Penalty]+@{weapontohit}[Key Attribute]`+
             `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})-@{slow}`+
-            `[slow]]]}}`;
+            `[Slow]]]}}`;
     if(values[`repeating_weapons${col}_weaponhaste`] === `1`){
      Macro = Macro + `{{Haste Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]-2[Crack Shot Penalty+@{weapontohit}[Key`+
              ` Attribute]+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous `+
@@ -5119,7 +6951,9 @@
   });
  });
 
- //Deadly Assault
+ //Deadly Assault legacy roll macro.
+ // The visible Deadly Assault button uses startRoll so the card can route damage/critical-confirmation links.
+ // This attr remains as a fallback for old token actions or manually referenced roll buttons.
  WeaponCol.forEach(col => {
   on(`change:repeating_weapons${col}:bonustoattack change:repeating_weapons${col}:weaponhaste change:repeating_weapons${col}:weaponslow` +
           ` change:repeating_weapons${col}:critlow change:repeating_weapons${col}:weaponbab change:repeating_weapons${col}:weaponminimize` +
@@ -5129,46 +6963,37 @@
     `repeating_weapons${col}_grandmaster`],function(values){
     let featbonus = values[`repeating_weapons${col}_bonustoattack`] || 0;
     let enhance = parseFloat(values[`repeating_weapons${col}_enhancetoattack`]) || 0;
-    let mincrit = parseFloat(values[`repeating_weapons${col}_critlow`]) || 0;
+    let mincrit = parseFloat(values[`repeating_weapons${col}_critlow`]) || 20;
     let grandmaster = parseFloat(values[`repeating_weapons${col}_grandmaster`]) || 0;
-    let BAB = parseFloat(values[`repeating_weapons${col}_weaponbab`]);
+    let BAB = parseFloat(values[`repeating_weapons${col}_weaponbab`]) || 0;
+    let slowed = values[`repeating_weapons${col}_weaponslow`] === `1`;
+    let slowPenalty = slowed ? `-@{slow}[Slow]` : ``;
+    let attackExpression = function(baseAttack) {
+     return `[[1d20cs>${mincrit}+${baseAttack}[Base Attack]+@{weapontohit}[Key Attribute]`+
+             `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})`+
+             `${slowPenalty}]]`;
+    };
+
     let Macro = `&{template:custom}{{title=Deadly Assault}}{{subtitle=@{character_name}'s @{weaponname}}}`+
-            `{{Bonus Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]+@{weapontohit}[Key Attribute]`+
-            `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})-@{slow}`+
-            `[slow]]]}}`+
-            `{{First Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]+@{weapontohit}[Key Attribute]`+
-            `+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous bonuses?|0})-@{slow}`+
-            `[slow]]]}}`;
-    if (BAB - 5 > 0) {
-     Macro = Macro + `{{Second Attack=[[1d20cs>${mincrit}+${BAB - 5}[Base Attack]+@{weapontohit}`+
-             `[Key Attribute]+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous `+
-             `bonuses?|0})-@{slow}[Slow]]]}}`;
+            `{{Deadly Assault Bonus 1=${attackExpression(BAB)}}}`+
+            `{{Deadly Assault Bonus 2=${attackExpression(BAB)}}}`+
+            `{{First Attack=${attackExpression(BAB)}}}`;
+
+    if (!slowed) {
+     if (BAB - 5 > 0 || grandmaster === 2) {
+      Macro += `{{Second Attack=${attackExpression(grandmaster === 2 ? BAB : BAB - 5)}}}`;
+     }
+     if (BAB - 10 > 0 || grandmaster === 3) {
+      Macro += `{{Third Attack=${attackExpression(grandmaster === 3 ? BAB - 5 : BAB - 10)}}}`;
+     }
+     if (BAB - 15 > 0 || grandmaster === 4) {
+      Macro += `{{Fourth Attack=${attackExpression(grandmaster === 4 ? BAB - 10 : BAB - 15)}}}`;
+     }
     }
-    if (grandmaster === 2){
-     Macro = Macro + `{{Second Attack=[[1d20cs>${mincrit}+${BAB}[Base Attack]+@{weapontohit}`+
-             `[Key Attribute]+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous `+
-             `bonuses?|0})-@{slow}[Slow]]]}}`;
-    }
-    if (BAB - 10 > 0) {
-     Macro = Macro + `{{Third Attack=[[1d20cs>${mincrit}+${BAB - 10}[Base Attack]+@{weapontohit}`+
-             `[Key Attribute]+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous `+
-             `bonuses?|0})-@{slow}[Slow]]]}}`;
-    }
-    if (grandmaster === 3){
-     Macro = Macro + `{{Third Attack=[[1d20cs>${mincrit}+${BAB - 5}[Base Attack]+@{weapontohit}`+
-             `[Key Attribute]+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous `+
-             `bonuses?|0})-@{slow}[Slow]]]}}`;
-    }
-    if (BAB - 15 > 0) {
-     Macro = Macro + `{{Fourth Attack=[[1d20cs>${mincrit}+${BAB - 15}[Base Attack]+@{weapontohit}`+
-             `[Key Attribute]+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous `+
-             `bonuses?|0})-@{slow}[Slow]]]}}`;
-    }
-    if (grandmaster === 4){
-     Macro = Macro + `{{Fourth Attack=[[1d20cs>${mincrit}+${BAB - 10}[Base Attack]+@{weapontohit}`+
-             `[Key Attribute]+${featbonus}[Feat Bonuses]+${enhance}[Enhancement]+(0?{Do you have any miscellaneous `+
-             `bonuses?|0})-@{slow}[Slow]]]}}`;
-    }
+
+    Macro += `{{desc=Deadly Assault is a full-round action. It adds two attacks at the highest attack bonus, does not `+
+            `gain an extra attack from Haste, and retains its two bonus attacks while Slowed.}}`;
+
     let toSetAttrs = {};
     toSetAttrs[`repeating_weapons${col}_deadlyassault`] = Macro;
     setAttrs(toSetAttrs);
@@ -5178,98 +7003,188 @@
 
  //Focus <Pending>
  // weapondamage is the name of the damage button
-// Focus <Legacy>
-// WeaponCol.forEach(col => {
-//  on(`clicked:repeating_weapons${col}:focusattack`, function(){
-//   getAttrs([
-//    `repeating_weapons${col}_bonustoattack`,
-//    `repeating_weapons${col}_critlow`,
-//    `repeating_weapons${col}_weaponhaste`,
-//    `repeating_weapons${col}_weaponbab`,
-//    `repeating_weapons${col}_enhancetoattack`,
-//    `repeating_weapons${col}_weapontodamage`,
-//    `repeating_weapons${col}_bonustodamage`,
-//    `repeating_weapons${col}_dnum`,
-//    `repeating_weapons${col}_dtype`,
-//    `repeating_weapons${col}_enchdamagedice`,
-//    `repeating_weapons${col}_extraenchdicecrit`,
-//    `repeating_weapons${col}_weaponcritmod`,
-//    `repeating_weapons${col}_twohanded`,
-//    `repeating_weapons${col}_weapontohit`,
-//    // `repeating_weapons${col}_character_name`,
-//    // `repeating_weapons${col}_arrayID`,
-//    `repeating_weapons${col}_weapondamagtype`], function(values){
-//    // const arrayID = values[`repeating_weapons${col}_arrayID`]
-//    // const characterName = values[`repeating_weapons${col}_character_name`];
-//    const featBonusToAttack = values[`repeating_weapons${col}_bonustoattack`] || 0;
-//    const featBonusToDamage = values[`repeating_weapons${col}_bonustodamage`] || 0;
-//    const dieQuantity = values[`repeating_weapons${col}_dnum`] || 1;
-//    const dieType = values[`repeating_weapons${col}_dtype`];
-//    const weaponEnhancement = values[`repeating_weapons${col}_enhancetoattack`] || 0;
-//    const baseAttack = values[`repeating_weapons${col}_weaponbab`] || 0;
-//    const minCritThreshold = values[`repeating_weapons${col}_critlow`]|| 20 ;
-//    const keyAttackAttribute = values[`repeating_weapons${col}_weapontohit`] || 0;
-//    const keyDamageAttribute = values[`repeating_weapons${col}_weapontodamage`] ;
-//    const twoHandedToggle = values[`repeating_weapons${col}_twohanded`];
-//    const magicDice = values[`repeating_weapons${col}_enchdamagedice`];
-//    const magicCriticalDice = values[`repeating_weapons${col}_extraenchdicecrit`];
-//    const magicDamageType = values[`repeating_weapons${col}_weapondamagtype`];
-//    const criticalModifier = values[`repeating_weapons${col}_weaponcritmod`];
-//    let macroRoll = `&{template:custom} {{title=Focus Attack}}{{Attack Roll=[[1d20cs>${minCritThreshold}+${baseAttack}`+
-//            `[BAB]+${keyAttackAttribute}[Key Attribute]+${featBonusToAttack}[Feats]+${weaponEnhancement}[Enhancement]`+
-//            `-@{slow}[Slow]+((0?{Focus Points Spent})*3)[Focus]+(0?{Miscellaneous attack bonuses?})[Misc.]]]}}`;
-//    if (twoHandedToggle === "on"){
-//     macroRoll = macroRoll + `{{Damage=[[[[${dieQuantity}+(0?{Focus Points Spent})]]${dieType}+floor(`+
-//             `(${keyDamageAttribute})*1.5)[Key Attribute]+${featBonusToDamage}[Feat]+${weaponEnhancement}[Magic]+((`+
-//             `0?{Focus Points Spent})*3)[Focus]]]}}`;
-//    }
-//    if (twoHandedToggle !== "on"){
-//     macroRoll = macroRoll + `{{Damage=[[[[${dieQuantity}+(0?{Focus Points Spent})]]${dieType}+floor(`+
-//             `${keyDamageAttribute})[Key Attribute]+${featBonusToDamage}[Feat]+${weaponEnhancement}[Magic]+((0?{`+
-//             `Focus Points Spent})*3)[Focus]]]}}`;
-//    }
-//    if (magicDice){
-//     macroRoll = macroRoll + `{{${magicDamageType} Damage=[[${magicDice}[${magicDamageType}]]]}}`;
-//    }
-//    macroRoll = macroRoll + `{{Critical Confirmation Roll=[[1d20cs>${minCritThreshold}+${baseAttack}`+
-//            `[BAB]+${keyAttackAttribute}[Key Attribute]+${featBonusToAttack}[Feats]+${weaponEnhancement}[Enhancement]`+
-//            `-@{slow}[Slow]+((0?{Focus Points Spent})*3)[Focus]+(0?{Miscellaneous attack bonuses?})[Misc.]]]}}`;
-//    if (twoHandedToggle === "on"){
-//     macroRoll = macroRoll + `{{Critical Damage=[[[[((${dieQuantity}+(0?{Focus Points Spent}))*${criticalModifier})]]`+
-//             `${dieType}+(floor(${keyDamageAttribute}*1.5)*${criticalModifier})[Key Attribute]+(`+
-//             `${featBonusToDamage}*${criticalModifier}[Feat])+(${weaponEnhancement}*${criticalModifier})+(((0?{Focus`+
-//             ` Points Spent})*3)*${criticalModifier})[Focus]]]}}`;
-//    }
-//    if (twoHandedToggle !== "on"){
-//     macroRoll = macroRoll + `{{Critical Damage=[[[[((${dieQuantity}+(0?{Focus Points Spent}))*${criticalModifier})]]`+
-//             `${dieType}+(${keyDamageAttribute}*${criticalModifier})[Key Attribute]+(`+
-//             `${featBonusToDamage}*${criticalModifier}[Feat])+(${weaponEnhancement}*${criticalModifier})+(((0?{Focus`+
-//             ` Points Spent})*3)*${criticalModifier})[Focus]]]}}`;
-//    }
-//    if (magicCriticalDice){
-//     macroRoll = macroRoll + `{{Bonus Critical Damage = [[${magicCriticalDice}]]}}`
-//    }
-//    startRoll(macroRoll,function(roll){
-//     finishRoll(roll.rollId);
-//    });
-//   });
-//  });
-// })
+ // Focus <Legacy>
+ // WeaponCol.forEach(col => {
+ //  on(`clicked:repeating_weapons${col}:focusattack`, function(){
+ //   getAttrs([
+ //    `repeating_weapons${col}_bonustoattack`,
+ //    `repeating_weapons${col}_critlow`,
+ //    `repeating_weapons${col}_weaponhaste`,
+ //    `repeating_weapons${col}_weaponbab`,
+ //    `repeating_weapons${col}_enhancetoattack`,
+ //    `repeating_weapons${col}_weapontodamage`,
+ //    `repeating_weapons${col}_bonustodamage`,
+ //    `repeating_weapons${col}_dnum`,
+ //    `repeating_weapons${col}_dtype`,
+ //    `repeating_weapons${col}_enchdamagedice`,
+ //    `repeating_weapons${col}_extraenchdicecrit`,
+ //    `repeating_weapons${col}_weaponcritmod`,
+ //    `repeating_weapons${col}_twohanded`,
+ //    `repeating_weapons${col}_weapontohit`,
+ //    // `repeating_weapons${col}_character_name`,
+ //    // `repeating_weapons${col}_arrayID`,
+ //    `repeating_weapons${col}_weapondamagtype`], function(values){
+ //    // const arrayID = values[`repeating_weapons${col}_arrayID`]
+ //    // const characterName = values[`repeating_weapons${col}_character_name`];
+ //    const featBonusToAttack = values[`repeating_weapons${col}_bonustoattack`] || 0;
+ //    const featBonusToDamage = values[`repeating_weapons${col}_bonustodamage`] || 0;
+ //    const dieQuantity = values[`repeating_weapons${col}_dnum`] || 1;
+ //    const dieType = values[`repeating_weapons${col}_dtype`];
+ //    const weaponEnhancement = values[`repeating_weapons${col}_enhancetoattack`] || 0;
+ //    const baseAttack = values[`repeating_weapons${col}_weaponbab`] || 0;
+ //    const minCritThreshold = values[`repeating_weapons${col}_critlow`]|| 20 ;
+ //    const keyAttackAttribute = values[`repeating_weapons${col}_weapontohit`] || 0;
+ //    const keyDamageAttribute = values[`repeating_weapons${col}_weapontodamage`] ;
+ //    const twoHandedToggle = values[`repeating_weapons${col}_twohanded`];
+ //    const magicDice = values[`repeating_weapons${col}_enchdamagedice`];
+ //    const magicCriticalDice = values[`repeating_weapons${col}_extraenchdicecrit`];
+ //    const magicDamageType = values[`repeating_weapons${col}_weapondamagtype`];
+ //    const criticalModifier = values[`repeating_weapons${col}_weaponcritmod`];
+ //    let macroRoll = `&{template:custom} {{title=Focus Attack}}{{Attack Roll=[[1d20cs>${minCritThreshold}+${baseAttack}`+
+ //            `[BAB]+${keyAttackAttribute}[Key Attribute]+${featBonusToAttack}[Feats]+${weaponEnhancement}[Enhancement]`+
+ //            `-@{slow}[Slow]+((0?{Focus Points Spent})*3)[Focus]+(0?{Miscellaneous attack bonuses?})[Misc.]]]}}`;
+ //    if (twoHandedToggle === "on"){
+ //     macroRoll = macroRoll + `{{Damage=[[[[${dieQuantity}+(0?{Focus Points Spent})]]${dieType}+floor(`+
+ //             `(${keyDamageAttribute})*1.5)[Key Attribute]+${featBonusToDamage}[Feat]+${weaponEnhancement}[Magic]+((`+
+ //             `0?{Focus Points Spent})*3)[Focus]]]}}`;
+ //    }
+ //    if (twoHandedToggle !== "on"){
+ //     macroRoll = macroRoll + `{{Damage=[[[[${dieQuantity}+(0?{Focus Points Spent})]]${dieType}+floor(`+
+ //             `${keyDamageAttribute})[Key Attribute]+${featBonusToDamage}[Feat]+${weaponEnhancement}[Magic]+((0?{`+
+ //             `Focus Points Spent})*3)[Focus]]]}}`;
+ //    }
+ //    if (magicDice){
+ //     macroRoll = macroRoll + `{{${magicDamageType} Damage=[[${magicDice}[${magicDamageType}]]]}}`;
+ //    }
+ //    macroRoll = macroRoll + `{{Critical Confirmation Roll=[[1d20cs>${minCritThreshold}+${baseAttack}`+
+ //            `[BAB]+${keyAttackAttribute}[Key Attribute]+${featBonusToAttack}[Feats]+${weaponEnhancement}[Enhancement]`+
+ //            `-@{slow}[Slow]+((0?{Focus Points Spent})*3)[Focus]+(0?{Miscellaneous attack bonuses?})[Misc.]]]}}`;
+ //    if (twoHandedToggle === "on"){
+ //     macroRoll = macroRoll + `{{Critical Damage=[[[[((${dieQuantity}+(0?{Focus Points Spent}))*${criticalModifier})]]`+
+ //             `${dieType}+(floor(${keyDamageAttribute}*1.5)*${criticalModifier})[Key Attribute]+(`+
+ //             `${featBonusToDamage}*${criticalModifier}[Feat])+(${weaponEnhancement}*${criticalModifier})+(((0?{Focus`+
+ //             ` Points Spent})*3)*${criticalModifier})[Focus]]]}}`;
+ //    }
+ //    if (twoHandedToggle !== "on"){
+ //     macroRoll = macroRoll + `{{Critical Damage=[[[[((${dieQuantity}+(0?{Focus Points Spent}))*${criticalModifier})]]`+
+ //             `${dieType}+(${keyDamageAttribute}*${criticalModifier})[Key Attribute]+(`+
+ //             `${featBonusToDamage}*${criticalModifier}[Feat])+(${weaponEnhancement}*${criticalModifier})+(((0?{Focus`+
+ //             ` Points Spent})*3)*${criticalModifier})[Focus]]]}}`;
+ //    }
+ //    if (magicCriticalDice){
+ //     macroRoll = macroRoll + `{{Bonus Critical Damage = [[${magicCriticalDice}]]}}`
+ //    }
+ //    startRoll(macroRoll,function(roll){
+ //     finishRoll(roll.rollId);
+ //    });
+ //   });
+ //  });
+ // })
  // </editor-fold>
 
  // <editor-fold desc="attr migration staging">
- const CURRENT_SHEET_VERSION = 1;
+ const CURRENT_SHEET_VERSION = 5;
+
+
+ const checkedLegacyCondition = function(value) {
+  return value === "1" || value === 1 || value === true || value === "on" || value === "yes";
+ };
+
+ const migrateFixedConditionsToRepeatingConditions = function(callback) {
+  getSectionIDs("repeating_conditions", function(existingRowIds) {
+   // If the new repeating section already has rows, do not duplicate anything.
+   if(existingRowIds && existingRowIds.length > 0) {
+    callback();
+    return;
+   }
+
+   const legacyAttrs = TTD_CONDITIONS.map(condition => condition.legacyAttr);
+
+   getAttrs(legacyAttrs, function(values) {
+    const attrsToSet = {};
+
+    TTD_CONDITIONS.forEach(condition => {
+     if(!checkedLegacyCondition(values[condition.legacyAttr])) return;
+
+     const rowId = generateRowID();
+     attrsToSet[`repeating_conditions_${rowId}_condition_type`] = condition.name;
+     attrsToSet[`repeating_conditions_${rowId}_condition_effect`] = condition.effect;
+    });
+
+    if(Object.keys(attrsToSet).length > 0) {
+     setAttrs(attrsToSet, callback);
+     return;
+    }
+
+    callback();
+   });
+  });
+ };
+
+ const migrateDamageReductionRepeatingSection = function(callback) {
+  getSectionIDs("repeating_damage_reduction", function(oldRowIds) {
+   if(!oldRowIds || oldRowIds.length === 0) {
+    callback();
+    return;
+   }
+
+   getSectionIDs("repeating_damagereduction", function(newRowIds) {
+    // Avoid duplicating rows if the user already recreated them after the section rename.
+    if(newRowIds && newRowIds.length > 0) {
+     callback();
+     return;
+    }
+
+    const attrsToGet = [];
+    oldRowIds.forEach(rowId => {
+     attrsToGet.push(`repeating_damage_reduction_${rowId}_damage_reduction_value`);
+     attrsToGet.push(`repeating_damage_reduction_${rowId}_damage_reduction_bypass`);
+    });
+
+    getAttrs(attrsToGet, function(oldValues) {
+     const attrsToSet = {};
+
+     oldRowIds.forEach(oldRowId => {
+      const newRowId = generateRowID();
+      attrsToSet[`repeating_damagereduction_${newRowId}_damage_reduction_value`] =
+              oldValues[`repeating_damage_reduction_${oldRowId}_damage_reduction_value`] || "";
+      attrsToSet[`repeating_damagereduction_${newRowId}_damage_reduction_bypass`] =
+              oldValues[`repeating_damage_reduction_${oldRowId}_damage_reduction_bypass`] || "";
+     });
+
+     setAttrs(attrsToSet, callback);
+    });
+   });
+  });
+ };
 
  on("sheet:opened", function() {
   getAttrs(["sheet_version"], function(values) {
    const sheetVersion = int(values, "sheet_version", 0);
-   if(sheetVersion < CURRENT_SHEET_VERSION) {
-    // Future migrations go here.
 
-    setAttrs({
-     sheet_version: CURRENT_SHEET_VERSION
-    });
+   const finishMigrations = function() {
+    if(sheetVersion < CURRENT_SHEET_VERSION) {
+     setAttrs({
+      sheet_version: CURRENT_SHEET_VERSION
+     });
+    }
+   };
+
+   const runConditionMigration = function() {
+    if(sheetVersion < 5) {
+     migrateFixedConditionsToRepeatingConditions(finishMigrations);
+     return;
+    }
+
+    finishMigrations();
+   };
+
+   if(sheetVersion < 4) {
+    migrateDamageReductionRepeatingSection(runConditionMigration);
+    return;
    }
+
+   runConditionMigration();
   });
  });
  //</editor-fold>
