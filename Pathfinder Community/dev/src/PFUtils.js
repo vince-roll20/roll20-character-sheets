@@ -237,7 +237,8 @@ export function shouldNotDisplayOption(attr, val) {
     case 'saving_throw':
       return (/^no/i.test(val) || /harmless/i.test(val)) && !/and|or/i.test(val);
     case 'spell_fail':
-      return (parseInt(val, 10) || 0) !== 0;
+      // hide the roll if 0%
+      return (parseInt(val, 10) || 0) === 0;
     default:
       return false;
   }
