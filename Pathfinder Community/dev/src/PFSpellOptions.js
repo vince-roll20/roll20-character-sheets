@@ -343,9 +343,25 @@ export function getOptionText(id, eventInfo, toggleValues, rowValues) {
   if (toggleValues.showspellnotes) {
     optionText += optionTemplates.spellnotes.replace('REPLACE', '@{spell-class-' + classNum + '-spells-notes}') || '';
   }
+  // if (toggleValues.showspell_fail_check) {
+  //   optionText += optionTemplates.spell_fail_check;
+  //   optionText += optionTemplates.spell_fail;
+  // }
+  //check if spell_fail_check and spell_fail should be shown
   if (toggleValues.showspell_fail_check) {
-    optionText += optionTemplates.spell_fail_check;
-    optionText += optionTemplates.spell_fail;
+    newValue = parseInt(toggleValues['spell-fail'], 10) || 0;
+    if (PFUtils.shouldNotDisplayOption('spell_fail', newValue)) {
+      optionText += '{{spell_fail_check=}}';
+    } else {
+      optionText += optionTemplates.spell_fail_check; //.replace("REPLACE", newValue)||"";
+    }
+    if (newValue) {
+      optionText += optionTemplates.spell_fail;
+    } else {
+      optionText += '{{spell_fail=}}';
+    }
+  } else {
+    optionText += '{{spell_fail_check=}}{{spell_fail=}}';
   }
   if (toggleValues.showdamage) {
     if (rowValues[prefix + 'damage-macro-text']) {
@@ -384,6 +400,7 @@ export function resetOption(id, eventInfo) {
           'Concentration-0-def': parseInt(v['Concentration-0-def'], 10) || 0,
           'Concentration-1-def': parseInt(v['Concentration-1-def'], 10) || 0,
           'Concentration-2-def': parseInt(v['Concentration-2-def'], 10) || 0,
+          'spell-fail': parseInt(v['spell-fail'], 10) || 0,
         })
         .value(),
       optionText = '',
@@ -421,6 +438,7 @@ export function resetOptions(callback, eventInfo) {
           'Concentration-0-def': parseInt(tv['Concentration-0-def'], 10) || 0,
           'Concentration-1-def': parseInt(tv['Concentration-1-def'], 10) || 0,
           'Concentration-2-def': parseInt(tv['Concentration-2-def'], 10) || 0,
+          'spell-fail': parseInt(tv['spell-fail'], 10) || 0,
         })
         .value();
       TAS.debug('PFSPellOptions.resetOptions: ', toggleValues);
@@ -488,6 +506,9 @@ function registerEventHandlers() {
         }
       }),
     );
+  });
+  on('change:spell-fail', function (eventInfo) {
+    resetOptions(null, eventInfo);
   });
 }
 registerEventHandlers();
