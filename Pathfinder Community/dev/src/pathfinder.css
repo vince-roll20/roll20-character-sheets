@@ -4680,6 +4680,7 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
 .charsheet .repeating-fields .nontable-repeating .toggle-casting-type:not(:checked) ~ label .prepared,
 
 .charsheet .deletesect-show:not(:checked) + span + .deletesect,
+/* .charsheet .deletesect-show:not(:checked) + .deletesect, */
 .charsheet .extra-show:not(:checked) ~ .extra-sect,
 .charsheet .extra-show:not(:checked) ~ div .extra-sect,
 .charsheet .extra-show:checked ~ .extra-sect-inverse,
