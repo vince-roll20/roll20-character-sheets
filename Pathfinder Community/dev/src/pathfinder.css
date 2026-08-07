@@ -2187,6 +2187,16 @@ also need 1 more level in selector or base css will override border */
     display: none;
 }
 
+.charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only button {
+    opacity: .35;
+    pointer-events: none;
+}
+
+.charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only input:checked + button {
+    opacity: 1;
+    pointer-events: initial;
+}
+
 .charsheet .abilities .tabinput.tab6:checked ~ .selected-tabtitle.tab6 ~ .sla-only,
 .charsheet .abilities .tabinput.tab10:checked ~ .selected-tabtitle.tab10 ~ .sla-only {
     display: inline-flex;
