@@ -2201,14 +2201,15 @@ also need 1 more level in selector or base css will override border */
 .charsheet .abilities .tabinput.tab10:checked ~ .selected-tabtitle.tab10 ~ .sla-only {
     display: inline-flex;
     left: initial;
-    margin: 0 0 0 1em;
+    margin: 2px;
+    margin-left: 8%;
 }
 
 .charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only > span:first-child {
     display: grid;
-    grid-template-columns: 2em 6.25em;
+    grid-template-columns: 2em 6.25em minmax(0, auto);
     justify-items: stretch;
-    width: min-content;
+    /* width: min-content; */
 }
 
 .charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only > span:last-child {
@@ -2220,7 +2221,23 @@ also need 1 more level in selector or base css will override border */
 }
 
 .charsheet .sla-only .or-B-show:not(:checked) ~ .either-or-sect {
+    display: inline-grid;
     visibility: collapse;
+    max-width: auto;
+}
+
+.charsheet .sla-only .or-A-show:checked ~ label.nor-sect,
+.charsheet .sla-only .or-B-show:checked ~ label.nor-sect {
+    display: inline-grid;
+    grid-template-columns: 0;
+    visibility: collapse;
+}
+
+.charsheet .sla-only .or-A-show:not(:checked) ~ .nor-sect,
+.charsheet .sla-only .or-B-show:not(:checked) ~ .nor-sect {
+    display: inline-grid;
+    grid-template-columns: min-content;
+    visibility: visible;
 }
 
 /* extra abilities tab: hide old .sections */

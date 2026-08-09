@@ -32,6 +32,7 @@
                     </h2>
                     <ol>
                         <h4>Latest ($$CURRENTRELEASEDATE$$)</h4>
+                        <li>Globally set CL and DC from the top of the Special Abilities section for all SLA's.</li>
                         <li>Updated the logic to hide the spell fail check in the roll template if spell_fail is 0%.</li>
                         <li>Fixed: buff to CMD(Dodge) would erroneously be included with the "FF CMD" calc. Use the "Do not lose Dex..." checkbox e.g. Uncanny Dodge, to include any CMD(Dodge) buff.</li>
                         <li>Fixed: buff to all "Saves" would erroneously stack with Trait and Resistance bonuses.</li>
@@ -8853,8 +8854,8 @@
                     <input class="deletebutton cssbutton deletesect-show" type="checkbox" name="attr_delete_rep_ability_btn" value="1" data-i18n-title="delete-ability" data-i18n-aria-label="delete-ability-must-confirm-next-checkbox" /><span></span><label class="deletesect allrows-note"><input type="checkbox" class="selectedlabel-check" name="attr_delete_rep_ability" data-i18n-aria-label="confirm-delete-ability" data-i18n-title="confirm-delete-ability" value="1" /><b data-i18n="delete-all-rows-are-you-sure">Deletes ALL rows, are you sure?</b></label>
                     <span class="sla-only">
                         <span class="small-label2">
-                            <span style="grid-column: 1/-1;">
-                                <select class="select-small" title="@{ability_cl_basis}" name="attr_ability_cl_basis">
+                            <span style="grid-column:1/3;">
+                                <select class="select-small" title="@{ability_CL-basis}" name="attr_ability_CL-basis">
                                     <option value="0" data-i18n="not-applicable">N/A</option>
                                     <option value="@{level}" data-i18n="full-caster-level-abbrv" selected>Lvl/HD</option>
                                     <option value="@{class-0-level}" data-i18n="1-ordinal-class">1st Class</option>
@@ -8867,27 +8868,36 @@
                                     <option value="(0*(@{level}))" data-i18n="other">Other</option>
                                 </select>
                             </span>
-                            <input type="checkbox" name="attr_confirm_ability_cl_basis_flag" value="1" data-i18n-title="confirm-ability-sla-cl" />
+
+                            <input type="checkbox" value="0" class="noshow or-A-show" name="attr_ability_CL-basis" role="presentation">
+                            <input type="checkbox" value="@{level}" class="noshow or-B-show" name="attr_ability_CL-basis" role="presentation">
+                            <label class="small-label2 linked-tablecell nor-sect nowrap entry-med" style="grid-row: span 2;">
+                                <input type="text" value="" name="attr_ability_class-name" title="@{ability_class-name}" class="calc">
+                                <span class="nowrap" data-i18n="source-name">Source Name</span>
+                            </label>
+                            <input class="number calc hidden" type="number" name="attr_ability_CL-basis-mod" value="0" />
+
+                            <input type="checkbox" name="attr_confirm_ability_CL-basis" value="1" data-i18n-title="confirm-ability-sla-cl" />
                             <button type="action" name="act_set-sla-cl" class="command-button" data-i18n-title="set-sla-caster-level-basis">
                                 <span data-i18n="set-sla-caster-level-abbrv">Set CL-Basis</span>
                             </button>
                         </span>
                         <span class="small-label2">
                             <span style="grid-column:1/3;">
-                                <select class="select-small" title="@{ability_spell_level_basis}" name="attr_ability_spell_level_basis">
+                                <select class="select-small" title="@{ability_spell_level-basis}" name="attr_ability_spell_level-basis">
                                     <option value="floor(@{casterlevel}/2)" data-i18n="half-caster-level-abbrv-selected" selected>•½ Lvl</option>
                                     <option value="@{casterlevel}" data-i18n="full-caster-level-abbrv">Lvl/HD</option>
                                     <option value="0" data-i18n="custom-level-abbrv">Custom Lvl</option>
                                 </select>
                             </span>
-                            <input type="checkbox" value="0" class="noshow or-B-show" name="attr_ability_spell_level_basis" role="presentation">
-                            <label class="small-label2 linked-tablecell either-or-sect nowrap entry-med" style="grid-row: span 3;">
-                                <input type="checkbox" value="1" name="attr_spell_level-misc-mod_error" class="error-mshow">
-                                <input type="text" class="macro-text-inline linked-cellfield highlight" title="@{ability_spell_level_misc}" name="attr_ability_spell_level_misc" data-i18n-placeholder="equation-macro-place" placeholder="#/Equation">
-                                <input type="number" value="0" name="attr_ability_spell_level_misc_misc_mod" title="@{ability_spell_level_misc_misc_mod}" class="narrow-numbers calc linked-cellfield highlight" readonly="">
+                            <input type="checkbox" value="0" class="noshow or-B-show" name="attr_ability_spell_level-basis" role="presentation">
+                            <label class="small-label2 linked-tablecell either-or-sect nowrap entry-med" style="grid-row: span 2;">
+                                <input type="checkbox" value="1" name="attr_ability_spell_level_misc-mod_error" class="error-mshow">
+                                <input type="text" class="macro-text-inline linked-cellfield highlight" title="@{ability_spell_level-misc}" name="attr_ability_spell_level-misc" data-i18n-placeholder="equation-macro-place" placeholder="#/Equation">
+                                <input type="number" value="0" name="attr_ability_spell_level-misc-mod" title="@{ability_spell_level-misc-mod}" class="narrow-numbers calc linked-cellfield highlight" readonly="">
                                 <span class="super note-a" data-i18n-aria-label="spell-level-miscellaneous-desc" data-i18n-title="spell-level-miscellaneous-desc" data-i18n="miscellaneous-abbrv" title="Spell level and DC bonus" aria-label="Spell level and DC bonus">Misc</span>
                             </label>
-                            <input type="checkbox" name="attr_confirm_ability_spell_level_basis" value="1" data-i18n-title="confirm-ability-sla-dc" />
+                            <input type="checkbox" name="attr_confirm_ability_spell_level-basis" value="1" data-i18n-title="confirm-ability-sla-dc" />
                             <button type="action" name="act_set-sla-dc" class="command-button" data-i18n-title="set-sla-difficulty-check-basis">
                                 <span data-i18n="set-sla-difficulty-check-abbrv">Set DC-Basis</span>
                             </button>
@@ -14137,8 +14147,8 @@
                     <input class="deletebutton cssbutton deletesect-show" type="checkbox" name="attr_delete_rep_ability_btn" value="1" data-i18n-title="delete-ability" data-i18n-aria-label="delete-ability-must-confirm-next-checkbox" /><span></span><label class="deletesect allrows-note"><input type="checkbox" class="selectedlabel-check" name="attr_delete_rep_ability" data-i18n-aria-label="confirm-delete-ability" data-i18n-title="confirm-delete-ability" value="1" /><b data-i18n="delete-all-rows-are-you-sure">Deletes ALL rows, are you sure?</b></label>
                     <span class="sla-only">
                         <span class="small-label2">
-                            <span style="grid-column: 1/-1;">
-                                <select class="select-small" title="@{ability_cl_basis}" name="attr_ability_cl_basis">
+                            <span style="grid-column:1/3;">
+                                <select class="select-small" title="@{ability_CL-basis}" name="attr_ability_CL-basis">
                                     <option value="0" data-i18n="not-applicable">N/A</option>
                                     <option value="@{level}" data-i18n="full-caster-level-abbrv" selected>Lvl/HD</option>
                                     <option value="@{class-0-level}" data-i18n="1-ordinal-class">1st Class</option>
@@ -14151,27 +14161,36 @@
                                     <option value="(0*(@{level}))" data-i18n="other">Other</option>
                                 </select>
                             </span>
-                            <input type="checkbox" name="attr_confirm_ability_cl_basis_flag" value="1" data-i18n-title="confirm-ability-sla-cl" />
+
+                            <input type="checkbox" value="0" class="noshow or-A-show" name="attr_ability_CL-basis" role="presentation">
+                            <input type="checkbox" value="@{level}" class="noshow or-B-show" name="attr_ability_CL-basis" role="presentation">
+                            <label class="small-label2 linked-tablecell nor-sect nowrap entry-med" style="grid-row: span 2;">
+                                <input type="text" value="" name="attr_ability_class-name" title="@{ability_class-name}" class="calc">
+                                <span class="nowrap" data-i18n="source-name">Source Name</span>
+                            </label>
+                            <input class="number calc hidden" type="number" name="attr_ability_CL-basis-mod" value="0" />
+
+                            <input type="checkbox" name="attr_confirm_ability_CL-basis" value="1" data-i18n-title="confirm-ability-sla-cl" />
                             <button type="action" name="act_set-sla-cl" class="command-button" data-i18n-title="set-sla-caster-level-basis">
                                 <span data-i18n="set-sla-caster-level-abbrv">Set CL-Basis</span>
                             </button>
                         </span>
                         <span class="small-label2">
                             <span style="grid-column:1/3;">
-                                <select class="select-small" title="@{ability_spell_level_basis}" name="attr_ability_spell_level_basis">
+                                <select class="select-small" title="@{ability_spell_level-basis}" name="attr_ability_spell_level-basis">
                                     <option value="floor(@{casterlevel}/2)" data-i18n="half-caster-level-abbrv-selected" selected>•½ Lvl</option>
                                     <option value="@{casterlevel}" data-i18n="full-caster-level-abbrv">Lvl/HD</option>
                                     <option value="0" data-i18n="custom-level-abbrv">Custom Lvl</option>
                                 </select>
                             </span>
-                            <input type="checkbox" value="0" class="noshow or-B-show" name="attr_ability_spell_level_basis" role="presentation">
-                            <label class="small-label2 linked-tablecell either-or-sect nowrap entry-med" style="grid-row: span 3;">
-                                <input type="checkbox" value="1" name="attr_spell_level-misc-mod_error" class="error-mshow">
-                                <input type="text" class="macro-text-inline linked-cellfield highlight" title="@{ability_spell_level_misc}" name="attr_ability_spell_level_misc" data-i18n-placeholder="equation-macro-place" placeholder="#/Equation">
-                                <input type="number" value="0" name="attr_ability_spell_level_misc_misc_mod" title="@{ability_spell_level_misc_misc_mod}" class="narrow-numbers calc linked-cellfield highlight" readonly="">
+                            <input type="checkbox" value="0" class="noshow or-B-show" name="attr_ability_spell_level-basis" role="presentation">
+                            <label class="small-label2 linked-tablecell either-or-sect nowrap entry-med" style="grid-row: span 2;">
+                                <input type="checkbox" value="1" name="attr_ability_spell_level_misc-mod_error" class="error-mshow">
+                                <input type="text" class="macro-text-inline linked-cellfield highlight" title="@{ability_spell_level-misc}" name="attr_ability_spell_level-misc" data-i18n-placeholder="equation-macro-place" placeholder="#/Equation">
+                                <input type="number" value="0" name="attr_ability_spell_level-misc-mod" title="@{ability_spell_level-misc-mod}" class="narrow-numbers calc linked-cellfield highlight" readonly="">
                                 <span class="super note-a" data-i18n-aria-label="spell-level-miscellaneous-desc" data-i18n-title="spell-level-miscellaneous-desc" data-i18n="miscellaneous-abbrv" title="Spell level and DC bonus" aria-label="Spell level and DC bonus">Misc</span>
                             </label>
-                            <input type="checkbox" name="attr_confirm_ability_spell_level_basis" value="1" data-i18n-title="confirm-ability-sla-dc" />
+                            <input type="checkbox" name="attr_confirm_ability_spell_level-basis" value="1" data-i18n-title="confirm-ability-sla-dc" />
                             <button type="action" name="act_set-sla-dc" class="command-button" data-i18n-title="set-sla-difficulty-check-basis">
                                 <span data-i18n="set-sla-difficulty-check-abbrv">Set DC-Basis</span>
                             </button>

@@ -4,7 +4,7 @@ import _ from 'underscore';
 import TAS from './TheAaronSheet.js';
 import * as ExExp from './ExExp';
 TAS.config({
- logging: {
+  logging: {
    info: process.env.NODE_ENV !== 'production',
    debug: process.env.NODE_ENV !== 'production'
  }

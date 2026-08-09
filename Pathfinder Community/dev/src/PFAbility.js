@@ -56,6 +56,11 @@ function setClassName(id, callback, eventInfo) {
     idStr = SWUtils.getRepeatingIDStr(id),
     prefix = 'repeating_ability_' + idStr,
     clbasisField = prefix + 'CL-basis';
+  if (eventInfo.sourceAttribute === 'ability_cl-basis') {
+    // use global attrs
+    prefix = 'ability_';
+    clbasisField = 'ability_CL-basis';
+  }
   getAttrs(
     [prefix + 'CL-basis', prefix + 'class-name', 'character_name', 'race', 'class-0-name', 'class-1-name', 'class-2-name', 'class-3-name', 'class-4-name', 'class-5-name'],
     function (v) {
@@ -1084,6 +1089,47 @@ export function updateIncludeLinkVersionCheck() {
   });
 }
 
+function setSLAsGlobally(eventInfo) {
+  getSectionIDs('repeating_ability', (idArray) => {
+    getAttrs(
+      [
+        'ability_CL-basis',
+        'ability_spell_level-basis',
+        'ability_class-name',
+        'ability_CL-basis-mod',
+        'confirm_ability_CL-basis',
+        'confirm_ability_spell_level-basis',
+        'ability_spell_level-misc',
+      ],
+      (v) => {
+        const output = {};
+        const button = eventInfo.triggerName;
+        const confirmCL = +v['confirm_ability_CL-basis'] || 0;
+        const confirmSL = +v['confirm_ability_spell_level-basis'] || 0;
+        const clBasis = v['ability_CL-basis'] || '@{level}';
+        const clBasisName = v['ability_class-name'] || '';
+        const clBasisMod = v['ability_CL-basis-mod'] || 0;
+        const slBasis = v['ability_spell_level-basis'] || 'floor(@{casterlevel}/2)';
+        const slBasisCustom = v['ability_spell_level-misc'] || 0;
+        idArray.forEach((id) => {
+          if (button === 'clicked:set-sla-cl' && confirmCL) {
+            output[`repeating_ability_${id}_CL-basis`] = clBasis;
+            output[`repeating_ability_${id}_class-name`] = clBasisName;
+            output[`repeating_ability_${id}_CL-basis-mod`] = clBasisMod;
+          } else if (button === 'clicked:set-sla-dc' && confirmSL) {
+            slBasis === '0' ? (output[`repeating_ability_${id}_spell_level-misc`] = slBasisCustom) : (output[`repeating_ability_${id}_spell_level-misc`] = 0);
+            output[`repeating_ability_${id}_spell_level-basis`] = slBasis;
+            output[`repeating_ability_${id}_ability-basis`] = '@{CHA-mod}';
+          } else {
+            TAS.error('no match ' + button);
+          }
+        });
+        setAttrs(output);
+      },
+    );
+  });
+}
+
 function registerEventHandlers() {
   let eventToWatch = '',
     macroEvent = 'remove:repeating_ability ',
@@ -1127,6 +1173,17 @@ function registerEventHandlers() {
     }),
   );
 
+  on(
+    'change:ability_CL-basis',
+    TAS.callback(function eventAbilityClassDropdown(eventInfo) {
+      TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType);
+      SWUtils.evaluateAndSetNumber('ability_CL-basis', 'ability_CL-basis-mod');
+      if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api') {
+        setClassName(null, null, eventInfo);
+      }
+    }),
+  );
+
   eventToWatch = _.reduce(
     optionRepeatingHelperFields,
     function (m, a) {
@@ -1146,7 +1203,7 @@ function registerEventHandlers() {
   );
 
   on(
-    'change:repeating_ability:CL-misc change:repeating_ability:spell_level-misc',
+    'change:repeating_ability:CL-misc change:repeating_ability:spell_level-misc change:ability_spell_level-misc',
     TAS.callback(function eventSLAEquationMacro(eventInfo) {
       TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType);
       SWUtils.evaluateAndSetNumber(eventInfo.sourceAttribute, eventInfo.sourceAttribute + '-mod');
@@ -1313,6 +1370,12 @@ function registerEventHandlers() {
   on('change:repeating_ability:ability_type2 change:repeating_ability:rule_category', (eventInfo) => {
     TAS.debug('caught ' + eventInfo.sourceAttribute + ' event' + eventInfo.sourceType);
     PFMacros.checkAbilityType2Row(eventInfo);
+  });
+
+  // set all SLA's using global attrs
+  on('clicked:set-sla-cl clicked:set-sla-dc', (eventInfo) => {
+    TAS.debug('caught ' + eventInfo.triggerName);
+    setSLAsGlobally(eventInfo);
   });
 }
 
