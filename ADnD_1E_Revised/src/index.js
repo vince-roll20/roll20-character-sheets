@@ -7579,3 +7579,93 @@ on('clicked:equipment-sort-undo', async (eventInfo) => {
     // clog(`Undo process finished. Sheet unlocked.`);
   }
 });
+
+// CRP
+// non-repeating buttons
+const buttonSet = [];
+
+// enables drag/drop of action buttons by syncing with a normal button
+on('sheet:opened change:character_name', async (eventInfo) => {
+  console.log(`Syncing Action buttons for macrobar.`);
+  const idArrayWeapons = await getSectionIDsAsync('repeating_weapon');
+  let output = {};
+  const v = await getAttrsAsync(['character_name']);
+  // process non-repeating buttons
+  output = buttonSet.reduce((all, one) => {
+    return {...all, [one]: `%{${v.character_name}|${one}-button}`};
+  }, {});
+
+  // process each repeating sections buttons
+  idArrayWeapons.forEach((id) => {
+    // repeating buttons
+    const repeatingButtonSet = ['weapon_attack_roll', 'weapon_attack_npc_roll'];
+    const attribute_values = repeatingButtonSet.reduce((all, one) => {
+      // added .replaceAll step for action buttons
+      return {...all, [`repeating_weapon_${id}_${one}`]: `%{${v.character_name}|repeating_weapon_${id}_${one.replaceAll('_', '-')}-button}`};
+    }, {});
+    output = {...output, ...attribute_values};
+  });
+  await setAttrsAsync(output, {silent: true});
+});
+
+on('clicked:repeating_weapon:weapon-attack-roll-button clicked:repeating_weapon:weapon-attack-npc-roll-button', async (eventInfo) => {
+  const id = eventInfo.sourceAttribute.split('_')[2].toLowerCase();
+  console.log(`${eventInfo.triggerName} id:${id}`);
+  const fields = [
+    'whisper_pc',
+    'whisper_npc',
+    'to_hit_misc_mod',
+    'weapon_whisper_to_hit',
+    `repeating_weapon_${id}_weapon_macro_text`,
+    `repeating_weapon_${id}_weapon_damage_chat_menu_npc`,
+  ];
+  const v = await getAttrsAsync(fields);
+  const output = {};
+  const whisperPC = int(v.whisper_pc);
+  const whisperNPC = int(v.whisper_npc);
+  const toHitTable = v.weapon_whisper_to_hit;
+  const attackMacro = v[`repeating_weapon_${id}_weapon_macro_text`];
+  const damageNPCmenu = v[`repeating_weapon_${id}_weapon_damage_chat_menu_npc`];
+  console.log(`Change detected - whisperPC: ${whisperPC} whisperNPC: ${whisperNPC} attackMacro: ${attackMacro} damageNPCmenu: ${damageNPCmenu} toHitTable: ${toHitTable}`);
+  // repeating CRP rolls
+  const repeatingRolls = {
+    [`repeating_weapon_${id}_weapon-attack-roll-button`]: `@{whisper_pc} @{repeating_weapon_${id}_weapon_macro_text}`,
+    [`repeating_weapon_${id}_weapon-attack-npc-roll-button`]: `@{whisper_npc} @{repeating_weapon_${id}_weapon_macro_text} @{repeating_weapon_${id}_weapon_damage_chat_menu_npc}`,
+  };
+  // which button was pressed?
+  const trigger = eventInfo.triggerName.replace('clicked:', '');
+  const roll_string = repeatingRolls[trigger];
+  const modifier = `!&{template:general}{{answer=![[${v.to_hit_misc_mod}]]}}`;
+  // process each button's roll
+  if (trigger.includes('weapon-attack-roll-button')) {
+    console.log(`Change detected: trigger:${trigger}`);
+    await new Promise((resolve) => {
+      startRoll(modifier, async (answer) => {
+        const toHitMod = int(answer.results.answer.result);
+        startRoll(roll_string, async (roll) => {
+          console.log(roll);
+          finishRoll(roll.rollId);
+          resolve();
+        });
+      });
+    });
+    await new Promise((resolve) => {
+      startRoll(toHitTable, (roll2) => {
+        console.log(roll2);
+        finishRoll(roll2.rollId);
+        resolve();
+      });
+    });
+  } else if (trigger.includes('weapon-attack-npc-roll-button')) {
+    console.log(`Change detected: trigger:${trigger}`);
+    startRoll(roll_string, (roll) => {
+      finishRoll(roll.rollId);
+    });
+  } else {
+    // NORMAL ROLL NO SPECIAL HANDLING NEEDED
+    console.log(`Normal roll - No special handling`);
+    startRoll(roll_string, (roll) => {
+      finishRoll(roll.rollId);
+    });
+  }
+});

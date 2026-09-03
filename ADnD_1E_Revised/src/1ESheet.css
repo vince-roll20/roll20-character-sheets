@@ -3249,7 +3249,7 @@ section.npc-box.statblock3 .image-avatar {
   padding: 9px 0 0 0;
 }
 
-.charsheet .hidden {
+.ui-dialog .tab-content .charsheet .hidden {
   display: none;
 }
 

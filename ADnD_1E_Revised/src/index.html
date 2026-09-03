@@ -32,6 +32,10 @@
 <input type="checkbox" name="attr_toggle_linear_background" class="toggle-linear-background hidden" value="1" />
 <input type="checkbox" name="attr_toggle_ar" class="toggle-ar hidden" value="1" />
 <input type="checkbox" name="attr_hide_to_hit_table" class="hide-to-hit hidden" value="1" />
+
+<!-- CRP related -->
+<input type="hidden" name="attr_to_hit_misc_mod" class="hidden" value="0" />
+
 <div class="background">
   <div class="wrapper">
     <!-- Sheet Header-->
@@ -2661,15 +2665,30 @@
       </div>
       <!-- Attacks -->
       <div class="sect">
+        // weapon_whisper_to_hit relocated: no need to reside within repeating_weapon
+        <textarea class="hidden" name="attr_weapon_whisper_to_hit">/w gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}</textarea>
         <input type="checkbox" class="hidden toggle-to-hit-table" name="attr_toggle_to_hit_table" value="1" />
         <fieldset class="repeating_weapon">
           <input type="hidden" class="weapon-type-toggle" name="attr_weapon_attack_type_flag" value="0" />
           <input type="checkbox" class="hidden" name="attr_weapon_critdamage_flag" value="1" />
           <div class="top-row border-top-half">
             <span class="weapons-row1 center">
+              <!--
               <button class="dice-button hide-as-npc" type="roll" name="attr_weapon_attack_roll" title="%{selected|repeating_weapon_$X_weapon_attack_roll} | PC Roll" value="@{whisper_pc} @{weapon_macro_text} @{weapon_whisper_to_hit}"></button>
-              <!--NPC version-->
               <button class="dice-button hide-as-pc" type="roll" name="attr_weapon_attack_npc_roll" title="%{selected|repeating_weapon_$X_weapon_attack_npc_roll} | NPC Roll" value="@{whisper_npc} @{weapon_macro_text} @{weapon_damage_chat_menu_npc} @{weapon_whisper_to_hit}"></button>
+              -->
+
+              <!--CRP PC version-->
+              <button class="dice-button hide-as-npc" type="roll" name="roll_weapon_attack_roll" title="%{selected|repeating_weapon_$X_weapon_attack_roll} | PC Roll" value="@{weapon_attack_roll}">
+              </button>
+              <button type="action" class="hidden" name="act_weapon-attack-roll-button"></button>
+              <input type="text" class="hidden" name="attr_weapon_attack_roll" value="@{whisper_pc} @{weapon_macro_text} @{weapon_whisper_to_hit}" />
+              <!--CRP NPC version-->
+              <button class="dice-button hide-as-pc" type="roll" name="roll_weapon_attack_npc_roll" title="%{selected|repeating_weapon_$X_weapon_attack_npc_roll} | NPC Roll" value="@{weapon_attack_npc_roll}">
+              </button>
+              <button type="action" class="hidden" name="act_weapon-attack-npc-roll-button"></button>
+              <input type="text" class="hidden" name="attr_weapon_attack_npc_roll" value="@{whisper_npc} @{weapon_macro_text} @{weapon_damage_chat_menu_npc} @{weapon_whisper_to_hit}" />
+
               <label class="label-under-small repeating-name">
                 <input type="text" class="text-large" name="attr_weapon_name" title="@{repeating_weapon_$X_weapon_name}" placeholder="Enter Weapon" />
                 <span>Name</span>
@@ -2828,8 +2847,8 @@
               </label>
               <label class="label-under-small">
                 <!-- IMPORTANT macro MUST include a hard return to force a new line -->
-                <textarea class="hidden" name="attr_weapon_whisper_to_hit">
-                /w gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}</textarea>
+                <!-- <textarea class="hidden" name="attr_weapon_whisper_to_hit">
+                /w gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}</textarea> -->
                 <select class="select-over-label" name="attr_weapon_whisper_to_hit_select" title="@{repeating_weapon_$X_weapon_whisper_to_hit_select}">
                   <option value="0" class="matrix-box" selected>Matrix</option>
                   <option value="1" class="thac0-box">THACO</option>
