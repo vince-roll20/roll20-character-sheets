@@ -3472,7 +3472,7 @@ const calcAC = async (recalc) => {
   const isMonster = int(v.toggle_npc);
   let syncAcFlag = int(v.sync_ac_flag);
   // if monster do not sync, otherwise follow user setting
-  syncAcFlag = isMonster ? 0 : 1;
+  syncAcFlag = isMonster ? 0 : syncAcFlag;
   const armorRatingFlag = int(v.armor_rating_flag);
   const armorShield_mod = int(v.armorshield_mod) * -1;
   const armorOther_mod = int(v.armorother_mod) * -1;
