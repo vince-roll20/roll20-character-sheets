@@ -7616,13 +7616,30 @@ on('sheet:opened change:character_name', async (eventInfo) => {
 on('clicked:repeating_weapon:weapon-attack-roll-button clicked:repeating_weapon:weapon-attack-npc-roll-button', async (eventInfo) => {
   const id = eventInfo.sourceAttribute.split('_')[2].toLowerCase();
   // console.log(`${eventInfo.triggerName} id:${id}`);
-  const fields = ['toggle_to_hit_table', 'best_ac_hit_method', 'hide_best_ac_hit', 'thac0', 'thac00', 'weapon_whisper_to_hit'];
+  const fields = [
+    'toggle_to_hit_table',
+    'best_ac_hit_method',
+    'hide_best_ac_hit',
+    'thac0',
+    'thac00',
+    'weapon_whisper_to_hit',
+    `toggle_ranged_ammo`,
+    `repeating_weapon_${id}_weapon_attack_type`, // 1 || 3 is ranged
+    `repeating_weapon_${id}_weapon_ammo`,
+    `repeating_weapon_${id}_weapon_ammo_max`,
+  ];
   const v = await getAttrsAsync(fields);
   const output = {};
   const useTHAC0 = int(v.toggle_to_hit_table);
   const THAC0 = useTHAC0 ? int(v.thac00) : int(v.thac0);
   const toHitTable = v.weapon_whisper_to_hit;
   const hideBestAC = int(v.hide_best_ac_hit);
+  const trackAmmo = int(v.toggle_ranged_ammo) === 1 ? 1 : 0;
+  // test if value is odd
+  const isRanged = int(v[`repeating_weapon_${id}_weapon_attack_type`]) % 2 !== 0;
+  const ammo = int(v[`repeating_weapon_${id}_weapon_ammo`]);
+  const ammoMax = int(v[`repeating_weapon_${id}_weapon_ammo_max`]);
+  console.log(`trackAmmo:${trackAmmo} isRanged:${isRanged} ammo:${ammo} ammoMax:${ammoMax}`);
   // repeating CRP rolls
   const repeatingRolls = {
     [`repeating_weapon_${id}_weapon-attack-roll-button`]: `@{whisper_pc} @{repeating_weapon_${id}_weapon_macro_text}`,
@@ -7685,11 +7702,11 @@ on('clicked:repeating_weapon:weapon-attack-roll-button clicked:repeating_weapon:
         // console.log(`Method:${methodText} THAC0:${THAC0} d20:${d20} totalRoll:${totalRoll} BEST_AC_HIT:${bestAC}`);
         // written to an attr for macro and API access
         output.best_ac_hit = bestAC;
-        setAttrs(output, {silent: true});
         finishRoll(roll.rollId, {
           //'name of key': 'computed value'
           // hides "hits AC" in roll based on sheet settings
           bestAChit: hideBestAC ? 99 : bestAC,
+          ammo: Math.max(0, isRanged && trackAmmo === 1 ? ammo - 1 : ammo),
         });
         resolve();
 
@@ -7701,6 +7718,8 @@ on('clicked:repeating_weapon:weapon-attack-roll-button clicked:repeating_weapon:
             resolve();
           });
         });
+        output[`repeating_weapon_${id}_weapon_ammo`] = Math.max(0, isRanged && trackAmmo === 1 ? ammo - 1 : ammo);
+        setAttrs(output, {silent: true});
       });
     });
   } else {

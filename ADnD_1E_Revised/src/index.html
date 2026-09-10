@@ -27,6 +27,7 @@
 <input type="checkbox" name="attr_toggle_single_column_notes" class="toggle-single-column-notes hidden" value="1" checked />
 <input type="checkbox" name="attr_toggle_single_column_spells" class="toggle-single-column-spells hidden" value="1" checked />
 <input type="checkbox" name="attr_toggle_critdamage" class="toggle-critdamage hidden" value="1" />
+<input type="checkbox" name="attr_toggle_ranged_ammo" class="toggle-ranged-ammo hidden" value="1" />
 <input type="checkbox" name="attr_toggle_lbs" class="toggle-lbs hidden" value="1" />
 <input type="checkbox" name="attr_toggle_row_shading" class="toggle-row-shading hidden" value="1" />
 <input type="checkbox" name="attr_toggle_linear_background" class="toggle-linear-background hidden" value="1" />
@@ -4404,8 +4405,8 @@
             <span>Use Fighter 5%:</span>
             <input type="checkbox" name="attr_toggle_fighter5" value="1" />
           </label>
-          <label title="@{best_ac_hit_method} | Method used to determine best AC hit when making attack rolls.">
-            <span>Hits AC Method:</span>
+          <label title="@{best_ac_hit_method} | Method used to determine the best AC hit when making attack rolls.">
+            <span>"Hits AC" Method:</span>
             <select name="attr_best_ac_hit_method" style="width:7em;">
               <option value="0" selected>RAW</option>
               <option value="1">Nat 20 Always Hits</option>
@@ -4419,6 +4420,10 @@
           <label title="@{toggle_critdamage} | Use crit damage rolls on natural 20. Defaults to weapon damage x2. Crit damage handling can be adjusted per attack.">
             <span>Use Crit Damage:</span>
             <input type="checkbox" name="attr_toggle_critdamage" value="1" />
+          </label>
+          <label title="@{toggle_ranged_ammo} | Each attack roll will reduce Ranged ammo by 1.">
+            <span>Track Ranged Ammo:</span>
+            <input type="checkbox" name="attr_toggle_ranged_ammo" value="1" />
           </label>
           <label title="@{toggle_lbs} | Use Lbs instead of gold pieces when determining encumbrance. Carrying capacities and carried coin weight will be divided by 10. Per-item weights need to be entered as lbs in order for the sheet to properly calculate encumbrance.">
             <span>Use Lbs:</span>
@@ -5376,23 +5381,25 @@
                     {{#speed}}<span class="sheet-bold">Speed:&nbsp;</span>{{speed}}&nbsp;{{/speed}}
                       {{#range}}
                         <span class="sheet-inlineroll-reset">
-                          {{#rollGreater() ammo 0}}
-                            {{#ammo}}<span class="sheet-bold">Ammo:&nbsp;</span>{{ammo}}&nbsp;{{/ammo}}
-                          {{/rollGreater() ammo 0}}
-                          {{#rollTotal() ammo 0}}
-                            {{#ammo}}<span class="sheet-bold">No Ammo!</span>&nbsp;{{/ammo}}
-                          {{/rollTotal() ammo 0}}
+                          {{#rollGreater() computed::ammo 0}}
+                            {{#ammo}}<span class="sheet-bold">Ammo:&nbsp;</span>{{computed::ammo}}{{/ammo}}
+                            {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
+                          {{/rollGreater() computed::ammo 0}}
+                          {{#rollTotal() computed::ammo 0}}
+                            {{#ammo}}<span class="sheet-bold">No Ammo!&nbsp;</span>{{computed::ammo}}{{/ammo}}
+                            {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
+                          {{/rollTotal() computed::ammo 0}}
                         </span>
                       {{/range}}
         </span>
       </span>
 
-      {{#allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 bestAChit damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammo whisper}}
+      {{#allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 bestAChit damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammo ammoMax whisper}}
         <span class="sheet-row sheet-all-props">
           <span class="sheet-tcat">{{key}}</span>
           <span>{{value}}</span>
         </span>
-      {{/allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 bestAChit damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammo whisper}}
+      {{/allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 bestAChit damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammo ammoMax whisper}}
 
       {{#WeaponNotes}}
         <span class="sheet-row">

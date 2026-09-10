@@ -173,8 +173,20 @@
       "description": "Use a 5% progression to-Hit table. This is a Fighter only option and will have no effect for other classes. This can still be enabled/edited per sheet."
     },
     {
+      "attribute": "best_ac_hit_method",
+      "displayname": "'Hits AC' Method:",
+      "type": "select",
+      "options": [
+        "RAW|0",
+        "Nat 20 Always Hits|1",
+        "DMG p82|2"
+      ],
+      "default": "0",
+      "description": "Method used to determine the best AC hit when making attack rolls."
+    },
+    {
       "attribute": "toggle_auto_damage",
-      "displayname": "Toggle Auto Damage:",
+      "displayname": "Auto Roll Damage:",
       "type": "checkbox",
       "value": "1",
       "description": "Auto roll damage regardless of the attack roll. This can still be enabled/edited per sheet."
@@ -185,6 +197,13 @@
       "type": "checkbox",
       "value": "1",
       "description": "Crit damage rolls on natural 20. Defaults to weapon damage x2. Crit damage handling can be adjusted per attack. This can still be enabled/edited per sheet."
+    },
+    {
+      "attribute": "toggle_ranged_ammo",
+      "displayname": "Track Ranged Ammo:",
+      "type": "checkbox",
+      "value": "1",
+      "description": "Each attack roll will reduce Ranged ammo by 1."
     },
     {
       "attribute": "toggle_lbs",
@@ -273,21 +292,21 @@
     },
     {
       "attribute": "toggle_ar",
-      "displayname": "Armor Class Rating (AR):",
+      "displayname": "Hide Armor Class Rating (AR):",
       "type": "checkbox",
       "value": "1",
       "description": "Hides Armor Class Rating fields and totals."
     },
     {
       "attribute": "hide_best_ac_hit",
-      "displayname": "Hits AC:",
+      "displayname": "Hide Hits AC:",
       "type": "checkbox",
       "value": "1",
       "description": "Hide the best AC hit based on when making attack rolls."
     },
     {
       "attribute": "hide_to_hit_table",
-      "displayname": "to-Hit Table:",
+      "displayname": "Hide to-Hit Table:",
       "type": "checkbox",
       "value": "1",
       "description": "Do not include to-Hit table data (Matrix/THAC0) with attack rolls. NOTE: this setting updates all existing and future attacks, but can be overwritten locally e.g. per attack. This can still be enabled/edited per sheet."
