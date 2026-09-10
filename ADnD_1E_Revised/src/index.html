@@ -27,11 +27,16 @@
 <input type="checkbox" name="attr_toggle_single_column_notes" class="toggle-single-column-notes hidden" value="1" checked />
 <input type="checkbox" name="attr_toggle_single_column_spells" class="toggle-single-column-spells hidden" value="1" checked />
 <input type="checkbox" name="attr_toggle_critdamage" class="toggle-critdamage hidden" value="1" />
+<input type="checkbox" name="attr_toggle_ranged_ammo" class="toggle-ranged-ammo hidden" value="1" />
 <input type="checkbox" name="attr_toggle_lbs" class="toggle-lbs hidden" value="1" />
 <input type="checkbox" name="attr_toggle_row_shading" class="toggle-row-shading hidden" value="1" />
 <input type="checkbox" name="attr_toggle_linear_background" class="toggle-linear-background hidden" value="1" />
 <input type="checkbox" name="attr_toggle_ar" class="toggle-ar hidden" value="1" />
 <input type="checkbox" name="attr_hide_to_hit_table" class="hide-to-hit hidden" value="1" />
+<input type="checkbox" name="attr_hide_best_ac_hit" class="hidden" value="1" checked />
+<!-- CRP -->
+<input type="hidden" name="attr_best_ac_hit" class="hidden" value="-" />
+
 <div class="background">
   <div class="wrapper">
     <!-- Sheet Header-->
@@ -67,15 +72,20 @@
             <span class="left">
               <span>v<span name="attr_sheet_version">
                 </span>
-            <span class="right"> • 9/9/26'</span>
+            <span class="right"> • 9/8/26'</span>
           </h5>
           <ul>
             <h5>Latest</h5>
-            <li>Fixed "sync AC" stuck on enabled.</li>
+            <li>WIP: Update attacks to use custom roll parsing (CRP). This allows the sheet to perform logic after the roll is made, make adjustments if applicable, then post the result to chat. This can enable displaying the best AC hit based on the current roll vs THAC0 +/- modifiers, auto-damage roll for hits, ammo tracking, etc.</li>
+            <li>Added CRP for attacks.</li>
+            <li>Moved to-hit table macro outside of repeating_weapon.</li>
+            <li>Option to show "hits AC" with the roll.</li>
+            <li>Option to pick the method applied to the to-Hit matrix to determine the best AC hit (raw, nat20 always hits, or DMG p82).</li>
+            <li>Sheet default settings updated with the new options.</li>
+            <li>Fixed "Sync AC" always enabled.</li>
+            <li>Small adjustments to roll template for inlinerollresult.</li>
 
             <h5>Recent/Previous</h5>
-            <li>Restored whispering the to-Hit AC table to the DM with the attack. This was temporarily set to either include the table openly or not at all due to a recent change in the VTT (bug report still pending). I have found an alternative method that allows this to work as it did previously. (TY @Kazdan)</li>
-            <li>Fixed fractional item weight being calculated as 0. Vacation is over Magic-users... (TY @Kazdan)</li>
             <li>Updated the sheet.json formatting to see if it helps the VTT actually apply Sheet Default Settings in-game after making changes.</li>
             <li>Fixed Fighter 5% to-hit progression.</li>
             <li>Check is now made when editing the class fields to ensure class-specific sections are visible. e.g Thief Skills and Spells.</li>
@@ -2661,15 +2671,30 @@
       </div>
       <!-- Attacks -->
       <div class="sect">
+        <!-- weapon_whisper_to_hit relocated: no need to reside within repeating_weapon -->
+        <textarea class="hidden" name="attr_weapon_whisper_to_hit">/w gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}</textarea>
         <input type="checkbox" class="hidden toggle-to-hit-table" name="attr_toggle_to_hit_table" value="1" />
         <fieldset class="repeating_weapon">
           <input type="hidden" class="weapon-type-toggle" name="attr_weapon_attack_type_flag" value="0" />
           <input type="checkbox" class="hidden" name="attr_weapon_critdamage_flag" value="1" />
           <div class="top-row border-top-half">
             <span class="weapons-row1 center">
+              <!--
               <button class="dice-button hide-as-npc" type="roll" name="attr_weapon_attack_roll" title="%{selected|repeating_weapon_$X_weapon_attack_roll} | PC Roll" value="@{whisper_pc} @{weapon_macro_text} @{weapon_whisper_to_hit}"></button>
-              <!--NPC version-->
               <button class="dice-button hide-as-pc" type="roll" name="attr_weapon_attack_npc_roll" title="%{selected|repeating_weapon_$X_weapon_attack_npc_roll} | NPC Roll" value="@{whisper_npc} @{weapon_macro_text} @{weapon_damage_chat_menu_npc} @{weapon_whisper_to_hit}"></button>
+              -->
+
+              <!--CRP PC version-->
+              <button class="dice-button hide-as-npc" type="roll" name="roll_weapon_attack_roll" title="%{selected|repeating_weapon_$X_weapon_attack_roll} | PC Roll" value="@{weapon_attack_roll}">
+              </button>
+              <button type="action" class="hidden" name="act_weapon-attack-roll-button"></button>
+              <input type="text" class="hidden" name="attr_weapon_attack_roll" value="@{whisper_pc} @{weapon_macro_text}" />
+              <!--CRP NPC version-->
+              <button class="dice-button hide-as-pc" type="roll" name="roll_weapon_attack_npc_roll" title="%{selected|repeating_weapon_$X_weapon_attack_npc_roll} | NPC Roll" value="@{weapon_attack_npc_roll}">
+              </button>
+              <button type="action" class="hidden" name="act_weapon-attack-npc-roll-button"></button>
+              <input type="text" class="hidden" name="attr_weapon_attack_npc_roll" value="@{whisper_npc} @{weapon_macro_text} @{weapon_damage_chat_menu_npc}" />
+
               <label class="label-under-small repeating-name">
                 <input type="text" class="text-large" name="attr_weapon_name" title="@{repeating_weapon_$X_weapon_name}" placeholder="Enter Weapon" />
                 <span>Name</span>
@@ -2827,9 +2852,6 @@
                 <span>QTY</span>
               </label>
               <label class="label-under-small">
-                <!-- IMPORTANT macro MUST include a hard return to force a new line -->
-                <textarea class="hidden" name="attr_weapon_whisper_to_hit">
-                /w gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}</textarea>
                 <select class="select-over-label" name="attr_weapon_whisper_to_hit_select" title="@{repeating_weapon_$X_weapon_whisper_to_hit_select}">
                   <option value="0" class="matrix-box" selected>Matrix</option>
                   <option value="1" class="thac0-box">THACO</option>
@@ -4381,6 +4403,14 @@
             <span>Use Fighter 5%:</span>
             <input type="checkbox" name="attr_toggle_fighter5" value="1" />
           </label>
+          <label title="@{best_ac_hit_method} | Method used to determine the best AC hit when making attack rolls.">
+            <span>"Hits AC" Method:</span>
+            <select name="attr_best_ac_hit_method" style="width:7em;">
+              <option value="0" selected>RAW</option>
+              <option value="1">Nat 20 Always Hits</option>
+              <option value="2">DMG p82</option>
+            </select>
+          </label>
           <label title="@{toggle_auto_damage} | Auto roll damage regardless of the attack roll.">
             <span>Auto Roll Damage:</span>
             <input type="checkbox" name="attr_toggle_auto_damage" value="1" />
@@ -4388,6 +4418,10 @@
           <label title="@{toggle_critdamage} | Use crit damage rolls on natural 20. Defaults to weapon damage x2. Crit damage handling can be adjusted per attack.">
             <span>Use Crit Damage:</span>
             <input type="checkbox" name="attr_toggle_critdamage" value="1" />
+          </label>
+          <label title="@{toggle_ranged_ammo} | Each attack roll will reduce Ranged ammo by 1.">
+            <span>Track Ranged Ammo:</span>
+            <input type="checkbox" name="attr_toggle_ranged_ammo" value="1" />
           </label>
           <label title="@{toggle_lbs} | Use Lbs instead of gold pieces when determining encumbrance. Carrying capacities and carried coin weight will be divided by 10. Per-item weights need to be entered as lbs in order for the sheet to properly calculate encumbrance.">
             <span>Use Lbs:</span>
@@ -4506,8 +4540,12 @@
             <span>Armor Class Rating (AR):</span>
             <input type="checkbox" name="attr_toggle_ar" value="1" />
           </label>
+          <label title="@{hide_best_ac_hit} | Hide the best AC hit based on when making attack rolls.">
+            <span>Hits AC:</span>
+            <input type="checkbox" name="attr_hide_best_ac_hit" value="1" />
+          </label>
           <label title="@{hide_to_hit_table} | Do not include to-Hit table data (Matrix/THAC0) with attack rolls. NOTE: this setting updates all existing and future attacks, but can be overwritten locally e.g. per attack.">
-            <span>Hide to-Hit:</span>
+            <span>to-Hit Table:</span>
             <input type="checkbox" name="attr_hide_to_hit_table" value="1" />
           </label>
           <label class="span-two"></label>
@@ -5077,13 +5115,16 @@
       <span class="sheet-row">{{#bigtext12}}<span class="sheet-big-text sheet-span-two">{{bigtext12}}</span>{{/bigtext12}}</span>
       {{#attack1}}
         <span class="sheet-row">
-          <span class="sheet-span-two sheet-tcat"><span class="sheet-center">Attack =</span>&nbsp;{{attack1}}
+          <span class="sheet-span-two sheet-tcat">Attack ={{attack1}}
             {{#rollWasCrit() attack1}}
               <!-- Only seen if 'Use Crit Damage' is enabled -->
               {{#rollGreater() crit 0}}
                 {{#crit}}<span class="sheet-bold sheet-center">CRIT!</span>{{/crit}}
               {{/rollGreater() crit 0}}
             {{/rollWasCrit() attack1}}
+            {{#^rollTotal() computed::bestAChit 99}}
+              {{#bestAChit}}hits AC{{computed::bestAChit}}{{/bestAChit}}
+            {{/^rollTotal() computed::bestAChit 99}}
           </span>
         </span>
         {{#^rollGreater() crit 0}}
@@ -5131,6 +5172,9 @@
                 {{#crit}}<span class="sheet-bold sheet-center">CRIT!</span>{{/crit}}
               {{/rollGreater() crit 0}}
             {{/rollWasCrit() attack2}}
+            {{#^rollTotal() computed::bestAChit 99}}
+              {{#bestAChit}}hits AC{{computed::bestAChit}}{{/bestAChit}}
+            {{/^rollTotal() computed::bestAChit 99}}
           </span>
         </span>
         {{#rollGreater() crit 0}}
@@ -5166,6 +5210,9 @@
                 {{#crit}}<span class="sheet-bold sheet-center">CRIT!</span>{{/crit}}
               {{/rollGreater() crit 0}}
             {{/rollWasCrit() attack3}}
+            {{#^rollTotal() computed::bestAChit 99}}
+              {{#bestAChit}}hits AC{{computed::bestAChit}}{{/bestAChit}}
+            {{/^rollTotal() computed::bestAChit 99}}
           </span>
         </span>
         {{#rollGreater() crit 0}}
@@ -5201,6 +5248,9 @@
                 {{#crit}}<span class="sheet-bold sheet-center">CRIT!</span>{{/crit}}
               {{/rollGreater() crit 0}}
             {{/rollWasCrit() attack4}}
+            {{#^rollTotal() computed::bestAChit 99}}
+              {{#bestAChit}}hits AC{{computed::bestAChit}}{{/bestAChit}}
+            {{/^rollTotal() computed::bestAChit 99}}
           </span>
         </span>
         {{#rollGreater() crit 0}}
@@ -5328,24 +5378,22 @@
                   {{#space}}<span class="sheet-bold">Space:&nbsp;</span>{{space}}&nbsp;{{/space}}
                     {{#speed}}<span class="sheet-bold">Speed:&nbsp;</span>{{speed}}&nbsp;{{/speed}}
                       {{#range}}
-                        <span class="sheet-inlineroll-reset">
-                          {{#rollGreater() ammo 0}}
-                            {{#ammo}}<span class="sheet-bold">Ammo:&nbsp;</span>{{ammo}}&nbsp;{{/ammo}}
-                          {{/rollGreater() ammo 0}}
-                          {{#rollTotal() ammo 0}}
-                            {{#ammo}}<span class="sheet-bold">No Ammo!</span>&nbsp;{{/ammo}}
-                          {{/rollTotal() ammo 0}}
-                        </span>
+                        {{#rollGreater() ammo 0}}
+                          {{#ammo}}<span class="sheet-bold">Ammo:&nbsp;</span>{{ammo}}&nbsp;{{/ammo}}
+                        {{/rollGreater() ammo 0}}
+                        {{#rollTotal() ammo 0}}
+                          {{#ammo}}<span class="sheet-bold">No Ammo!</span>&nbsp;{{/ammo}}
+                        {{/rollTotal() ammo 0}}
                       {{/range}}
         </span>
       </span>
 
-      {{#allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammo whisper}}
+      {{#allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 bestAChit damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammo ammoMax whisper}}
         <span class="sheet-row sheet-all-props">
           <span class="sheet-tcat">{{key}}</span>
           <span>{{value}}</span>
         </span>
-      {{/allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammo whisper}}
+      {{/allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 bestAChit damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammo ammoMax whisper}}
 
       {{#WeaponNotes}}
         <span class="sheet-row">
