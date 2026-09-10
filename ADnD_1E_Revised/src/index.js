@@ -3453,7 +3453,7 @@ on('change:toggle_npc change:sync_hp_flag change:hitpoints change:hitpoints_max 
 
 // AC Calcs
 const calcAC = async (recalc) => {
-  clog('Armor re-calculated');
+  // clog('Armor re-calculated');
   const v = await getAttrsAsync([
     ...armorAttrs,
     'armor_rating_flag',
@@ -3476,7 +3476,7 @@ const calcAC = async (recalc) => {
   const armorClass = int(v.armorclass);
   const isMonster = int(v.toggle_npc);
   let syncAcFlag = int(v.sync_ac_flag);
-  // if monster do not sync, otherwise follow user settings
+  // if monster do not sync, otherwise follow user setting
   syncAcFlag = isMonster ? 0 : syncAcFlag;
   const armorRatingFlag = int(v.armor_rating_flag);
   const armorShield_mod = int(v.armorshield_mod) * -1;
@@ -3678,7 +3678,7 @@ on(
     // const thisEvent = eventInfo.sourceAttribute === undefined ? 'sheet opened' : eventInfo.sourceAttribute;
     const triggerEvent = eventInfo.triggerName;
     const recalc = triggerEvent === 'clicked:calcac' ? 1 : 0;
-    clog(`triggerEvent: ${triggerEvent} recalc:${recalc}`);
+    // clog(`triggerEvent: ${triggerEvent} recalc:${recalc}`);
     await calcAC(recalc);
   },
 );
