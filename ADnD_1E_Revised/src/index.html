@@ -76,16 +76,16 @@
           </h5>
           <ul>
             <h5>Latest</h5>
-            <li>WIP: Update attacks to use custom roll parsing (CRP). This allows the sheet to perform logic after the roll is made, make adjustments if applicable, then post the result to chat. This can enable displaying the best AC hit based on the current roll vs THAC0 +/- modifiers, auto-damage roll for hits, ammo tracking, etc.</li>
-            <li>Added CRP for attacks.</li>
+            <li>Updated attack rolls to Custom Roll Parsing(CRP). Allows determining the best AC hit, ammo tracking, and more without API.</li>
+            <li>Added optional Ranged weapon ammo tracking. If enabled from the sheet settings, each attack roll will reduce Ranged ammo by 1. This will be seen with the attack roll and adjusted on the weapon's row.</li>
             <li>Moved to-hit table macro outside of repeating_weapon.</li>
-            <li>Option to show "hits AC" with the roll.</li>
-            <li>Option to pick the method applied to the to-Hit matrix to determine the best AC hit (raw, nat20 always hits, or DMG p82).</li>
-            <li>Sheet default settings updated with the new options.</li>
+            <li>Added an option to show "hits AC" with attack rolls. Uses THAC0, the adjusted to-Hit roll, and the preferred method for handling the attack matrix to determine the best AC the attack can hit.</li>
+            <li>Added an option to pick the preferred method for handling the to-Hit matrix determining the best AC the attack can hit. (RAW, nat20 Always Hits, or DMG p82).</li>
+            <li>Sheet default settings have been updated with the new options.</li>
+            <li>Included a sheet update that checks and updates the default attack macro. This only works for unedited attack macros. If you have custom attack macros you will need to manually update those macros to enable the new CRP rolls. <code>{{bestAChit=[[0]]}}</code> was added to handle "hits AC" and <code>{{ammo=[[ @{weapon_ammo} ]]/[[ @{weapon_ammo|max} ]]}}</code> was changed/updated to <code>{{ammo=[[ @{weapon_ammo} ]]}} {{ammoMax=[[ @{weapon_ammo|max} ]]}}</code> to handle Ranged ammo tracking.</li>
+            <h5>Recent/Previous</h5>
             <li>Fixed "Sync AC" always enabled.</li>
             <li>Small adjustments to roll template for inlinerollresult.</li>
-
-            <h5>Recent/Previous</h5>
             <li>Fixed fractional item weight being calculated as 0. Vacation is over Magic-users... (TY @Kazdan)</li>
             <li>Restored whispering the to-Hit AC table to the DM with the attack. This was temporarily set to either include the table openly or not at all due to a recent change in the VTT (bug report still pending). I have found an alternative method that allows this to work as it did previously. (TY @Kazdan)</li>
             <li>Updated the sheet.json formatting to see if it helps the VTT actually apply Sheet Default Settings in-game after making changes.</li>
