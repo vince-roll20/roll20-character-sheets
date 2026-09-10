@@ -279,8 +279,15 @@
       "description": "Hides Armor Class Rating fields and totals."
     },
     {
+      "attribute": "hide_best_ac_hit",
+      "displayname": "Hits AC:",
+      "type": "checkbox",
+      "value": "1",
+      "description": "Hide the best AC hit based on when making attack rolls."
+    },
+    {
       "attribute": "hide_to_hit_table",
-      "displayname": "Hide to-Hit:",
+      "displayname": "to-Hit Table:",
       "type": "checkbox",
       "value": "1",
       "description": "Do not include to-Hit table data (Matrix/THAC0) with attack rolls. NOTE: this setting updates all existing and future attacks, but can be overwritten locally e.g. per attack. This can still be enabled/edited per sheet."
