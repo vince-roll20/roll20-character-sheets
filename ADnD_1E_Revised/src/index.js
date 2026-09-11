@@ -1026,13 +1026,16 @@ const equipmentMacroUpdate = async (current_version, final_version) => {
   const replacements = {
     equipment_old:
       '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{freetext=@{equipment_description}}} {{quantity= @{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}} {{uses=@{equipment_current}}} {{uses_max=[[ @{equipment_current|max} ]]}}',
-    equipment_current:
+    equipment_old_v2:
       '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{quantity=@{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}} {{uses=@{equipment_current}}} {{uses_max=[[ @{equipment_current|max} ]]}}',
+    equipment_current:
+      '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{uses=[[ @{equipment_current} ]]}} {{uses_max=[[ @{equipment_current|max} ]]}} {{quantity=@{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}}',
   };
+  const oldVersions = [replacements.equipment_old, replacements.equipment_old_v2];
+  // check and update all existing equipment
   _.each(idArray, (id) => {
     const attrName = `repeating_equipment_${id}_equipment_macro_text`;
-    // Only update if the current text matches the old default exactly
-    if (v[attrName] === replacements.equipment_old) {
+    if (oldVersions.includes(v[attrName])) {
       output[attrName] = replacements.equipment_current;
     }
   });
@@ -1906,6 +1909,9 @@ versionator = async (current_version, final_version) => {
   if (current_version < 1.71) {
     return await weaponMacroUpdate(1.71, final_version);
   }
+  if (current_version < 1.72) {
+    return await equipmentMacroUpdate(1.72, final_version);
+  }
   // All updates completed
   const finalCheck = await getAttrsAsync(['sheet_version', 'old_character']);
   const actualAttrVersion = parseFloat(finalCheck.sheet_version) || 0;
@@ -1923,7 +1929,7 @@ versionator = async (current_version, final_version) => {
 };
 
 on('sheet:opened', async () => {
-  const final_version = 1.71; // must be >= last update versionator()
+  const final_version = 1.72; // must be >= last update versionator()
   const v = await getAttrsAsync(['sheet_version', 'old_character']);
   let current_version = parseFloat(v.sheet_version) || 0;
   // New Sheet?
@@ -7602,6 +7608,7 @@ const buttonSet = [];
 on('sheet:opened change:character_name', async (eventInfo) => {
   // console.log(`Syncing Action buttons for macrobar.`);
   const idArrayWeapons = await getSectionIDsAsync('repeating_weapon');
+  const idArrayEquipment = await getSectionIDsAsync('repeating_equipment');
   let output = {};
   const v = await getAttrsAsync(['character_name']);
   // process non-repeating buttons
@@ -7618,123 +7625,156 @@ on('sheet:opened change:character_name', async (eventInfo) => {
     }, {});
     output = {...output, ...attribute_values};
   });
+  idArrayEquipment.forEach((id) => {
+    // repeating buttons
+    const repeatingButtonSet = ['equipment_roll'];
+    const attribute_values = repeatingButtonSet.reduce((all, one) => {
+      // added .replaceAll step for action buttons
+      return {...all, [`repeating_equipment_${id}_${one}`]: `%{${v.character_name}|repeating_equipment_${id}_${one.replaceAll('_', '-')}-button}`};
+    }, {});
+    output = {...output, ...attribute_values};
+  });
   await setAttrsAsync(output, {silent: true});
 });
 
-on('clicked:repeating_weapon:weapon-attack-roll-button clicked:repeating_weapon:weapon-attack-npc-roll-button', async (eventInfo) => {
-  const id = eventInfo.sourceAttribute.split('_')[2].toLowerCase();
-  // console.log(`${eventInfo.triggerName} id:${id}`);
-  const fields = [
-    'toggle_to_hit_table',
-    'best_ac_hit_method',
-    'hide_best_ac_hit',
-    'thac0',
-    'thac00',
-    'weapon_whisper_to_hit',
-    `toggle_ranged_ammo`,
-    `repeating_weapon_${id}_weapon_attack_type`, // 1 || 3 is ranged
-    `repeating_weapon_${id}_weapon_ammo`,
-    `repeating_weapon_${id}_weapon_ammo_max`,
-  ];
-  const v = await getAttrsAsync(fields);
-  const output = {};
-  const useTHAC0 = int(v.toggle_to_hit_table);
-  const THAC0 = useTHAC0 ? int(v.thac00) : int(v.thac0);
-  const toHitTable = v.weapon_whisper_to_hit;
-  const hideBestAC = int(v.hide_best_ac_hit);
-  const trackAmmo = int(v.toggle_ranged_ammo) === 1 ? 1 : 0;
-  // test if value is odd
-  const isRanged = int(v[`repeating_weapon_${id}_weapon_attack_type`]) % 2 !== 0;
-  const ammo = int(v[`repeating_weapon_${id}_weapon_ammo`]);
-  const ammoMax = int(v[`repeating_weapon_${id}_weapon_ammo_max`]);
-  console.log(`trackAmmo:${trackAmmo} isRanged:${isRanged} ammo:${ammo} ammoMax:${ammoMax}`);
-  // repeating CRP rolls
-  const repeatingRolls = {
-    [`repeating_weapon_${id}_weapon-attack-roll-button`]: `@{whisper_pc} @{repeating_weapon_${id}_weapon_macro_text}`,
-    [`repeating_weapon_${id}_weapon-attack-npc-roll-button`]: `@{whisper_npc} @{repeating_weapon_${id}_weapon_macro_text} @{repeating_weapon_${id}_weapon_damage_chat_menu_npc}`,
-  };
-  // which button was pressed?
-  const trigger = eventInfo.triggerName.replace('clicked:', '');
-  const roll_string = repeatingRolls[trigger];
-  // process attack rolls
-  if (trigger.includes('weapon-attack-roll-button' || 'weapon-attack-npc-roll-button')) {
-    await new Promise((resolve) => {
-      startRoll(roll_string, async (roll) => {
-        // console.log(roll);
-        const d20 = int(roll.results.attack1.dice[0]);
-        const totalRoll = int(roll.results.attack1.result);
-        const bestAcHitMethod = int(v.best_ac_hit_method) || 0;
-        let bestAC = '';
-        // Option 0: RAW (total adjusted roll)
-        if (bestAcHitMethod === 0) {
-          if (totalRoll < 20) {
-            bestAC = THAC0 - totalRoll;
-          } else if (totalRoll <= 25) {
-            bestAC = THAC0 - 25;
-          } else {
-            bestAC = THAC0 - totalRoll - 5;
-          }
-        }
-        // Option 1: Nat20 Always Hits (Any AC)
-        else if (bestAcHitMethod === 1) {
-          if (d20 === 20) {
-            bestAC = 'Any AC'; // Auto-hit bypass
-          } else if (totalRoll < 20) {
-            bestAC = THAC0 - totalRoll;
-          } else if (totalRoll <= 25) {
-            bestAC = THAC0 - 25;
-          } else {
-            bestAC = THAC0 - totalRoll - 5;
-          }
-        }
-        // Option 2: DMG p82 Official Clarification
-        else if (bestAcHitMethod === 2) {
-          if (d20 === 20) {
-            if (totalRoll < 20) {
-              bestAC = THAC0 - 25; // Penalties frozen on plateau
-            } else {
-              bestAC = THAC0 - totalRoll - 5; // unfreezes bonuses for target numbers 21+
-            }
-          } else {
+on(
+  'clicked:repeating_weapon:weapon-attack-roll-button clicked:repeating_weapon:weapon-attack-npc-roll-button clicked:repeating_equipment:equipment-roll-button',
+  async (eventInfo) => {
+    const id = eventInfo.sourceAttribute.split('_')[2].toLowerCase();
+    console.log(`${eventInfo.triggerName} id:${id}`);
+    const fields = [
+      'toggle_to_hit_table',
+      'best_ac_hit_method',
+      'hide_best_ac_hit',
+      'thac0',
+      'thac00',
+      'weapon_whisper_to_hit',
+      `toggle_ranged_ammo`,
+      `repeating_weapon_${id}_weapon_attack_type`, // 1 || 3 is ranged
+      `repeating_weapon_${id}_weapon_ammo`,
+      `repeating_weapon_${id}_weapon_ammo_max`,
+      `toggle_equipment_uses`,
+      `repeating_equipment_${id}_equipment_current`,
+      `repeating_equipment_${id}_equipment_current_max`,
+    ];
+    const v = await getAttrsAsync(fields);
+    const output = {};
+    // repeating CRP rolls
+    const repeatingRolls = {
+      [`repeating_weapon_${id}_weapon-attack-roll-button`]: `@{whisper_pc} @{repeating_weapon_${id}_weapon_macro_text}`,
+      [`repeating_weapon_${id}_weapon-attack-npc-roll-button`]: `@{whisper_npc} @{repeating_weapon_${id}_weapon_macro_text} @{repeating_weapon_${id}_weapon_damage_chat_menu_npc}`,
+      [`repeating_equipment_${id}_equipment-roll-button`]: `@{repeating_equipment_${id}_equipment_macro_text}`,
+    };
+    // which button was pressed?
+    const trigger = eventInfo.triggerName.replace('clicked:', '');
+    const roll_string = repeatingRolls[trigger];
+    // process attack rolls
+    if (trigger.includes('weapon-attack-roll-button' || 'weapon-attack-npc-roll-button')) {
+      const useTHAC0 = int(v.toggle_to_hit_table);
+      const THAC0 = useTHAC0 ? int(v.thac00) : int(v.thac0);
+      const toHitTable = v.weapon_whisper_to_hit;
+      const hideBestAC = int(v.hide_best_ac_hit);
+      const trackAmmo = int(v.toggle_ranged_ammo) === 1 ? 1 : 0;
+      // test if value is odd
+      const isRanged = int(v[`repeating_weapon_${id}_weapon_attack_type`]) % 2 !== 0;
+      const ammo = int(v[`repeating_weapon_${id}_weapon_ammo`]);
+      const ammoMax = int(v[`repeating_weapon_${id}_weapon_ammo_max`]);
+      console.log(`Ranged Ammo - trackAmmo:${trackAmmo} isRanged:${isRanged} ammo:${ammo} ammoMax:${ammoMax}`);
+      await new Promise((resolve) => {
+        startRoll(roll_string, async (roll) => {
+          // console.log(roll);
+          const d20 = int(roll.results.attack1.dice[0]);
+          const totalRoll = int(roll.results.attack1.result);
+          const bestAcHitMethod = int(v.best_ac_hit_method) || 0;
+          let bestAC = '';
+          // Option 0: RAW (total adjusted roll)
+          if (bestAcHitMethod === 0) {
             if (totalRoll < 20) {
               bestAC = THAC0 - totalRoll;
+            } else if (totalRoll <= 25) {
+              bestAC = THAC0 - 25;
             } else {
-              bestAC = THAC0 - 25; // totalRoll >= 20 reaches but cannot extend past plateau without a Nat 20
+              bestAC = THAC0 - totalRoll - 5;
             }
           }
-        }
+          // Option 1: Nat20 Always Hits (Any AC)
+          else if (bestAcHitMethod === 1) {
+            if (d20 === 20) {
+              bestAC = 'Any AC'; // Auto-hit bypass
+            } else if (totalRoll < 20) {
+              bestAC = THAC0 - totalRoll;
+            } else if (totalRoll <= 25) {
+              bestAC = THAC0 - 25;
+            } else {
+              bestAC = THAC0 - totalRoll - 5;
+            }
+          }
+          // Option 2: DMG p82 Official Clarification
+          else if (bestAcHitMethod === 2) {
+            if (d20 === 20) {
+              if (totalRoll < 20) {
+                bestAC = THAC0 - 25; // Penalties frozen on plateau
+              } else {
+                bestAC = THAC0 - totalRoll - 5; // unfreezes bonuses for target numbers 21+
+              }
+            } else {
+              if (totalRoll < 20) {
+                bestAC = THAC0 - totalRoll;
+              } else {
+                bestAC = THAC0 - 25; // totalRoll >= 20 reaches but cannot extend past plateau without a Nat 20
+              }
+            }
+          }
 
-        // let methodText = 'RAW';
-        // if (bestAcHitMethod === 1) methodText = 'Nat20';
-        // if (bestAcHitMethod === 2) methodText = 'p82';
-        // console.log(`Method:${methodText} THAC0:${THAC0} d20:${d20} totalRoll:${totalRoll} BEST_AC_HIT:${bestAC}`);
-        // written to an attr for macro and API access
-        output.best_ac_hit = bestAC;
-        finishRoll(roll.rollId, {
-          //'name of key': 'computed value'
-          // hides "hits AC" in roll based on sheet settings
-          bestAChit: hideBestAC ? 99 : bestAC,
-          ammo: Math.max(0, isRanged && trackAmmo === 1 ? ammo - 1 : ammo),
-        });
-        resolve();
-
-        // post the to-Hit table macro
-        await new Promise((resolve) => {
-          startRoll(toHitTable, (roll2) => {
-            // console.log(roll2);
-            finishRoll(roll2.rollId);
-            resolve();
+          // let methodText = 'RAW';
+          // if (bestAcHitMethod === 1) methodText = 'Nat20';
+          // if (bestAcHitMethod === 2) methodText = 'p82';
+          // console.log(`Method:${methodText} THAC0:${THAC0} d20:${d20} totalRoll:${totalRoll} BEST_AC_HIT:${bestAC}`);
+          // written to an attr for macro and API access
+          output.best_ac_hit = bestAC;
+          finishRoll(roll.rollId, {
+            //'name of key': 'computed value'
+            // hides "hits AC" in roll based on sheet settings
+            bestAChit: hideBestAC ? 99 : bestAC,
+            ammo: Math.max(0, isRanged && trackAmmo === 1 ? ammo - 1 : ammo),
           });
+          resolve();
+
+          // post the to-Hit table macro
+          await new Promise((resolve) => {
+            startRoll(toHitTable, (roll2) => {
+              // console.log(roll2);
+              finishRoll(roll2.rollId);
+              resolve();
+            });
+          });
+          output[`repeating_weapon_${id}_weapon_ammo`] = Math.max(0, isRanged && trackAmmo === 1 ? ammo - 1 : ammo);
+          setAttrs(output, {silent: true});
         });
-        output[`repeating_weapon_${id}_weapon_ammo`] = Math.max(0, isRanged && trackAmmo === 1 ? ammo - 1 : ammo);
+      });
+    } else if (trigger.includes('equipment-roll-button')) {
+      const trackEquipment = int(v.toggle_equipment_uses) === 1 ? 1 : 0;
+      const uses = int(v[`repeating_equipment_${id}_equipment_current`]);
+      const usesMax = int(v[`repeating_equipment_${id}_equipment_current_max`]);
+      console.log(`Equipment Uses - trackEquipment:${trackEquipment} current:${uses} current_max:${usesMax}`);
+      await new Promise((resolve) => {
+        startRoll(roll_string, (roll) => {
+          console.log(roll);
+          finishRoll(roll.rollId, {
+            //'name of key': 'computed value'
+            uses: Math.max(0, trackEquipment === 1 ? uses - 1 : uses),
+          });
+          resolve();
+        });
+        output[`repeating_equipment_${id}_equipment_current`] = Math.max(0, trackEquipment === 1 ? uses - 1 : uses);
         setAttrs(output, {silent: true});
       });
-    });
-  } else {
-    // NORMAL ROLL NO SPECIAL HANDLING NEEDED
-    console.log(`Normal roll - No special handling`);
-    startRoll(roll_string, (roll) => {
-      finishRoll(roll.rollId);
-    });
-  }
-});
+    } else {
+      // NORMAL ROLL NO SPECIAL HANDLING NEEDED
+      console.log(`Normal roll - No special handling`);
+      startRoll(roll_string, (roll) => {
+        finishRoll(roll.rollId);
+      });
+    }
+  },
+);

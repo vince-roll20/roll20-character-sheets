@@ -206,6 +206,13 @@
       "description": "Each attack roll will reduce Ranged ammo by 1."
     },
     {
+      "attribute": "toggle_equipment_uses",
+      "displayname": "Track Equipment Uses:",
+      "type": "checkbox",
+      "value": "1",
+      "description": "Each equipment roll will reduce Uses by 1."
+    },
+    {
       "attribute": "toggle_lbs",
       "displayname": "Use LBS:",
       "type": "checkbox",

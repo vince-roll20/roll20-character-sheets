@@ -28,6 +28,7 @@
 <input type="checkbox" name="attr_toggle_single_column_spells" class="toggle-single-column-spells hidden" value="1" checked />
 <input type="checkbox" name="attr_toggle_critdamage" class="toggle-critdamage hidden" value="1" />
 <input type="checkbox" name="attr_toggle_ranged_ammo" class="toggle-ranged-ammo hidden" value="1" />
+<input type="checkbox" name="attr_toggle_equipment_uses" class="toggle-equipment-uses hidden" value="1" />
 <input type="checkbox" name="attr_toggle_lbs" class="toggle-lbs hidden" value="1" />
 <input type="checkbox" name="attr_toggle_row_shading" class="toggle-row-shading hidden" value="1" />
 <input type="checkbox" name="attr_toggle_linear_background" class="toggle-linear-background hidden" value="1" />
@@ -72,12 +73,14 @@
             <span class="left">
               <span>v<span name="attr_sheet_version">
                 </span>
-            <span class="right"> • 9/8/26'</span>
+            <span class="right"> • 9/11/26'</span>
           </h5>
           <ul>
             <h5>Latest</h5>
-            <li>Updated attack rolls to Custom Roll Parsing(CRP). Allows determining the best AC hit, ammo tracking, and more without API.</li>
+            <li>Updated Attack rolls to Custom Roll Parsing(CRP). Allows determining the best AC hit, ammo tracking, and more without API.</li>
             <li>Added optional Ranged weapon ammo tracking. If enabled from the sheet settings, each attack roll will reduce Ranged ammo by 1. This will be seen with the attack roll and adjusted on the weapon's row.</li>
+            <li>Updated Equipment rolls to Custom Roll Parsing(CRP). Allows tracking Uses without API.</li>
+            <li>Added optional Equipment Uses tracking. If enabled from the sheet settings, each Equipment roll will reduce Uses by 1. This will be seen with the roll and adjusted on the equipment's row.</li>
             <li>Moved to-hit table macro outside of repeating_weapon.</li>
             <li>Added an option to show "hits AC" with attack rolls. Uses THAC0, the adjusted to-Hit roll, and the preferred method for handling the attack matrix to determine the best AC the attack can hit.</li>
             <li>Added an option to pick the preferred method for handling the to-Hit matrix determining the best AC the attack can hit. (RAW, nat20 Always Hits, or DMG p82).</li>
@@ -2980,7 +2983,13 @@
                   <div class="equipment-display-carry sect">
                     <div class="equipment-display-type">
                       <span class="top-row equipment-columns border-top-half">
-                        <button class="dice-button" type="roll" name="attr_equipment_roll" title="%{repeating_equipment_$X_equipment_roll}" value="@{equipment_macro_text}"></button>
+                        <!-- <button class="dice-button" type="roll" name="attr_equipment_roll" title="%{repeating_equipment_$X_equipment_roll}" value="@{equipment_macro_text}"></button> -->
+                        <!--CRP version-->
+                        <button class="dice-button" type="roll" name="roll_equipment_roll" title="%{selected|repeating_equipment_$X_equipment_roll}" value="@{equipment_roll}">
+                        </button>
+                        <button type="action" class="hidden" name="act_equipment-roll-button"></button>
+                        <input type="text" class="hidden" name="attr_equipment_roll" value="@{equipment_macro_text}" />
+
                         <input type="text" class="width-fill" name="attr_equipment_item" title="@{repeating_equipment_$X_equipment_item}" value="" placeholder="Item/Description" />
                         <input type="text" class="width-fill" name="attr_equipment_location" title="@{repeating_equipment_$X_equipment_location}" value="" placeholder="Location" />
                         <select class="equipment-type" name="attr_equipment_type" title="@{repeating_equipment_$X_equipment_type}">
@@ -3195,7 +3204,7 @@
                             <textarea class="info-link" wrap="off" name="attr_equipment_link" title="@{repeating_equipment_$X_equipment_link}" placeholder="https://www.example.com"></textarea>
                           </label>
                         </span>
-                        <textarea class="height-short toggle-macros" name="attr_equipment_macro_text" title="@{repeating_equipment_$X_equipment_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{quantity= @{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}} {{uses=@{equipment_current}}} {{uses_max=[[ @{equipment_current|max} ]]}}</textarea>
+                        <textarea class="height-short toggle-macros" name="attr_equipment_macro_text" title="@{repeating_equipment_$X_equipment_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{uses=[[ @{equipment_current} ]]}} {{uses_max=[[ @{equipment_current|max} ]]}} {{quantity=@{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}}</textarea>
                       </details>
                     </div>
                   </div>
@@ -4424,6 +4433,10 @@
                   <label title="@{toggle_ranged_ammo} | Each attack roll will reduce Ranged ammo by 1.">
                     <span>Track Ranged Ammo:</span>
                     <input type="checkbox" name="attr_toggle_ranged_ammo" value="1" />
+                  </label>
+                  <label title="@{toggle_equipment_uses} | Each equipment roll will reduce Uses by 1.">
+                    <span>Track Equipment Uses:</span>
+                    <input type="checkbox" name="attr_toggle_equipment_uses" value="1" />
                   </label>
                   <label title="@{toggle_lbs} | Use Lbs instead of gold pieces when determining encumbrance. Carrying capacities and carried coin weight will be divided by 10. Per-item weights need to be entered as lbs in order for the sheet to properly calculate encumbrance.">
                     <span>Use Lbs:</span>
@@ -5677,7 +5690,7 @@
                       {{#uses_max}}
                         {{#^rollTotal() uses_max 0}}
                           {{#uses}}
-                            <span class="sheet-inlineroll-reset">Uses:{{uses}}/{{uses_max}}</span>
+                            <span class="sheet-inlineroll-reset">Uses:{{computed::uses}}/{{uses_max}}</span>
                           {{/uses}}
                         {{/^rollTotal() uses_max 0}}
                       {{/uses_max}}
