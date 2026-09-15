@@ -73,10 +73,11 @@
             <span class="left">
               <span>v<span name="attr_sheet_version">
                 </span>
-            <span class="right"> • 9/11/26'</span>
+            <span class="right"> • 9/14/26'</span>
           </h5>
           <ul>
             <h5>Latest</h5>
+            <li>Changed the attack's "show to-Hit?" AC table to a /ss roll. (only viewable by the DM)</li>
             <li>Updated Attack rolls to Custom Roll Parsing(CRP). Allows determining the best AC hit, ammo tracking, and more without API.</li>
             <li>Added optional Ranged weapon ammo tracking. If enabled from the sheet settings, each attack roll will reduce Ranged ammo by 1. This will be seen with the attack roll and adjusted on the weapon's row.</li>
             <li>Updated Equipment rolls to Custom Roll Parsing(CRP). Allows tracking Uses without API.</li>
@@ -2678,7 +2679,7 @@
               <!-- Attacks -->
               <div class="sect">
                 <!-- weapon_whisper_to_hit relocated: no need to reside within repeating_weapon -->
-                <textarea class="hidden" name="attr_weapon_whisper_to_hit">/w gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}</textarea>
+                <textarea class="hidden" name="attr_weapon_whisper_to_hit">/ss gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}</textarea>
                 <input type="checkbox" class="hidden toggle-to-hit-table" name="attr_toggle_to_hit_table" value="1" />
                 <fieldset class="repeating_weapon">
                   <input type="hidden" class="weapon-type-toggle" name="attr_weapon_attack_type_flag" value="0" />
