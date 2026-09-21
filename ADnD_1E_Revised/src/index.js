@@ -7710,7 +7710,7 @@ on(
           // Option 1: Nat20 Always Hits (Any AC)
           else if (bestAcHitMethod === 1) {
             if (d20 === 20) {
-              bestAC = 'Any AC'; // Auto-hit bypass
+              bestAC = '-99'; // Auto-hit bypass
             } else if (totalRoll < 20) {
               bestAC = THAC0 - totalRoll;
             } else if (totalRoll <= 25) {
