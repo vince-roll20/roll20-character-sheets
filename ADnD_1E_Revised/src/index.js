@@ -187,7 +187,7 @@ on('change:character_name', async (eventInfo) => {
 
 // Validate input for +/- adjustment
 on(
-  'change:armortype_magic change:armortype2_magic change:armorshield_magic change:armorhelmet_magic change:armorother_magic change:armorother2_magic change:armorother3_magic change:armorother4_magic change:armorother5_magic change:armorother6_magic change:armorshield_mod change:armorother_mod change:armorother2_mod change:armorother3_mod change:armorother4_mod change:armorother5_mod change:armorother6_mod change:repeating_equipment:equipment_armor_mod change:repeating_equipment:equipment_armor_magic, change:hitpoints_1_class, change:hitpoints_2_class, change:hitpoints_3_class',
+  'change:armortype_magic change:armortype2_magic change:armorshield_magic change:armorhelmet_magic change:armorother_magic change:armorother2_magic change:armorother3_magic change:armorother4_magic change:armorother5_magic change:armorother6_magic change:armorshield_mod change:armorother_mod change:armorother2_mod change:armorother3_mod change:armorother4_mod change:armorother5_mod change:armorother6_mod change:repeating_equipment:equipment_armor_mod change:repeating_equipment:equipment_armor_magic change:hitpoints_1_class change:hitpoints_2_class change:hitpoints_3_class',
   async (eventInfo) => {
     // clog(`Δ detected: ${eventInfo.sourceAttribute}`);
     const id = eventInfo.sourceAttribute.split('_')[2];
@@ -227,7 +227,7 @@ on(
 );
 
 const attackMacroDefault =
-  '&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + ( @{weapon_backstab_bonus}[BACKSTAB] ) + ( @{weapon_tohitbonus}[HIT_BON] ) + ( @{weapon_prof_pen}[PROF_PEN] ) + ( @{weapon_dual_pen}[DUAL_PEN] ) + ( @{weapon_magicbonus}[MAG_BON] ) + ( ?{To Hit Modifier?|0}[MISC_MOD] ) ]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammo=[[ @{weapon_ammo} ]]/[[ @{weapon_ammo|max} ]]}} {{crit=[[ @{toggle_critdamage} ]]}} @{weapon_tohitacadj}';
+  '&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + ( @{weapon_backstab_bonus}[BACKSTAB] ) + ( @{weapon_tohitbonus}[HIT_BON] ) + ( @{weapon_prof_pen}[PROF_PEN] ) + ( @{weapon_dual_pen}[DUAL_PEN] ) + ( @{weapon_magicbonus}[MAG_BON] ) + ( ?{To Hit Modifier?|0}[MISC_MOD] ) ]]}} {{bestAChit=[[0]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammo=[[ @{weapon_ammo} ]]}} {{ammoMax=[[ @{weapon_ammo|max} ]]}} {{crit=[[ @{toggle_critdamage} ]]}} @{weapon_tohitacadj}';
 
 const armorRowIDs = [
   'unarmored_row_id',
@@ -871,7 +871,7 @@ const migrateAC = async (current_version, final_version) => {
 const weaponMacroUpdate = async (current_version, final_version) => {
   const idArray = await getSectionIDsAsync('repeating_weapon');
   const fields = idArray.map((id) => `repeating_weapon_${id}_weapon_macro_text`);
-  const v = await getAttrsAsync(fields);
+  const v = await getAttrsAsync(['default_attack_macro', ...fields]);
   const output = {};
   const replacements = {
     weapon_old:
@@ -886,8 +886,11 @@ const weaponMacroUpdate = async (current_version, final_version) => {
       '&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + @{weapon_backstab_bonus}[BACKSTAB] + @{weapon_tohitbonus}[HIT_BON] + @{weapon_prof_pen}[PROF_PEN] + @{weapon_dual_pen}[DUAL_PEN]+ @{weapon_magicbonus}[MAG_BON] + ?{To Hit Modifier?|0}[MISC_MOD] ]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammo=[[ @{weapon_ammo} ]]/[[ @{weapon_ammo|max} ]]}} {{crit=@{toggle_critdamage}}} @{weapon_tohitacadj}',
     weapon_old_v6:
       '&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + @{weapon_backstab_bonus}[BACKSTAB] + @{weapon_tohitbonus}[HIT_BON] + @{weapon_prof_pen}[PROF_PEN] + @{weapon_dual_pen}[DUAL_PEN]+ @{weapon_magicbonus}[MAG_BON] + ?{To Hit Modifier?|0}[MISC_MOD] ]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammo=[[ @{weapon_ammo} ]]/[[ @{weapon_ammo|max} ]]}} {{crit=[[ @{toggle_critdamage} ]]}} @{weapon_tohitacadj}',
-    weapon_current:
+    // pre-CRP
+    weapon_old_v7:
       '&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + ( @{weapon_backstab_bonus}[BACKSTAB] ) + ( @{weapon_tohitbonus}[HIT_BON] ) + ( @{weapon_prof_pen}[PROF_PEN] ) + ( @{weapon_dual_pen}[DUAL_PEN] ) + ( @{weapon_magicbonus}[MAG_BON] ) + ( ?{To Hit Modifier?|0}[MISC_MOD] ) ]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammo=[[ @{weapon_ammo} ]]/[[ @{weapon_ammo|max} ]]}} {{crit=[[ @{toggle_critdamage} ]]}} @{weapon_tohitacadj}',
+    // newest/latest version of the attack macro
+    weapon_current: attackMacroDefault,
   };
   const oldVersions = [
     replacements.weapon_old,
@@ -896,13 +899,19 @@ const weaponMacroUpdate = async (current_version, final_version) => {
     replacements.weapon_old_v4,
     replacements.weapon_old_v5,
     replacements.weapon_old_v6,
+    replacements.weapon_old_v7,
   ];
+  // check and update all existing attacks
   _.each(idArray, (id) => {
     const attrName = `repeating_weapon_${id}_weapon_macro_text`;
     if (oldVersions.includes(v[attrName])) {
       output[attrName] = replacements.weapon_current;
     }
   });
+  // ensures that the on-sheet default also gets updated
+  if (oldVersions.includes(v.default_attack_macro)) {
+    output.default_attack_macro = replacements.weapon_current;
+  }
   output.sheet_version = current_version;
   clog(`VERSION UPDATE: weaponMacroUpdate completed`);
   await setAttrsAsync(output, {silent: true});
@@ -1017,13 +1026,16 @@ const equipmentMacroUpdate = async (current_version, final_version) => {
   const replacements = {
     equipment_old:
       '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{freetext=@{equipment_description}}} {{quantity= @{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}} {{uses=@{equipment_current}}} {{uses_max=[[ @{equipment_current|max} ]]}}',
-    equipment_current:
+    equipment_old_v2:
       '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{quantity=@{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}} {{uses=@{equipment_current}}} {{uses_max=[[ @{equipment_current|max} ]]}}',
+    equipment_current:
+      '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{uses=[[ @{equipment_current} ]]}} {{uses_max=[[ @{equipment_current|max} ]]}} {{quantity=@{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}}',
   };
+  const oldVersions = [replacements.equipment_old, replacements.equipment_old_v2];
+  // check and update all existing equipment
   _.each(idArray, (id) => {
     const attrName = `repeating_equipment_${id}_equipment_macro_text`;
-    // Only update if the current text matches the old default exactly
-    if (v[attrName] === replacements.equipment_old) {
+    if (oldVersions.includes(v[attrName])) {
       output[attrName] = replacements.equipment_current;
     }
   });
@@ -1430,6 +1442,8 @@ const setWeaponsUpdate = async (current_version, final_version) => {
     // Strings/Misc
     output[`${prefix}weapon_dual`] = v[`${prefix}weapon_dual`];
     output[`${prefix}weapon_whisper_to_hit`] = v[`${prefix}weapon_whisper_to_hit`];
+    // copy outside repeating_weapon for future access
+    output.weapon_whisper_to_hit = v[`${prefix}weapon_whisper_to_hit`];
     output[`${prefix}weapon_length`] = v[`${prefix}weapon_length`];
     output[`${prefix}weapon_space`] = v[`${prefix}weapon_space`];
     output[`${prefix}weapon_speed`] = v[`${prefix}weapon_speed`];
@@ -1702,9 +1716,10 @@ const updateSyncArmorFlag = async (current_version, final_version) => {
 const recalcToHitWhisper = async (current_version, final_version) => {
   const idArray = await getSectionIDsAsync('repeating_weapon');
   const fields = idArray.flatMap((id) => [`repeating_weapon_${id}_weapon_whisper_to_hit`, `repeating_weapon_${id}_weapon_whisper_to_hit_select`]);
-  const v = await getAttrsAsync(['toggle_to_hit_table', ...fields]);
+  const v = await getAttrsAsync(['toggle_to_hit_table', 'weapon_whisper_to_hit', ...fields]);
   const updates = await Promise.all(idArray.map((id) => getToHitRowUpdate(v, id)));
   const output = Object.assign({}, ...updates);
+  output.weapon_whisper_to_hit = v.weapon_whisper_to_hit;
   output.sheet_version = current_version;
   clog(`VERSION UPDATE: recalcToHitWhisper completed`);
   await setAttrsAsync(output, {silent: true});
@@ -1891,6 +1906,12 @@ versionator = async (current_version, final_version) => {
   if (current_version < 1.7) {
     return await recalcToHitWhisper(1.7, final_version);
   }
+  if (current_version < 1.71) {
+    return await weaponMacroUpdate(1.71, final_version);
+  }
+  if (current_version < 1.72) {
+    return await equipmentMacroUpdate(1.72, final_version);
+  }
   // All updates completed
   const finalCheck = await getAttrsAsync(['sheet_version', 'old_character']);
   const actualAttrVersion = parseFloat(finalCheck.sheet_version) || 0;
@@ -1908,9 +1929,9 @@ versionator = async (current_version, final_version) => {
 };
 
 on('sheet:opened', async () => {
-  const final_version = 1.7; // must be >= last update versionator()
+  const final_version = 1.72; // must be >= last update versionator()
   const v = await getAttrsAsync(['sheet_version', 'old_character']);
-  let current_version = parseFloat(v.sheet_version) || 0;
+  let current_version = float(v.sheet_version);
   // New Sheet?
   const isNewSheet = int(v.old_character) === 0 && current_version === 0;
   if (isNewSheet) {
@@ -3112,15 +3133,12 @@ const getToHitRowUpdate = async (v, id, isLocal) => {
   const whichTable = int(v.toggle_to_hit_table); // MATRIX or THAC0
   const hideToHit = int(v.hide_to_hit_table); //
   const attrSelect = `repeating_weapon_${id}_weapon_whisper_to_hit_select`;
-  const attrMacro = `repeating_weapon_${id}_weapon_whisper_to_hit`;
+  const attrMacro = 'weapon_whisper_to_hit';
   let thishitTableSelect = int(v[attrSelect]);
   let thishitTableMacro = '';
   const noMacro = '&nbsp;';
-  // IMPORTANT these strings MUST include a hard return to force a new line
-  const matrixMacro = `
-/w gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}`;
-  const thac0Macro = `
-/w gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac0-10} ]]}} {{ToHitAC-9=[[ @{thac0-9} ]]}} {{ToHitAC-8=[[ @{thac0-8} ]]}} {{ToHitAC-7=[[ @{thac0-7} ]]}} {{ToHitAC-6=[[ @{thac0-6} ]]}} {{ToHitAC-5=[[ @{thac0-5} ]]}} {{ToHitAC-4=[[ @{thac0-4} ]]}} {{ToHitAC-3=[[ @{thac0-3} ]]}} {{ToHitAC-2=[[ @{thac0-2} ]]}} {{ToHitAC-1=[[ @{thac0-1} ]]}} {{ToHitAC0=[[ @{thac00} ]]}} {{ToHitAC1=[[ @{thac01} ]]}} {{ToHitAC2=[[ @{thac02} ]]}} {{ToHitAC3=[[ @{thac03} ]]}} {{ToHitAC4=[[ @{thac04} ]]}} {{ToHitAC5=[[ @{thac05} ]]}} {{ToHitAC6=[[ @{thac06} ]]}} {{ToHitAC7=[[ @{thac07} ]]}} {{ToHitAC8=[[ @{thac08} ]]}} {{ToHitAC9=[[ @{thac09} ]]}} {{ToHitAC10=[[ @{thac010} ]] }}`;
+  const matrixMacro = `/ss &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}`;
+  const thac0Macro = `/ss &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac0-10} ]]}} {{ToHitAC-9=[[ @{thac0-9} ]]}} {{ToHitAC-8=[[ @{thac0-8} ]]}} {{ToHitAC-7=[[ @{thac0-7} ]]}} {{ToHitAC-6=[[ @{thac0-6} ]]}} {{ToHitAC-5=[[ @{thac0-5} ]]}} {{ToHitAC-4=[[ @{thac0-4} ]]}} {{ToHitAC-3=[[ @{thac0-3} ]]}} {{ToHitAC-2=[[ @{thac0-2} ]]}} {{ToHitAC-1=[[ @{thac0-1} ]]}} {{ToHitAC0=[[ @{thac00} ]]}} {{ToHitAC1=[[ @{thac01} ]]}} {{ToHitAC2=[[ @{thac02} ]]}} {{ToHitAC3=[[ @{thac03} ]]}} {{ToHitAC4=[[ @{thac04} ]]}} {{ToHitAC5=[[ @{thac05} ]]}} {{ToHitAC6=[[ @{thac06} ]]}} {{ToHitAC7=[[ @{thac07} ]]}} {{ToHitAC8=[[ @{thac08} ]]}} {{ToHitAC9=[[ @{thac09} ]]}} {{ToHitAC10=[[ @{thac010} ]] }}`;
   if (isLocal) {
     // clog(`getToHitRowUpdate: USE LOCAL CHANGE`);
     if (thishitTableSelect === 2) {
@@ -3158,8 +3176,8 @@ const getToHitRowUpdate = async (v, id, isLocal) => {
 on('change:toggle_to_hit_table change:hide_to_hit_table', async (eventInfo) => {
   // hide/show to-Hit? isLocal should override global sheet settings
   const idArray = await getSectionIDsAsync('weapon');
-  const fields = idArray.flatMap((id) => [`repeating_weapon_${id}_weapon_whisper_to_hit_select`, `repeating_weapon_${id}_weapon_whisper_to_hit`]);
-  const v = await getAttrsAsync(['toggle_to_hit_table', 'hide_to_hit_table', ...fields]);
+  const fields = idArray.flatMap((id) => [`repeating_weapon_${id}_weapon_whisper_to_hit_select`]);
+  const v = await getAttrsAsync(['toggle_to_hit_table', 'hide_to_hit_table', 'weapon_whisper_to_hit', ...fields]);
   const isLocal = 0;
   // Map the IDs to an array of Promises
   const updatePromises = idArray.map((id) => getToHitRowUpdate(v, id, isLocal));
@@ -3172,7 +3190,7 @@ on('change:toggle_to_hit_table change:hide_to_hit_table', async (eventInfo) => {
 
 on('change:repeating_weapon:weapon_whisper_to_hit_select', async (eventInfo) => {
   const id = eventInfo.sourceAttribute.split('_')[2];
-  const v = await getAttrsAsync(['toggle_to_hit_table', `repeating_weapon_${id}_weapon_whisper_to_hit_select`, `repeating_weapon_${id}_weapon_whisper_to_hit`]);
+  const v = await getAttrsAsync(['toggle_to_hit_table', 'weapon_whisper_to_hit', `repeating_weapon_${id}_weapon_whisper_to_hit_select`]);
   const isLocal = 1;
   const output = await getToHitRowUpdate(v, id, isLocal);
   await setAttrsAsync(output, {silent: true});
@@ -3448,7 +3466,7 @@ on('change:toggle_npc change:sync_hp_flag change:hitpoints change:hitpoints_max 
 
 // AC Calcs
 const calcAC = async (recalc) => {
-  clog('Armor re-calculated');
+  // clog('Armor re-calculated');
   const v = await getAttrsAsync([
     ...armorAttrs,
     'armor_rating_flag',
@@ -3673,7 +3691,7 @@ on(
     // const thisEvent = eventInfo.sourceAttribute === undefined ? 'sheet opened' : eventInfo.sourceAttribute;
     const triggerEvent = eventInfo.triggerName;
     const recalc = triggerEvent === 'clicked:calcac' ? 1 : 0;
-    clog(`triggerEvent: ${triggerEvent} recalc:${recalc}`);
+    // clog(`triggerEvent: ${triggerEvent} recalc:${recalc}`);
     await calcAC(recalc);
   },
 );
@@ -3796,7 +3814,8 @@ const repeatingWeaponString = [
   'weapon_range_error',
   'weapon_dual',
   'weapon_tohitacadj',
-  'weapon_whisper_to_hit',
+  // no longer resides in repeating_weapon
+  // 'weapon_whisper_to_hit',
   'weapon_length',
   'weapon_space',
   'weapon_speed',
@@ -4262,7 +4281,7 @@ const hearnoiseCalc = async (migrate) => {
 const climbwallsCalc = async (migrate) => {
   const v = await getAttrsAsync(['climbwalls', 'climbwalls_base', 'climbwalls_racial_mod', 'climbwalls_ability_mod', 'climbwalls_magic']);
   const output = {};
-  let baseClimbwalls = int(v.climbwalls_base);
+  let baseClimbwalls = float(v.climbwalls_base);
   baseClimbwalls = baseClimbwalls >= 99.1 ? baseClimbwalls.toFixed(1) : Math.floor(baseClimbwalls);
   const racialClimbwalls = int(v.climbwalls_racial_mod);
   const abilityClimbwalls = int(v.climbwalls_ability_mod);
@@ -4449,11 +4468,22 @@ on(
       const levels = [v.level, v.level_2, v.level_3];
       // clog(`classNames: ${classNames} levels: ${levels}`);
       const index = classLinked - 1; // match index position
-      const currentClassName = (classNames[index] || '').trim();
+      const currentClassName = (classNames[index] || '').trim().toLowerCase();
       const currentLevel = +levels[index] || 0;
       const classSelected = await matchClassName(currentClassName);
       levelSelected = currentLevel;
-      output.thief_level = classSelected === 4 ? levelSelected : 0; // 4 = thief matchClassName()
+      // 4 = thief
+      if (classSelected === 4) {
+        if (currentClassName === 'assassin') {
+          // thief skills @ 2 lvl below their assassin lvl
+          levelSelected = Math.max(levelSelected - 2, 0);
+          output.thief_level = levelSelected;
+        } else {
+          output.thief_level = levelSelected;
+        }
+      } else {
+        output.thief_level = 0;
+      }
     }
 
     // Clamp level between 0 and 17 for the table lookup
@@ -4464,7 +4494,8 @@ on(
     skillKeys.forEach((key, i) => {
       output[key] = statValues[i];
     });
-    await setAttrsAsync(output, {silent: true});
+    // await setAttrsAsync(output, {silent: true});
+    await setAttrsAsync(output);
   },
 );
 
@@ -7580,3 +7611,181 @@ on('clicked:equipment-sort-undo', async (eventInfo) => {
     // clog(`Undo process finished. Sheet unlocked.`);
   }
 });
+
+// CRP
+// non-repeating buttons
+const buttonSet = [];
+
+// enables drag/drop of action buttons by syncing with a normal button
+on('sheet:opened change:character_name', async (eventInfo) => {
+  // console.log(`Syncing Action buttons for macrobar.`);
+  const idArrayWeapons = await getSectionIDsAsync('repeating_weapon');
+  const idArrayEquipment = await getSectionIDsAsync('repeating_equipment');
+  let output = {};
+  const v = await getAttrsAsync(['character_name']);
+  // process non-repeating buttons
+  output = buttonSet.reduce((all, one) => {
+    return {...all, [one]: `%{${v.character_name}|${one}-button}`};
+  }, {});
+  // process each repeating sections buttons
+  idArrayWeapons.forEach((id) => {
+    // repeating buttons
+    const repeatingButtonSet = ['weapon_attack_roll', 'weapon_attack_npc_roll'];
+    const attribute_values = repeatingButtonSet.reduce((all, one) => {
+      // added .replaceAll step for action buttons
+      return {...all, [`repeating_weapon_${id}_${one}`]: `%{${v.character_name}|repeating_weapon_${id}_${one.replaceAll('_', '-')}-button}`};
+    }, {});
+    output = {...output, ...attribute_values};
+  });
+  idArrayEquipment.forEach((id) => {
+    // repeating buttons
+    const repeatingButtonSet = ['equipment_roll'];
+    const attribute_values = repeatingButtonSet.reduce((all, one) => {
+      // added .replaceAll step for action buttons
+      return {...all, [`repeating_equipment_${id}_${one}`]: `%{${v.character_name}|repeating_equipment_${id}_${one.replaceAll('_', '-')}-button}`};
+    }, {});
+    output = {...output, ...attribute_values};
+  });
+  await setAttrsAsync(output, {silent: true});
+});
+
+on(
+  'clicked:repeating_weapon:weapon-attack-roll-button clicked:repeating_weapon:weapon-attack-npc-roll-button clicked:repeating_equipment:equipment-roll-button',
+  async (eventInfo) => {
+    const id = eventInfo.sourceAttribute.split('_')[2].toLowerCase();
+    console.log(`${eventInfo.triggerName} id:${id}`);
+    const fields = [
+      'toggle_to_hit_table',
+      'best_ac_hit_method',
+      'hide_best_ac_hit',
+      'thac0',
+      'thac00',
+      'weapon_whisper_to_hit',
+      `toggle_ranged_ammo`,
+      `repeating_weapon_${id}_weapon_attack_type`, // 1 || 3 is ranged
+      `repeating_weapon_${id}_weapon_ammo`,
+      `repeating_weapon_${id}_weapon_ammo_max`,
+      `toggle_equipment_uses`,
+      `repeating_equipment_${id}_equipment_current`,
+      `repeating_equipment_${id}_equipment_current_max`,
+    ];
+    const v = await getAttrsAsync(fields);
+    const output = {};
+    // repeating CRP rolls
+    const repeatingRolls = {
+      [`repeating_weapon_${id}_weapon-attack-roll-button`]: `@{whisper_pc} @{repeating_weapon_${id}_weapon_macro_text}`,
+      [`repeating_weapon_${id}_weapon-attack-npc-roll-button`]: `@{whisper_npc} @{repeating_weapon_${id}_weapon_macro_text} @{repeating_weapon_${id}_weapon_damage_chat_menu_npc}`,
+      [`repeating_equipment_${id}_equipment-roll-button`]: `@{repeating_equipment_${id}_equipment_macro_text}`,
+    };
+    // which button was pressed?
+    const trigger = eventInfo.triggerName.replace('clicked:', '');
+    const roll_string = repeatingRolls[trigger];
+    if (trigger.includes('weapon-attack-roll-button' || 'weapon-attack-npc-roll-button')) {
+      const useTHAC0 = int(v.toggle_to_hit_table);
+      const THAC0 = useTHAC0 ? int(v.thac00) : int(v.thac0);
+      const toHitTable = v.weapon_whisper_to_hit;
+      const hideBestAC = int(v.hide_best_ac_hit);
+      const trackAmmo = int(v.toggle_ranged_ammo) === 1 ? 1 : 0;
+      // test if value is odd
+      const isRanged = int(v[`repeating_weapon_${id}_weapon_attack_type`]) % 2 !== 0;
+      const ammo = int(v[`repeating_weapon_${id}_weapon_ammo`]);
+      const ammoMax = int(v[`repeating_weapon_${id}_weapon_ammo_max`]);
+      console.log(`Ranged Ammo - trackAmmo:${trackAmmo} isRanged:${isRanged} ammo:${ammo} ammoMax:${ammoMax}`);
+      await new Promise((resolve) => {
+        startRoll(roll_string, async (roll) => {
+          // console.log(roll);
+          const d20 = int(roll.results.attack1.dice[0]);
+          const totalRoll = int(roll.results.attack1.result);
+          const bestAcHitMethod = int(v.best_ac_hit_method) || 0;
+          let bestAC = '';
+          // Option 0: RAW (total adjusted roll)
+          if (bestAcHitMethod === 0) {
+            if (totalRoll < 20) {
+              bestAC = THAC0 - totalRoll;
+            } else if (totalRoll <= 25) {
+              bestAC = THAC0 - 25;
+            } else {
+              bestAC = THAC0 - totalRoll - 5;
+            }
+          }
+          // Option 1: Nat20 Always Hits (Any AC)
+          else if (bestAcHitMethod === 1) {
+            if (d20 === 20) {
+              bestAC = '-99'; // Auto-hit bypass
+            } else if (totalRoll < 20) {
+              bestAC = THAC0 - totalRoll;
+            } else if (totalRoll <= 25) {
+              bestAC = THAC0 - 25;
+            } else {
+              bestAC = THAC0 - totalRoll - 5;
+            }
+          }
+          // Option 2: DMG p82 Official Clarification
+          else if (bestAcHitMethod === 2) {
+            if (d20 === 20) {
+              if (totalRoll < 20) {
+                bestAC = THAC0 - 25; // Penalties frozen on plateau
+              } else {
+                bestAC = THAC0 - totalRoll - 5; // unfreezes bonuses for target numbers 21+
+              }
+            } else {
+              if (totalRoll < 20) {
+                bestAC = THAC0 - totalRoll;
+              } else {
+                bestAC = THAC0 - 25; // totalRoll >= 20 reaches but cannot extend past plateau without a Nat 20
+              }
+            }
+          }
+
+          // let methodText = 'RAW';
+          // if (bestAcHitMethod === 1) methodText = 'Nat20';
+          // if (bestAcHitMethod === 2) methodText = 'p82';
+          // console.log(`Method:${methodText} THAC0:${THAC0} d20:${d20} totalRoll:${totalRoll} BEST_AC_HIT:${bestAC}`);
+          // written to an attr for macro and API access
+          output.best_ac_hit = bestAC;
+          finishRoll(roll.rollId, {
+            //'name of key': 'computed value'
+            // hides "hits AC" in roll based on sheet settings
+            bestAChit: hideBestAC ? 99 : bestAC,
+            ammo: Math.max(0, isRanged && trackAmmo === 1 ? ammo - 1 : ammo),
+          });
+          resolve();
+
+          // post the to-Hit table macro
+          await new Promise((resolve) => {
+            startRoll(toHitTable, (roll2) => {
+              // console.log(roll2);
+              finishRoll(roll2.rollId);
+              resolve();
+            });
+          });
+          output[`repeating_weapon_${id}_weapon_ammo`] = Math.max(0, isRanged && trackAmmo === 1 ? ammo - 1 : ammo);
+          setAttrs(output, {silent: true});
+        });
+      });
+    } else if (trigger.includes('equipment-roll-button')) {
+      const trackEquipment = int(v.toggle_equipment_uses) === 1 ? 1 : 0;
+      const uses = int(v[`repeating_equipment_${id}_equipment_current`]);
+      const usesMax = int(v[`repeating_equipment_${id}_equipment_current_max`]);
+      console.log(`Equipment Uses - trackEquipment:${trackEquipment} current:${uses} current_max:${usesMax}`);
+      await new Promise((resolve) => {
+        startRoll(roll_string, (roll) => {
+          console.log(roll);
+          finishRoll(roll.rollId, {
+            //'name of key': 'computed value'
+            uses: Math.max(0, trackEquipment === 1 ? uses - 1 : uses),
+          });
+          resolve();
+        });
+        output[`repeating_equipment_${id}_equipment_current`] = Math.max(0, trackEquipment === 1 ? uses - 1 : uses);
+        setAttrs(output, {silent: true});
+      });
+    } else {
+      // NORMAL ROLL NO SPECIAL HANDLING NEEDED
+      console.log(`Normal roll - No special handling`);
+      startRoll(roll_string, (roll) => {
+        finishRoll(roll.rollId);
+      });
+    }
+  },
+);

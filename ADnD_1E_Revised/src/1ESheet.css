@@ -4576,12 +4576,11 @@ section.npc-box.statblock3 .image-avatar {
 }
 
 .sheet-rolltemplate-attacks-table div {
-  border-top-color: transparent;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  box-shadow: 2px 4px 5px oklch(0% 0 0);
-  margin: -1.75em 0 0.5em 0;
-  padding-bottom: 0.25em;
+  border: 3px solid oklch(0% 0 0);
+  border-width: 2px;
+  margin: 0;
+  outline: none;
+  padding: 5px 3px 3px 0;
 }
 
 .sheet-rolltemplate-attacks .sheet-row,
@@ -4948,6 +4947,11 @@ section.npc-box.statblock3 .image-avatar {
   margin-bottom: 2px;
 }
 
+.sheet-rolltemplate-attacks-table .sheet-wrap-ToHit-table > span:first-child,
+.sheet-rolltemplate-attacks-table .sheet-wrap-ToHit-table > span:nth-child(2) {
+  padding-top: 2px;
+}
+
 .sheet-rolltemplate-attacks .sheet-wrap-ToHit,
 .sheet-rolltemplate-attacks-table .sheet-wrap-ToHit {
   background-color: transparent;
@@ -5013,31 +5017,10 @@ section.npc-box.statblock3 .image-avatar {
   display: inline-flex;
 }
 
-
-/* .sheet-rolltemplate-attacks .sheet-wrap-ToHit span.inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-attacks-table .sheet-wrap-ToHit span.inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-general .sheet-row .sheet-span.inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-attacks .sheet-row .sheet-span-two span.inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-attacks .sheet-row.sheet-all-props span.inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-general .sheet-row.sheet-all-props span.inlinerollresult.inlinerollresult {
-  background-color: oklch(95.774% 0.12615 104.673);
-  color: oklch(0% 0 0);
-  display: inline-block;
-  font-family: var(--font-inputs);
-  line-height: normal;
-  min-height: 1em;
-  min-width: 1.2em;
-  padding: 0 2px 0 2px;
-  text-align: center;
-  text-shadow: none;
-  white-space: nowrap;
-} */
-
 .sheet-rolltemplate-attacks .inlinerollresult.inlinerollresult,
 .sheet-rolltemplate-general .inlinerollresult.inlinerollresult,
 .sheet-rolltemplate-attacks-table .inlinerollresult.inlinerollresult {
   align-items: center;
-  aspect-ratio: 1;
   background-color: oklch(95.774% 0.12615 104.673);
   box-sizing: border-box;
   color: oklch(0% 0 0);
@@ -5047,6 +5030,7 @@ section.npc-box.statblock3 .image-avatar {
   font-weight: var(--text-wt500);
   margin: 0 1px 3px 1px;
   min-height: 1.4em;
+  min-width: 2ch;
   padding: 0 2px 0 2px;
   place-content: center;
   text-align: center;
@@ -5129,9 +5113,14 @@ section.npc-box.statblock3 .image-avatar {
   width: calc(100% + 10px);
 }
 
+/* float the table to the top of the secret container */
 .sheet-rolltemplate-attacks-table {
-  margin-top: -4em;
-}
+  position: relative;
+  margin-top: calc(-43px + min(17px,
+        max(0px,
+        calc(1700% - 6224px))));
+        /* 1px-wide CSS trigger that transitions the margin by exactly one line-height */
+      }
 
 .sheet-rolltemplate-attacks div.sheet-color-black .sheet-template-header,
 .sheet-rolltemplate-attacks div.sheet-color-black .sheet-template-footer,
