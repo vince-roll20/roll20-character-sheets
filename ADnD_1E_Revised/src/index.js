@@ -3432,7 +3432,7 @@ const calcHP = async () => {
   const output = {};
   const isMonster = int(v.toggle_npc);
   let syncHpFlag = int(v.sync_hp_flag);
-  // if monster do not sync, otherwise follow user setting
+  // if monster do not sync, otherwise follow user settings
   syncHpFlag = isMonster ? 0 : syncHpFlag;
   const hitPointsMax = int(v.hitpoints_max);
   const hitpoints_1_class = Math.max(0, int(v.hitpoints_1_class));
