@@ -84,7 +84,13 @@
             <li>Added optional Equipment Uses tracking. If enabled from the sheet settings, each Equipment roll will reduce Uses by 1. This will be seen with the roll and adjusted on the equipment's row.</li>
             <li>Moved to-hit table macro outside of repeating_weapon.</li>
             <li>Added an option to show "hits AC" with attack rolls. Uses THAC0, the adjusted to-Hit roll, and the preferred method for handling the attack matrix to determine the best AC the attack can hit.</li>
-            <li>Added an option to pick the preferred method for handling the to-Hit matrix determining the best AC the attack can hit. (RAW, nat20 Always Hits, or DMG p82).</li>
+            <li>Added an option to pick the preferred method for handling the to-Hit matrix determining the best AC the attack can hit.
+              <ol>
+                <li>RAW (an adjusted 20 hits the entire range of repeating 20's. An adjusted roll >25 can hit AC's above last repeating 20.) This would be the default.</li>
+                <li>nat20 Always Hits (same as the RAW option, but a natural 20 always hits regardless of bonuses or the combatants AC.)</li>
+                <li>DMG p82 (Natural 20 hits the entire range of repeating 20's regardless of bonuses. To hit AC's above the range of the repeating 20's, a natural 20 plus bonuses are required.)</li>
+              </ol>
+            </li>
             <li>Sheet default settings have been updated with the new options.</li>
             <li>Included a sheet update that checks and updates the default Attack macro. This only works for unedited attack macros. If you have custom attack macros you will need to manually update those macros to enable the new CRP rolls. <code>{{bestAChit=[[0]]}}</code> was added to handle "hits AC" and <code>{{ammo=[[ @{weapon_ammo} ]]/[[ @{weapon_ammo|max} ]]}}</code> was changed/updated to <code>{{ammo=[[ @{weapon_ammo} ]]}} {{ammoMax=[[ @{weapon_ammo|max} ]]}}</code> to handle Ranged ammo tracking. Reminder, you can also reset all macros, by section, to their defaults, from the sheet settings page. You lose any macro-text edits but are guaranteed to get the current default macro.</li>
             <li>Included a sheet update that checks and updates the default Equipment macro. This only works for unedited Equipment macros. If you have custom Equipment macros you will need to manually update those macros to enable the new CRP rolls. <code>{{uses=@{equipment_current}}}</code> was changed/updated to <code>{{uses=[[ @{equipment_current} ]]}}</code> to handle Equipment Uses tracking. Reminder, you can also reset all macros, by section, to their defaults, from the sheet settings page. You lose any macro-text edits but are guaranteed to get the current default macro.</li>

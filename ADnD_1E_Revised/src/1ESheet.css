@@ -3611,7 +3611,7 @@ section.npc-box.statblock3 .image-avatar {
   max-height: 300px;
 }
 
-.charsheet li {
+.charsheet ul > li {
   position: relative;
   list-style: disc !important;
   margin-left: 2em;
