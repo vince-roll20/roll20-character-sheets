@@ -72,7 +72,7 @@
           <h5 class="right two-columns span-all">
             <span class="left">
               <span>v</span><span name="attr_sheet_version"></span>
-              <span class="right"> • 9/27/26'</span>
+              <span class="right"> • 10/4/26'</span>
             </span>
           </h5>
           <ul>
@@ -4421,7 +4421,7 @@
                     <span>Use Fighter 5%:</span>
                     <input type="checkbox" name="attr_toggle_fighter5" value="1" />
                   </label>
-                  <label title="@{best_ac_hit_method} | Method used to determine the best AC hit when making attack rolls.">
+                  <label title="@{best_ac_hit_method} | Method used to determine the best AC hit when making attack rolls.&#10;1. RAW (an adjusted 20 hits the entire range of repeating 20's. An adjusted roll >25 can hit AC's above last repeating 20.)  This would be the default.&#10;2. nat20 Always Hits (same as the RAW option, but a natural 20 always hits regardless of bonuses or the combatants AC.)&#10;3. DMG p82 (Natural 20 hits the entire range of repeating 20's regardless of bonuses. To hit AC's above the range of the repeating 20's, a natural 20 plus bonuses are required.)">
                     <span>"Hits AC" Method:</span>
                     <select name="attr_best_ac_hit_method" style="width:7em;">
                       <option value="0" selected>RAW</option>
@@ -5137,7 +5137,7 @@
                   <span class="sheet-row">{{#bigtext12}}<span class="sheet-big-text sheet-span-two">{{bigtext12}}</span>{{/bigtext12}}</span>
                   {{#attack1}}
                     <span class="sheet-row">
-                      <span class="sheet-span-two sheet-tcat">Attack ={{attack1}}
+                      <span class="sheet-span-two sheet-tcat"><span>Attack =</span>&nbsp;{{attack1}}
                         {{#rollWasCrit() attack1}}
                           <!-- Only seen if 'Use Crit Damage' is enabled -->
                           {{#rollGreater() crit 0}}
@@ -5145,7 +5145,7 @@
                           {{/rollGreater() crit 0}}
                         {{/rollWasCrit() attack1}}
                         {{#^rollTotal() computed::bestAChit 99}}
-                          {{#bestAChit}}hits AC{{computed::bestAChit}}{{/bestAChit}}
+                          {{#bestAChit}}<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
                         {{/^rollTotal() computed::bestAChit 99}}
                       </span>
                     </span>
@@ -5187,7 +5187,7 @@
 
                   {{#attack2}}
                     <span class="sheet-row">
-                      <span class="sheet-span-two sheet-tcat">Attack 2 = {{attack2}}
+                      <span class="sheet-span-two sheet-tcat"><span>Attack 2 =</span>&nbsp;{{attack2}}
                         {{#rollWasCrit() attack2}}
                           <!-- Only seen if 'Use Crit Damage' is enabled -->
                           {{#rollGreater() crit 0}}
@@ -5195,7 +5195,7 @@
                           {{/rollGreater() crit 0}}
                         {{/rollWasCrit() attack2}}
                         {{#^rollTotal() computed::bestAChit 99}}
-                          {{#bestAChit}}hits AC{{computed::bestAChit}}{{/bestAChit}}
+                          {{#bestAChit}}<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
                         {{/^rollTotal() computed::bestAChit 99}}
                       </span>
                     </span>
@@ -5225,7 +5225,7 @@
 
                   {{#attack3}}
                     <span class="sheet-row">
-                      <span class="sheet-span-two sheet-tcat">Attack 3 = {{attack3}}
+                      <span class="sheet-span-two sheet-tcat"><span>Attack 3 =</span>&nbsp;{{attack3}}
                         {{#rollWasCrit() attack3}}
                           <!-- Only seen if 'Use Crit Damage' is enabled -->
                           {{#rollGreater() crit 0}}
@@ -5233,7 +5233,7 @@
                           {{/rollGreater() crit 0}}
                         {{/rollWasCrit() attack3}}
                         {{#^rollTotal() computed::bestAChit 99}}
-                          {{#bestAChit}}hits AC{{computed::bestAChit}}{{/bestAChit}}
+                          {{#bestAChit}}<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
                         {{/^rollTotal() computed::bestAChit 99}}
                       </span>
                     </span>
@@ -5263,7 +5263,7 @@
 
                   {{#attack4}}
                     <span class="sheet-row">
-                      <span class="sheet-span-two sheet-tcat">Attack 4 = {{attack4}}
+                      <span class="sheet-span-two sheet-tcat"><span>Attack 4 =</span>&nbsp;{{attack4}}
                         {{#rollWasCrit() attack4}}
                           <!-- Only seen if 'Use Crit Damage' is enabled -->
                           {{#rollGreater() crit 0}}
@@ -5271,7 +5271,7 @@
                           {{/rollGreater() crit 0}}
                         {{/rollWasCrit() attack4}}
                         {{#^rollTotal() computed::bestAChit 99}}
-                          {{#bestAChit}}hits AC{{computed::bestAChit}}{{/bestAChit}}
+                          {{#bestAChit}}<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
                         {{/^rollTotal() computed::bestAChit 99}}
                       </span>
                     </span>

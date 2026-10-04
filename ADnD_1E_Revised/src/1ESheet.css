@@ -4770,7 +4770,7 @@ section.npc-box.statblock3 .image-avatar {
 .sheet-rolltemplate-attacks .sheet-smaller-text,
 .sheet-rolltemplate-general .sheet-smaller-text {
   font-size: var(--text-sm);
-  line-height: 1.85;
+  line-height: 1.85em;
   padding: 2px 0 2px 0;
 }
 
@@ -5028,8 +5028,8 @@ section.npc-box.statblock3 .image-avatar {
   font-family: var(--font-inputs);
   font-size: var(--text-xxl);
   font-weight: var(--text-wt500);
-  margin: 0 1px 3px 1px;
-  min-height: 1.4em;
+  margin: 0 2px 0 2px;
+  min-height: 2ch;
   min-width: 2ch;
   padding: 0 2px 0 2px;
   place-content: center;

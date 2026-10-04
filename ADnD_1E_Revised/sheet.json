@@ -182,7 +182,7 @@
         "DMG p82|2"
       ],
       "default": "0",
-      "description": "Method used to determine the best AC hit when making attack rolls. This can still be enabled/edited per sheet."
+      "description": "Method used to determine the best AC hit when making attack rolls. 1. RAW (an adjusted 20 hits the entire range of repeating 20's. An adjusted roll >25 can hit AC's above last repeating 20.) This would be the default. 2. nat20 Always Hits (same as the RAW option, but a natural 20 always hits regardless of bonuses or the combatants AC.) 3. DMG p82 (Natural 20 hits the entire range of repeating 20's regardless of bonuses. To hit AC's above the range of the repeating 20's, a natural 20 plus bonuses are required.) This can still be enabled/edited per sheet."
     },
     {
       "attribute": "toggle_auto_damage",
