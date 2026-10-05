@@ -4735,7 +4735,6 @@ section.npc-box.statblock3 .image-avatar {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   color: var(--color-white1);
-  margin-top: -2px;
   min-height: 1em;
   text-align: center;
   text-shadow: -1px -1px 0 oklch(0% 0 0), 1px -1px 0 oklch(0% 0 0), -1px 1px 0 oklch(0% 0 0), 1px 1px 0 oklch(0% 0 0);
