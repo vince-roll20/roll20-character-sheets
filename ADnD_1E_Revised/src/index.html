@@ -77,7 +77,7 @@
           </h5>
           <ul>
             <h5>Latest</h5>
-            <li>Changed the attack's "show to-Hit?" AC table to a /ss roll. (only viewable by the DM)</li>
+            <li>Changed the attack's "show to-Hit?" AC table to a /ssr roll. (only viewable by the DM)</li>
             <li>Updated Attack rolls to Custom Roll Parsing(CRP). Allows determining the best AC hit, ammo tracking, and more without API.</li>
             <li>Added optional Ranged weapon ammo tracking. If enabled from the sheet settings, each attack roll will reduce Ranged ammo by 1. This will be seen with the attack roll and adjusted on the weapon's row.</li>
             <li>Updated Equipment rolls to Custom Roll Parsing(CRP). Allows tracking Uses without API.</li>
@@ -86,9 +86,9 @@
             <li>Added an option to show "hits AC" with attack rolls. Uses THAC0, the adjusted to-Hit roll, and the preferred method for handling the attack matrix to determine the best AC the attack can hit.</li>
             <li>Added an option to pick the preferred method for handling the to-Hit matrix determining the best AC the attack can hit.
               <ol>
-                <li>RAW (an adjusted 20 hits the entire range of repeating 20's. An adjusted roll >25 can hit AC's above last repeating 20.) This would be the default.</li>
-                <li>nat20 Always Hits (same as the RAW option, but a natural 20 always hits regardless of bonuses or the combatants AC.)</li>
-                <li>DMG p82 (Natural 20 hits the entire range of repeating 20's regardless of bonuses. To hit AC's above the range of the repeating 20's, a natural 20 plus bonuses are required.)</li>
+                <li><b>RAW</b> (an adjusted 20 hits the entire range of repeating 20's. An adjusted roll >25 can hit AC's above last repeating 20.) This would be the default.</li>
+                <li><b>nat20 Always Hits</b> (same as the RAW option, but a natural 20 always hits regardless of bonuses or the combatants AC.)</li>
+                <li><b>DMG p82</b> (Natural 20 hits the entire range of repeating 20's regardless of bonuses. To hit AC's above the range of the repeating 20's, a natural 20 plus bonuses are required.)</li>
               </ol>
             </li>
             <li>Sheet default settings have been updated with the new options.</li>
@@ -2690,7 +2690,7 @@
               <!-- Attacks -->
               <div class="sect">
                 <!-- weapon_whisper_to_hit relocated: no need to reside within repeating_weapon -->
-                <textarea class="hidden" name="attr_weapon_whisper_to_hit">/ss gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}</textarea>
+                <textarea class="hidden" name="attr_weapon_whisper_to_hit">/ssr gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}</textarea>
                 <input type="checkbox" class="hidden toggle-to-hit-table" name="attr_toggle_to_hit_table" value="1" />
                 <fieldset class="repeating_weapon">
                   <input type="hidden" class="weapon-type-toggle" name="attr_weapon_attack_type_flag" value="0" />
@@ -2875,7 +2875,7 @@
                           <option value="1" class="thac0-box">THACO</option>
                           <option value="2">No</option>
                         </select>
-                        <span class="label-under-small stack-text" title="Whispers the to-Hit AC table to DM with the attack?">show toHit?</span>
+                        <span class="label-under-small stack-text" title="Whispers the to-Hit AC table to DM with the attack?">/ssr toHit?</span>
                       </label>
                     </span>
                     <!--deprecated: weapon_dmgbonus has been replaced with weapon_attackdmgbonus-->
@@ -4414,18 +4414,10 @@
                   </label>
                 </span>
                 <span class="inline-label wrap width-fill">
-                  <h4>Misc. Options:</h4>
-                  <label title="@{ability_check_die} | Die/Dice vs Ability Score. e.g. 1d20, 4d6, 3d6, etc.">
-                    <span>Ability Check die:</span>
-                    <input type="text" class="width-small-plus border" name="attr_ability_check_die" value="1d20" />
-                  </label>
+                  <h4>Attack Options:</h4>
                   <label title="@{toggle_to_hit_table} | Use THAC0 instead of Attack Matrix. NOTE: The Autofill Table option uses the 1e table data to establish the base THAC0, but it does not use the repeating 20's.">
                     <span>Use THAC0:</span>
                     <input type="checkbox" name="attr_toggle_to_hit_table" value="1" />
-                  </label>
-                  <label title="@{toggle_fighter5} | Use a 5% progression to-Hit table. This is a Fighter only option and will have no effect for other classes.">
-                    <span>Use Fighter 5%:</span>
-                    <input type="checkbox" name="attr_toggle_fighter5" value="1" />
                   </label>
                   <label title="@{best_ac_hit_method} | Method used to determine the best AC hit when making attack rolls.&#10;1. RAW (an adjusted 20 hits the entire range of repeating 20's. An adjusted roll >25 can hit AC's above last repeating 20.)  This would be the default.&#10;2. nat20 Always Hits (same as the RAW option, but a natural 20 always hits regardless of bonuses or the combatants AC.)&#10;3. DMG p82 (Natural 20 hits the entire range of repeating 20's regardless of bonuses. To hit AC's above the range of the repeating 20's, a natural 20 plus bonuses are required.)">
                     <span>"Hits AC" Method:</span>
@@ -4443,6 +4435,9 @@
                     <span>Use Crit Damage:</span>
                     <input type="checkbox" name="attr_toggle_critdamage" value="1" />
                   </label>
+                </span>
+                <span class="inline-label wrap width-fill">
+                  <h4>Tracking:</h4>
                   <label title="@{toggle_ranged_ammo} | Each attack roll will reduce Ranged ammo by 1.">
                     <span>Track Ranged Ammo:</span>
                     <input type="checkbox" name="attr_toggle_ranged_ammo" value="1" />
@@ -4450,6 +4445,21 @@
                   <label title="@{toggle_equipment_uses} | Each equipment roll will reduce Uses by 1.">
                     <span>Track Equipment Uses:</span>
                     <input type="checkbox" name="attr_toggle_equipment_uses" value="1" />
+                  </label>
+                  <label title="@{toggle_special_ability_uses} | Each special ability roll will reduce Uses by 1.">
+                    <span>Track Special Ability Uses:</span>
+                    <input type="checkbox" name="attr_toggle_special_ability_uses" value="1" />
+                  </label>
+                </span>
+                <span class="inline-label wrap width-fill">
+                  <h4>Misc. Options:</h4>
+                  <label title="@{ability_check_die} | Die/Dice vs Ability Score. e.g. 1d20, 4d6, 3d6, etc.">
+                    <span>Ability Check die:</span>
+                    <input type="text" class="width-small-plus border" name="attr_ability_check_die" value="1d20" />
+                  </label>
+                  <label title="@{toggle_fighter5} | Use a 5% progression to-Hit table. This is a Fighter only option and will have no effect for other classes.">
+                    <span>Use Fighter 5%:</span>
+                    <input type="checkbox" name="attr_toggle_fighter5" value="1" />
                   </label>
                   <label title="@{toggle_lbs} | Use Lbs instead of gold pieces when determining encumbrance. Carrying capacities and carried coin weight will be divided by 10. Per-item weights need to be entered as lbs in order for the sheet to properly calculate encumbrance.">
                     <span>Use Lbs:</span>
@@ -4521,6 +4531,7 @@
                     <button type="action" name="act_addturnundead2"><span>+Add</span></button>
                   </label>
                 </span>
+                <!-- Hide -->
                 <span class="six-columns">
                   <h4 style="grid-row: 1/3; justify-self: left;">Hide Areas:</h4>
                   <label class="inline-label" title="@{toggle_thief_skills} | Hides Thief Skills and melee attack backstab bonuses.">
@@ -4579,11 +4590,12 @@
                   <label class="span-two"></label>
                   <span class="span-all text-notes">These options will show/hide sections of the sheet. Some options may hide related fields as well. e.g. hiding "Thief Skills" will also hide "Backstab" in attacks.</span>
                 </span>
+                <!-- Whisper -->
                 <span class="five-columns">
                   <h4>Whisper Options:</h4>
                   <label class="span-two center">
                     <span>PC Rolls:</span>
-                    <select class="width-medium" name="attr_whisper_pc" title="@{whisper_pc} | rolls from the PC page.">
+                    <select class="width-medium" name="attr_whisper_pc" title="@{whisper_pc} | Whisper rolls from the PC page.">
                       <option value=" " selected>Open Rolls</option>
                       <option value="/w gm">Whisper Rolls</option>
                       <option value="?{Whisper to DM?|no|yes,/w gm}">Ask</option>
@@ -4591,7 +4603,7 @@
                   </label>
                   <label class="span-two center">
                     <span>Monster Rolls:</span>
-                    <select class="width-medium" name="attr_whisper_npc" title="@{whisper_npc} | rolls from the Monster page.">
+                    <select class="width-medium" name="attr_whisper_npc" title="@{whisper_npc} | Whisper rolls from the Monster page.">
                       <option value=" " selected>Open Rolls</option>
                       <option value="/w gm">Whisper Rolls</option>
                       <option value="?{Whisper to DM?|no|yes,/w gm}">Ask</option>

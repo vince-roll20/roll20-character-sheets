@@ -4637,7 +4637,6 @@ section.npc-box.statblock3 .image-avatar {
   flex-wrap: wrap;
   margin-inline: auto;
   margin-left: 0;
-  white-space: nowrap;
 }
 
 /* center */
@@ -4692,7 +4691,6 @@ section.npc-box.statblock3 .image-avatar {
 .sheet-rolltemplate-general div span.sheet-span-two {
   display: block;
   grid-column: span 2;
-  justify-content: center;
   position: relative;
   text-align: center;
 }
