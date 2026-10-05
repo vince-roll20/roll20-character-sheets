@@ -935,11 +935,20 @@ const abilityMacroUpdate = async (current_version, final_version) => {
       '&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll= [[ @{ability_die} + @{ability_mod}[MOD] ]]}} {{freetext=@{ability_short_description} @{ability_description}}} {{uses=@{ability_current}}} {{uses_max=[[ @{ability_current|max} ]]}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}',
     ability_old_v5:
       '&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll= [[ @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}} {{uses=@{ability_current}}} {{uses_max=[[@{ability_current|max}]]}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}',
-    ability_current:
+    ability_old_v6:
       '&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll= [[ 0 + @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}} {{uses=@{ability_current}}} {{uses_max=[[ 0 + @{ability_current|max} ]]}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}',
+    ability_current:
+      '&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll=[[ 0 + @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}} {{uses=[[ @{ability_current} ]]}} {{uses_max=[[ @{ability_current|max} ]]}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}',
   };
   // Create a list of all old versions for easier checking
-  const oldVersions = [replacements.ability_old, replacements.ability_old_v2, replacements.ability_old_v3, replacements.ability_old_v4, replacements.ability_old_v5];
+  const oldVersions = [
+    replacements.ability_old,
+    replacements.ability_old_v2,
+    replacements.ability_old_v3,
+    replacements.ability_old_v4,
+    replacements.ability_old_v5,
+    replacements.ability_old_v6,
+  ];
   _.each(idArray, (id) => {
     const attrName = `repeating_ability_${id}_ability_macro_text`;
     const currentText = v[attrName];
@@ -1912,6 +1921,9 @@ versionator = async (current_version, final_version) => {
   if (current_version < 1.72) {
     return await equipmentMacroUpdate(1.72, final_version);
   }
+  if (current_version < 1.73) {
+    return await abilityMacroUpdate(1.73, final_version);
+  }
   // All updates completed
   const finalCheck = await getAttrsAsync(['sheet_version', 'old_character']);
   const actualAttrVersion = parseFloat(finalCheck.sheet_version) || 0;
@@ -1929,7 +1941,7 @@ versionator = async (current_version, final_version) => {
 };
 
 on('sheet:opened', async () => {
-  const final_version = 1.72; // must be >= last update versionator()
+  const final_version = 1.73; // must be >= last update versionator()
   const v = await getAttrsAsync(['sheet_version', 'old_character']);
   let current_version = float(v.sheet_version);
   // New Sheet?
@@ -7621,6 +7633,7 @@ on('sheet:opened change:character_name', async (eventInfo) => {
   // console.log(`Syncing Action buttons for macrobar.`);
   const idArrayWeapons = await getSectionIDsAsync('repeating_weapon');
   const idArrayEquipment = await getSectionIDsAsync('repeating_equipment');
+  const idArrayAbility = await getSectionIDsAsync('repeating_ability');
   let output = {};
   const v = await getAttrsAsync(['character_name']);
   // process non-repeating buttons
@@ -7646,11 +7659,20 @@ on('sheet:opened change:character_name', async (eventInfo) => {
     }, {});
     output = {...output, ...attribute_values};
   });
+  idArrayAbility.forEach((id) => {
+    // repeating buttons
+    const repeatingButtonSet = ['ability_roll', 'ability_npc_roll'];
+    const attribute_values = repeatingButtonSet.reduce((all, one) => {
+      // added .replaceAll step for action buttons
+      return {...all, [`repeating_ability_${id}_${one}`]: `%{${v.character_name}|repeating_ability_${id}_${one.replaceAll('_', '-')}-button}`};
+    }, {});
+    output = {...output, ...attribute_values};
+  });
   await setAttrsAsync(output, {silent: true});
 });
 
 on(
-  'clicked:repeating_weapon:weapon-attack-roll-button clicked:repeating_weapon:weapon-attack-npc-roll-button clicked:repeating_equipment:equipment-roll-button',
+  'clicked:repeating_weapon:weapon-attack-roll-button clicked:repeating_weapon:weapon-attack-npc-roll-button clicked:repeating_equipment:equipment-roll-button clicked:repeating_ability:ability-roll-button clicked:repeating_ability:ability-npc-roll-button',
   async (eventInfo) => {
     const id = eventInfo.sourceAttribute.split('_')[2].toLowerCase();
     console.log(`${eventInfo.triggerName} id:${id}`);
@@ -7661,13 +7683,16 @@ on(
       'thac0',
       'thac00',
       'weapon_whisper_to_hit',
-      `toggle_ranged_ammo`,
+      'toggle_ranged_ammo',
+      'toggle_equipment_uses',
+      'toggle_special_ability_uses',
       `repeating_weapon_${id}_weapon_attack_type`, // 1 || 3 is ranged
       `repeating_weapon_${id}_weapon_ammo`,
       `repeating_weapon_${id}_weapon_ammo_max`,
-      `toggle_equipment_uses`,
       `repeating_equipment_${id}_equipment_current`,
       `repeating_equipment_${id}_equipment_current_max`,
+      `repeating_ability_${id}_ability_current`,
+      `repeating_ability_${id}_ability_current_max`,
     ];
     const v = await getAttrsAsync(fields);
     const output = {};
@@ -7676,6 +7701,8 @@ on(
       [`repeating_weapon_${id}_weapon-attack-roll-button`]: `@{whisper_pc} @{repeating_weapon_${id}_weapon_macro_text}`,
       [`repeating_weapon_${id}_weapon-attack-npc-roll-button`]: `@{whisper_npc} @{repeating_weapon_${id}_weapon_macro_text} @{repeating_weapon_${id}_weapon_damage_chat_menu_npc}`,
       [`repeating_equipment_${id}_equipment-roll-button`]: `@{repeating_equipment_${id}_equipment_macro_text}`,
+      [`repeating_ability_${id}_ability-roll-button`]: `@{whisper_pc} @{repeating_ability_${id}_ability_macro_text}`,
+      [`repeating_ability_${id}_ability-roll-npc-button`]: `@{whisper_npc} @{repeating_ability_${id}_ability_macro_text}`,
     };
     // which button was pressed?
     const trigger = eventInfo.triggerName.replace('clicked:', '');
@@ -7770,7 +7797,7 @@ on(
       console.log(`Equipment Uses - trackEquipment:${trackEquipment} current:${uses} current_max:${usesMax}`);
       await new Promise((resolve) => {
         startRoll(roll_string, (roll) => {
-          console.log(roll);
+          // console.log(roll);
           finishRoll(roll.rollId, {
             //'name of key': 'computed value'
             uses: Math.max(0, trackEquipment === 1 ? uses - 1 : uses),
@@ -7778,6 +7805,23 @@ on(
           resolve();
         });
         output[`repeating_equipment_${id}_equipment_current`] = Math.max(0, trackEquipment === 1 ? uses - 1 : uses);
+        setAttrs(output, {silent: true});
+      });
+    } else if (trigger.includes('ability-roll-button' || 'ability-npc-roll-button')) {
+      const trackAbility = int(v.toggle_special_ability_uses) === 1 ? 1 : 0;
+      const uses = int(v[`repeating_ability_${id}_ability_current`]);
+      const usesMax = int(v[`repeating_ability_${id}_ability_current_max`]);
+      console.log(`Ability Uses - trackAbility:${trackAbility} current:${uses} current_max:${usesMax}`);
+      await new Promise((resolve) => {
+        startRoll(roll_string, (roll) => {
+          // console.log(roll);
+          finishRoll(roll.rollId, {
+            //'name of key': 'computed value'
+            uses: Math.max(0, trackAbility === 1 ? uses - 1 : uses),
+          });
+          resolve();
+        });
+        output[`repeating_ability_${id}_ability_current`] = Math.max(0, trackAbility === 1 ? uses - 1 : uses);
         setAttrs(output, {silent: true});
       });
     } else {
