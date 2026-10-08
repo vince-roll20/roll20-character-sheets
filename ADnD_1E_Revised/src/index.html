@@ -5438,7 +5438,7 @@
                                         {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
                                       {{/rollGreater() computed::ammo 0}}
                                       {{#rollTotal() computed::ammo 0}}
-                                        {{#ammo}}<span class="sheet-bold">No Ammo!&nbsp;</span>{{computed::ammo}}{{/ammo}}
+                                        {{#ammo}}<br><span class="sheet-bold">NO MORE AMMO!&nbsp;</span>{{computed::ammo}}{{/ammo}}
                                         {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
                                       {{/rollTotal() computed::ammo 0}}
                                     </span>
@@ -5726,13 +5726,19 @@
 
                   <span class="sheet-row">
                     <span class="sheet-span-two sheet-tcat sheet-right">
-                      {{#uses_max}}
-                        {{#^rollTotal() uses_max 0}}
-                          {{#uses}}
-                            <span class="sheet-inlineroll-reset">Uses:{{computed::uses}}/{{uses_max}}</span>
-                          {{/uses}}
-                        {{/^rollTotal() uses_max 0}}
-                      {{/uses_max}}
+                      {{#rollGreater() uses_max 0}}
+                        <span class="sheet-inlineroll-reset">
+                          {{#rollGreater() computed::uses 0}}
+                            {{#uses}}<span class="sheet-bold">Uses:&nbsp;</span>{{computed::uses}}{{/uses}}
+                            {{#uses_max}}<span class="sheet-bold">/</span>{{uses_max}}{{/uses_max}}
+                          {{/rollGreater() computed::uses 0}}
+                          {{#rollTotal() computed::uses 0}}
+                            {{#uses}}<span class="sheet-bold">NO MORE USES!&nbsp;</span>{{computed::uses}}{{/uses}}
+                            {{#uses_max}}<span class="sheet-bold">/</span>{{uses_max}}{{/uses_max}}
+                          {{/rollTotal() computed::uses 0}}
+                        </span>
+                      {{/rollGreater() uses_max 0}}
+
                       {{#quantity_max}}
                         {{#quantity}}
                           <span class="sheet-inlineroll-reset">Qty:{{quantity}}/{{quantity_max}}</span>

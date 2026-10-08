@@ -4624,19 +4624,24 @@ section.npc-box.statblock3 .image-avatar {
   white-space: normal;
 }
 
-.sheet-rolltemplate-attacks .sheet-row.sheet-all-props span:first-child:not(.sheet-span-two),
-.sheet-rolltemplate-general .sheet-row.sheet-all-props span:first-child:not(.sheet-span-two) {
+.sheet-rolltemplate-attacks .sheet-row.sheet-all-props span:not(.sheet-span-two),
+.sheet-rolltemplate-general .sheet-row.sheet-all-props span:not(.sheet-span-two) {
   display: inline-block;
   text-align: left;
 }
 
-.sheet-rolltemplate-attacks .sheet-row span:first-child:not(.sheet-span-two),
-.sheet-rolltemplate-general .sheet-row span:first-child:not(.sheet-span-two) {
+.sheet-rolltemplate-attacks .sheet-row span:not(.sheet-span-two),
+.sheet-rolltemplate-general .sheet-row span:not(.sheet-span-two) {
   align-self: center;
   flex-direction: column;
   flex-wrap: wrap;
   margin-inline: auto;
   margin-left: 0;
+}
+
+.sheet-rolltemplate-attacks .sheet-row .sheet-span-two .sheet-inlineroll-reset,
+.sheet-rolltemplate-general .sheet-row .sheet-span-two .sheet-inlineroll-reset {
+  flex-direction: row;
 }
 
 /* center */
