@@ -5177,7 +5177,7 @@
                           {{/rollGreater() crit 0}}
                         {{/rollWasCrit() attack1}}
                         {{#^rollTotal() computed::bestAChit 99}}
-                          {{#bestAChit}}<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
+                          {{#bestAChit}}&nbsp;&nbsp;<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
                         {{/^rollTotal() computed::bestAChit 99}}
                       </span>
                     </span>
@@ -5227,7 +5227,7 @@
                           {{/rollGreater() crit 0}}
                         {{/rollWasCrit() attack2}}
                         {{#^rollTotal() computed::bestAChit 99}}
-                          {{#bestAChit}}<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
+                          {{#bestAChit}}&nbsp;&nbsp;<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
                         {{/^rollTotal() computed::bestAChit 99}}
                       </span>
                     </span>
@@ -5265,7 +5265,7 @@
                           {{/rollGreater() crit 0}}
                         {{/rollWasCrit() attack3}}
                         {{#^rollTotal() computed::bestAChit 99}}
-                          {{#bestAChit}}<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
+                          {{#bestAChit}}&nbsp;&nbsp;<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
                         {{/^rollTotal() computed::bestAChit 99}}
                       </span>
                     </span>
@@ -5303,7 +5303,7 @@
                           {{/rollGreater() crit 0}}
                         {{/rollWasCrit() attack4}}
                         {{#^rollTotal() computed::bestAChit 99}}
-                          {{#bestAChit}}<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
+                          {{#bestAChit}}&nbsp;&nbsp;<span>hits AC</span>&nbsp;{{computed::bestAChit}}{{/bestAChit}}
                         {{/^rollTotal() computed::bestAChit 99}}
                       </span>
                     </span>
@@ -5424,25 +5424,30 @@
                   </span>
 
                   <span class="sheet-row">
+                    <span class="sheet-span-two">
+                      {{#range}}
+                        <span class="sheet-inlineroll-reset">
+                          {{#rollGreater() computed::ammo 0}}
+                            {{#ammo}}<span class="sheet-bold">Ammo:&nbsp;</span>{{computed::ammo}}{{/ammo}}
+                            {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
+                          {{/rollGreater() computed::ammo 0}}
+                          {{#rollTotal() computed::ammo 0}}
+                            {{#ammo}}<br><span class="sheet-bold">NO MORE AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
+                            {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
+                          {{/rollTotal() computed::ammo 0}}
+                        </span>
+                      {{/range}}
+                    </span>
+                  </span>
+
+                  <span class="sheet-row">
                     <span class="sheet-span-two sheet-smaller-text">
                       {{#damagetype}}<span class="sheet-bold">Type:&nbsp;</span>{{damagetype}}&nbsp;{{/damagetype}}
-                        {{#rate}}<span class="sheet-bold">RoF:&nbsp;</span>{{rate}}&nbsp;{{/rate}}
-                          {{#range}}<span class="sheet-bold">Range:&nbsp;</span>{{range}}&nbsp;{{/range}}
-                            {{#length}}<span class="sheet-bold">Length:&nbsp;</span>{{length}}&nbsp;{{/length}}
-                              {{#space}}<span class="sheet-bold">Space:&nbsp;</span>{{space}}&nbsp;{{/space}}
-                                {{#speed}}<span class="sheet-bold">Speed:&nbsp;</span>{{speed}}&nbsp;{{/speed}}
-                                  {{#range}}
-                                    <span class="sheet-inlineroll-reset">
-                                      {{#rollGreater() computed::ammo 0}}
-                                        {{#ammo}}<span class="sheet-bold">Ammo:&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                                        {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
-                                      {{/rollGreater() computed::ammo 0}}
-                                      {{#rollTotal() computed::ammo 0}}
-                                        {{#ammo}}<br><span class="sheet-bold">NO MORE AMMO!&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                                        {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
-                                      {{/rollTotal() computed::ammo 0}}
-                                    </span>
-                                  {{/range}}
+                      {{#rate}}<span class="sheet-bold">RoF:&nbsp;</span>{{rate}}&nbsp;{{/rate}}
+                      {{#range}}<span class="sheet-bold">Range:&nbsp;</span>{{range}}&nbsp;{{/range}}
+                      {{#length}}<span class="sheet-bold">Length:&nbsp;</span>{{length}}&nbsp;{{/length}}
+                      {{#space}}<span class="sheet-bold">Space:&nbsp;</span>{{space}}&nbsp;{{/space}}
+                      {{#speed}}<span class="sheet-bold">Speed:&nbsp;</span>{{speed}}&nbsp;{{/speed}}
                     </span>
                   </span>
 
@@ -5725,7 +5730,7 @@
                   {{/rollGreater() locked_doors 0}}
 
                   <span class="sheet-row">
-                    <span class="sheet-span-two sheet-tcat sheet-right">
+                    <span class="sheet-span-two sheet-tcat">
                       {{#rollGreater() uses_max 0}}
                         <span class="sheet-inlineroll-reset">
                           {{#rollGreater() computed::uses 0}}
@@ -5733,7 +5738,7 @@
                             {{#uses_max}}<span class="sheet-bold">/</span>{{uses_max}}{{/uses_max}}
                           {{/rollGreater() computed::uses 0}}
                           {{#rollTotal() computed::uses 0}}
-                            {{#uses}}<span class="sheet-bold">NO MORE USES!&nbsp;</span>{{computed::uses}}{{/uses}}
+                            {{#uses}}<span class="sheet-bold">NO MORE USES!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
                             {{#uses_max}}<span class="sheet-bold">/</span>{{uses_max}}{{/uses_max}}
                           {{/rollTotal() computed::uses 0}}
                         </span>

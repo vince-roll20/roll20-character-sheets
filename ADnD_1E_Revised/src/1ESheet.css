@@ -4695,7 +4695,11 @@ section.npc-box.statblock3 .image-avatar {
 .sheet-rolltemplate-attacks-table .sheet-span-two,
 .sheet-rolltemplate-general div span.sheet-span-two {
   display: block;
+  display: flex;
+  flex-wrap: wrap;
   grid-column: span 2;
+  margin-inline: auto;
+  place-content: center;
   position: relative;
   text-align: center;
 }
@@ -4715,9 +4719,11 @@ section.npc-box.statblock3 .image-avatar {
   color: var(--color-white1);
   font-family: var(--font-headers);
   font-size: var(--text-xxl);
+  max-width: stretch;
   padding: 2px;
   text-align: center;
   text-shadow: -1px -1px 0 oklch(0% 0 0), 1px -1px 0 oklch(0% 0 0), -1px 1px 0 oklch(0% 0 0), 1px 1px 0 oklch(0% 0 0);
+  width: stretch;
 }
 
 .sheet-rolltemplate-attacks .sheet-subheader,
@@ -4727,9 +4733,11 @@ section.npc-box.statblock3 .image-avatar {
   color: var(--color-white1);
   font-family: var(--font-headers);
   font-size: var(--text-lg);
+  max-width: stretch;
   padding: 2px;
   text-align: center;
   text-shadow: -1px -1px 0 oklch(0% 0 0), 1px -1px 0 oklch(0% 0 0), -1px 1px 0 oklch(0% 0 0), 1px 1px 0 oklch(0% 0 0);
+  width: stretch;
 }
 
 .sheet-rolltemplate-attacks .sheet-template-footer,
@@ -4740,9 +4748,11 @@ section.npc-box.statblock3 .image-avatar {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   color: var(--color-white1);
+  max-width: stretch;
   min-height: 1em;
   text-align: center;
   text-shadow: -1px -1px 0 oklch(0% 0 0), 1px -1px 0 oklch(0% 0 0), -1px 1px 0 oklch(0% 0 0), 1px 1px 0 oklch(0% 0 0);
+  width: stretch;
 }
 
 /* needed to prevent visible notch when {{bigname}} and {{name}} are used together */
