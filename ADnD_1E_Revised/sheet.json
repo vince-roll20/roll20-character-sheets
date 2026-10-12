@@ -206,11 +206,11 @@
       "description": "Each attack roll will reduce Ranged ammo by 1. This can still be enabled/edited per sheet."
     },
     {
-      "attribute": "toggle_equipment_uses",
-      "displayname": "Track Equipment Uses:",
+      "attribute": "toggle_equipment_tracking",
+      "displayname": "Track Equipment Uses or Quantity:",
       "type": "checkbox",
       "value": "1",
-      "description": "Each equipment roll will reduce Uses by 1. This can still be enabled/edited per sheet."
+      "description": "Each equipment roll will either reduce Uses(default) or Quantity(must be selected per item) by 1. This can still be enabled/edited per sheet."
     },
     {
       "attribute": "toggle_lbs",

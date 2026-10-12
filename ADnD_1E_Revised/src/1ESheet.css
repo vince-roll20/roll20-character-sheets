@@ -502,6 +502,7 @@
 .charsheet input[type='checkbox'].toggle-multiclass:checked ~ .background .toggle-multiclass,
 .charsheet input[type='checkbox'].toggle-psionics:checked ~ .background .toggle-psionics,
 .charsheet input[type='checkbox'].toggle-macros:checked ~ .background .toggle-macros,
+.charsheet input[type='checkbox'].toggle-equipment-tracking:not(:checked) ~ .background .toggle-equipment-tracking,
 .charsheet input[type='checkbox'].toggle-critdamage:not(:checked) ~ .background .toggle-critdamage,
 .charsheet input[type='checkbox'].toggle-lbs:not(:checked) ~ .background span.toggle-lbs + span,
 .charsheet input[type='checkbox'].toggle-lbs:checked ~ .background span.toggle-lbs {

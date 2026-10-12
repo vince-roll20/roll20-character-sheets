@@ -28,7 +28,7 @@
 <input type="checkbox" name="attr_toggle_single_column_spells" class="toggle-single-column-spells hidden" value="1" checked />
 <input type="checkbox" name="attr_toggle_critdamage" class="toggle-critdamage hidden" value="1" />
 <input type="checkbox" name="attr_toggle_ranged_ammo" class="toggle-ranged-ammo hidden" value="1" />
-<input type="checkbox" name="attr_toggle_equipment_uses" class="toggle-equipment-uses hidden" value="1" />
+<input type="checkbox" name="attr_toggle_equipment_tracking" class="toggle-equipment-tracking hidden" value="1" />
 <input type="checkbox" name="attr_toggle_lbs" class="toggle-lbs hidden" value="1" />
 <input type="checkbox" name="attr_toggle_row_shading" class="toggle-row-shading hidden" value="1" />
 <input type="checkbox" name="attr_toggle_linear_background" class="toggle-linear-background hidden" value="1" />
@@ -3025,7 +3025,7 @@
                         <input type="checkbox" class="hidden" name="attr_equipment_carried" value="1" checked />
                         <input type="text" class="width-smaller" name="attr_equipment_quantity" title="@{repeating_equipment_$X_equipment_quantity} | Used for weight and cost calculations." value="1" />
                         <span>/</span>
-                        <input type="text" class="width-smaller" name="attr_equipment_quantity_max" title="@{repeating_equipment_$X_equipment_quantity|max}" value="" placeholder="n/a" />
+                        <input type="text" class="width-smaller" name="attr_equipment_quantity_max" title="@{repeating_equipment_$X_equipment_quantity|max}" value="0" placeholder="n/a" />
                         <input type="text" class="width-fill" name="attr_equipment_weight" title="@{repeating_equipment_$X_equipment_weight} | Weight for one item." value="0" />
                         <input type="text" class="width-fill toggle-costs" name="attr_equipment_cost" title="@{repeating_equipment_$X_equipment_cost} | Cost for one item." value="0" />
                       </span>
@@ -3210,6 +3210,11 @@
                             <button type="action" name="act_addattack" title="Adds weapon to attacks. Creates a unique, non-synced, attack."><span>+Add</span></button>
                           </label>
                         </span>
+                        <span class="inline-label right toggle-equipment-tracking">
+                          <span>Choose Tracking:</span>
+                          <label><span>Uses</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="uses" checked /></label>
+                          <label><span>Quantity</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="quantity" /></label>
+                        </span>
                         <span class="inline-label">
                           <textarea class="height-short" name="attr_equipment_description" title="@{repeating_equipment_$X_equipment_description}" value="" placeholder="Description"></textarea>
                           <label>
@@ -3217,7 +3222,7 @@
                             <textarea class="info-link" wrap="off" name="attr_equipment_link" title="@{repeating_equipment_$X_equipment_link}" placeholder="https://www.example.com"></textarea>
                           </label>
                         </span>
-                        <textarea class="height-short toggle-macros" name="attr_equipment_macro_text" title="@{repeating_equipment_$X_equipment_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{uses=[[ @{equipment_current} ]]}} {{uses_max=[[ @{equipment_current|max} ]]}} {{quantity=@{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}}</textarea>
+                        <textarea class="height-short toggle-macros" name="attr_equipment_macro_text" title="@{repeating_equipment_$X_equipment_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{uses=[[ @{equipment_current} ]]}} {{uses_max=[[ @{equipment_current|max} ]]}} {{quantity=[[ @{equipment_quantity} ]]}} {{quantity_max=[[ @{equipment_quantity|max} ]]}}</textarea>
                       </details>
                     </div>
                   </div>
@@ -4456,9 +4461,9 @@
                     <span>Track Ranged Ammo:</span>
                     <input type="checkbox" name="attr_toggle_ranged_ammo" value="1" />
                   </label>
-                  <label title="@{toggle_equipment_uses} | Each equipment roll will reduce Uses by 1.">
-                    <span>Track Equipment Uses:</span>
-                    <input type="checkbox" name="attr_toggle_equipment_uses" value="1" />
+                  <label title="@{toggle_equipment_uses} | Each equipment roll will reduce either Uses or Quantity by 1.">
+                    <span>Track Equipment Uses or Quantity:</span>
+                    <input type="checkbox" name="attr_toggle_equipment_tracking" value="1" />
                   </label>
                   <label title="@{toggle_special_ability_uses} | Each special ability roll will reduce Uses by 1.">
                     <span>Track Special Ability Uses:</span>
@@ -5730,7 +5735,7 @@
                   {{/rollGreater() locked_doors 0}}
 
                   <span class="sheet-row">
-                    <span class="sheet-span-two sheet-tcat">
+                    <span class="sheet-span-two sheet-tcat sheet-right">
                       {{#rollGreater() uses_max 0}}
                         <span class="sheet-inlineroll-reset">
                           {{#rollGreater() computed::uses 0}}
@@ -5743,12 +5748,22 @@
                           {{/rollTotal() computed::uses 0}}
                         </span>
                       {{/rollGreater() uses_max 0}}
-
-                      {{#quantity_max}}
-                        {{#quantity}}
-                          <span class="sheet-inlineroll-reset">Qty:{{quantity}}/{{quantity_max}}</span>
-                        {{/quantity}}
-                      {{/quantity_max}}
+                    </span>
+                  </span>
+                  <span class="sheet-row">
+                    <span class="sheet-span-two sheet-tcat sheet-right">
+                      {{#rollGreater() quantity_max 0}}
+                        <span class="sheet-inlineroll-reset">
+                          {{#rollGreater() computed::quantity 0}}
+                            {{#quantity}}<span class="sheet-bold">Qty:&nbsp;</span>{{computed::quantity}}{{/quantity}}
+                            {{#quantity_max}}<span class="sheet-bold">/</span>{{quantity_max}}{{/quantity_max}}
+                          {{/rollGreater() computed::quantity 0}}
+                          {{#rollTotal() computed::quantity 0}}
+                            {{#quantity}}<span class="sheet-bold">NO MORE ITEMS!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
+                            {{#quantity_max}}<span class="sheet-bold">/</span>{{quantity_max}}{{/quantity_max}}
+                          {{/rollTotal() computed::quantity 0}}
+                        </span>
+                      {{/rollGreater() quantity_max 0}}
                     </span>
                   </span>
 

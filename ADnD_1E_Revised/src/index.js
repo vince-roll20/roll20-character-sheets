@@ -1038,7 +1038,7 @@ const equipmentMacroUpdate = async (current_version, final_version) => {
     equipment_old_v2:
       '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{quantity=@{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}} {{uses=@{equipment_current}}} {{uses_max=[[ @{equipment_current|max} ]]}}',
     equipment_current:
-      '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{uses=[[ @{equipment_current} ]]}} {{uses_max=[[ @{equipment_current|max} ]]}} {{quantity=@{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}}',
+      '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{uses=[[ @{equipment_current} ]]}} {{uses_max=[[ @{equipment_current|max} ]]}} {{quantity=[[ @{equipment_quantity} ]]}} {{quantity_max=[[ @{equipment_quantity|max} ]]}}',
   };
   const oldVersions = [replacements.equipment_old, replacements.equipment_old_v2];
   // check and update all existing equipment
@@ -1344,10 +1344,10 @@ const setEquipmentUpdate = async (current_version, final_version) => {
     // Setting carried_select to carried value to preserve existing state
     output[`${prefix}equipment_carried_select`] = int(v[`${prefix}equipment_carried`]);
     output[`${prefix}equipment_carried`] = int(v[`${prefix}equipment_carried`]);
-    output[`${prefix}equipment_quantity`] = int(v[`${prefix}equipment_quantity`]);
-    output[`${prefix}equipment_quantity_max`] = int(v[`${prefix}equipment_quantity_max`]);
-    output[`${prefix}equipment_weight`] = int(v[`${prefix}equipment_weight`]);
-    output[`${prefix}equipment_cost`] = int(v[`${prefix}equipment_cost`]);
+    output[`${prefix}equipment_quantity`] = float(v[`${prefix}equipment_quantity`]);
+    output[`${prefix}equipment_quantity_max`] = float(v[`${prefix}equipment_quantity_max`]);
+    output[`${prefix}equipment_weight`] = float(v[`${prefix}equipment_weight`]);
+    output[`${prefix}equipment_cost`] = float(v[`${prefix}equipment_cost`]);
     output[`${prefix}equipment_armor_type`] = int(v[`${prefix}equipment_armor_type`]);
     output[`${prefix}equipment_armor_worn`] = int(v[`${prefix}equipment_armor_worn`]);
     output[`${prefix}equipment_armor_ac`] = int(v[`${prefix}equipment_armor_ac`]);
@@ -3870,6 +3870,7 @@ const repeatingEquipmentNumber = [
 ];
 const repeatingEquipmentString = [
   'equipment_macro_text',
+  'equipment_tracking',
   'equipment_weapon_speed',
   'equipment_weapon_misc',
   'equipment_weapon_length',
@@ -7684,13 +7685,16 @@ on(
       'thac00',
       'weapon_whisper_to_hit',
       'toggle_ranged_ammo',
-      'toggle_equipment_uses',
+      'toggle_equipment_tracking',
       'toggle_special_ability_uses',
       `repeating_weapon_${id}_weapon_attack_type`, // 1 || 3 is ranged
       `repeating_weapon_${id}_weapon_ammo`,
       `repeating_weapon_${id}_weapon_ammo_max`,
+      `repeating_equipment_${id}_equipment_tracking`,
       `repeating_equipment_${id}_equipment_current`,
       `repeating_equipment_${id}_equipment_current_max`,
+      `repeating_equipment_${id}_equipment_quantity`,
+      `repeating_equipment_${id}_equipment_quantity_max`,
       `repeating_ability_${id}_ability_current`,
       `repeating_ability_${id}_ability_current_max`,
     ];
@@ -7791,22 +7795,41 @@ on(
         });
       });
     } else if (trigger.includes('equipment-roll-button')) {
-      const trackEquipment = int(v.toggle_equipment_uses) === 1 ? 1 : 0;
-      const uses = int(v[`repeating_equipment_${id}_equipment_current`]);
-      const usesMax = int(v[`repeating_equipment_${id}_equipment_current_max`]);
-      console.log(`Equipment Uses - trackEquipment:${trackEquipment} current:${uses} current_max:${usesMax}`);
-      await new Promise((resolve) => {
-        startRoll(roll_string, (roll) => {
-          // console.log(roll);
-          finishRoll(roll.rollId, {
-            //'name of key': 'computed value'
-            uses: Math.max(0, trackEquipment === 1 ? uses - 1 : uses),
+      const trackEquipment = int(v.toggle_equipment_tracking) === 1 ? 1 : 0;
+      const trackingOption = v[`repeating_equipment_${id}_equipment_tracking`]; // 'uses' or 'quantity'
+      if (trackingOption === 'quantity') {
+        const quantity = int(v[`repeating_equipment_${id}_equipment_quantity`]);
+        const quantityMax = int(v[`repeating_equipment_${id}_equipment_quantity_max`]);
+        console.log(`trackEquipment:${trackEquipment} trackingOption:${trackingOption} quantity:${quantity} quantity_max:${quantityMax}`);
+        await new Promise((resolve) => {
+          startRoll(roll_string, (roll) => {
+            // console.log(roll);
+            finishRoll(roll.rollId, {
+              //'name of key': 'computed value'
+              quantity: Math.max(0, trackEquipment === 1 ? quantity - 1 : quantity),
+            });
+            resolve();
           });
-          resolve();
+          output[`repeating_equipment_${id}_equipment_quantity`] = Math.max(0, trackEquipment === 1 ? quantity - 1 : quantity);
+          setAttrs(output);
         });
-        output[`repeating_equipment_${id}_equipment_current`] = Math.max(0, trackEquipment === 1 ? uses - 1 : uses);
-        setAttrs(output, {silent: true});
-      });
+      } else {
+        const uses = int(v[`repeating_equipment_${id}_equipment_current`]);
+        const usesMax = int(v[`repeating_equipment_${id}_equipment_current_max`]);
+        console.log(`trackEquipment:${trackEquipment} trackingOption:${trackingOption} current:${uses} current_max:${usesMax}`);
+        await new Promise((resolve) => {
+          startRoll(roll_string, (roll) => {
+            // console.log(roll);
+            finishRoll(roll.rollId, {
+              //'name of key': 'computed value'
+              uses: Math.max(0, trackEquipment === 1 ? uses - 1 : uses),
+            });
+            resolve();
+          });
+          output[`repeating_equipment_${id}_equipment_current`] = Math.max(0, trackEquipment === 1 ? uses - 1 : uses);
+          setAttrs(output, {silent: true});
+        });
+      }
     } else if (trigger.includes('ability-roll-button' || 'ability-npc-roll-button')) {
       const trackAbility = int(v.toggle_special_ability_uses) === 1 ? 1 : 0;
       const uses = int(v[`repeating_ability_${id}_ability_current`]);
