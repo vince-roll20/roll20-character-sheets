@@ -72,7 +72,7 @@
           <h5 class="right two-columns span-all">
             <span class="left">
               <span>v</span><span name="attr_sheet_version"></span>
-              <span class="right"> • 10/4/26'</span>
+              <span class="right"> • 10/12/26'</span>
             </span>
           </h5>
           <ul>
@@ -81,7 +81,7 @@
             <li>Updated Attack rolls to Custom Roll Parsing(CRP). Allows determining the best AC hit, ammo tracking, and more without API.</li>
             <li>Added optional Ranged weapon ammo tracking. If enabled from the sheet settings, each attack roll will reduce Ranged ammo by 1. This will be seen with the attack roll and adjusted on the weapon's row.</li>
             <li>Updated Equipment and Special Ability rolls to Custom Roll Parsing(CRP). Allows tracking Uses without API.</li>
-            <li>Added optional Equipment and Special Ability Uses tracking. If enabled from the sheet settings, each Equipment or Special Ability roll will reduce Uses by 1. This will be seen with the roll and adjusted on the equipment or special ability row.</li>
+            <li>Added optional Equipment and Special Ability Uses tracking. If enabled from the sheet settings, each Equipment or Special Ability roll will reduce Uses by 1. This will be seen with the roll and adjusted on the equipment or special ability row. Each Equipment item has an option to have nothing reduced, uses, or quantity.</li>
             <li>Moved to-hit table macro outside of repeating_weapon.</li>
             <li>Added an option to show "hits AC" with attack rolls. Uses THAC0, the adjusted to-Hit roll, and the preferred method for handling the attack matrix to determine the best AC the attack can hit.</li>
             <li>Added an option to pick the preferred method for handling the to-Hit matrix determining the best AC the attack can hit.
@@ -3212,7 +3212,8 @@
                         </span>
                         <span class="inline-label right toggle-equipment-tracking">
                           <span>Choose Tracking:</span>
-                          <label><span>Uses</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="uses" checked /></label>
+                          <label><span>None</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="none" checked /></label>
+                          <label><span>Uses</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="uses" /></label>
                           <label><span>Quantity</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="quantity" /></label>
                         </span>
                         <span class="inline-label">
@@ -4461,7 +4462,7 @@
                     <span>Track Ranged Ammo:</span>
                     <input type="checkbox" name="attr_toggle_ranged_ammo" value="1" />
                   </label>
-                  <label title="@{toggle_equipment_uses} | Each equipment roll will reduce either Uses or Quantity by 1.">
+                  <label title="@{toggle_equipment_uses} | Equipment items will have an option to auto-reduce nothing, Uses, or Quantity by 1 with each roll.">
                     <span>Track Equipment Uses or Quantity:</span>
                     <input type="checkbox" name="attr_toggle_equipment_tracking" value="1" />
                   </label>

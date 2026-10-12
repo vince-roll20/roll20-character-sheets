@@ -7795,11 +7795,26 @@ on(
         });
       });
     } else if (trigger.includes('equipment-roll-button')) {
-      const trackEquipment = int(v.toggle_equipment_tracking) === 1 ? 1 : 0;
+      const trackEquipment = int(v.toggle_equipment_tracking);
       const trackingOption = v[`repeating_equipment_${id}_equipment_tracking`]; // 'uses' or 'quantity'
+      const quantity = int(v[`repeating_equipment_${id}_equipment_quantity`]);
+      const quantityMax = int(v[`repeating_equipment_${id}_equipment_quantity_max`]);
+      const uses = int(v[`repeating_equipment_${id}_equipment_current`]);
+      const usesMax = int(v[`repeating_equipment_${id}_equipment_current_max`]);
+      if (trackingOption === 'none') {
+        await new Promise((resolve) => {
+          startRoll(roll_string, (roll) => {
+            // console.log(roll);
+            finishRoll(roll.rollId, {
+              //'name of key': 'computed value'
+              uses: uses,
+              quantity: quantity,
+            });
+            resolve();
+          });
+        });
+      }
       if (trackingOption === 'quantity') {
-        const quantity = int(v[`repeating_equipment_${id}_equipment_quantity`]);
-        const quantityMax = int(v[`repeating_equipment_${id}_equipment_quantity_max`]);
         console.log(`trackEquipment:${trackEquipment} trackingOption:${trackingOption} quantity:${quantity} quantity_max:${quantityMax}`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
@@ -7813,9 +7828,8 @@ on(
           output[`repeating_equipment_${id}_equipment_quantity`] = Math.max(0, trackEquipment === 1 ? quantity - 1 : quantity);
           setAttrs(output);
         });
-      } else {
-        const uses = int(v[`repeating_equipment_${id}_equipment_current`]);
-        const usesMax = int(v[`repeating_equipment_${id}_equipment_current_max`]);
+      }
+      if (trackingOption === 'uses') {
         console.log(`trackEquipment:${trackEquipment} trackingOption:${trackingOption} current:${uses} current_max:${usesMax}`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
