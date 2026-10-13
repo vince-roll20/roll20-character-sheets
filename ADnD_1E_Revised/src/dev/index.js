@@ -7797,11 +7797,13 @@ on(
     } else if (trigger.includes('equipment-roll-button')) {
       const trackEquipment = int(v.toggle_equipment_tracking);
       const trackingOption = v[`repeating_equipment_${id}_equipment_tracking`]; // 'uses' or 'quantity'
-      const quantity = int(v[`repeating_equipment_${id}_equipment_quantity`]);
-      const quantityMax = int(v[`repeating_equipment_${id}_equipment_quantity_max`]);
+      const quantity = float(v[`repeating_equipment_${id}_equipment_quantity`]);
+      const quantityMax = float(v[`repeating_equipment_${id}_equipment_quantity_max`]);
       const uses = int(v[`repeating_equipment_${id}_equipment_current`]);
       const usesMax = int(v[`repeating_equipment_${id}_equipment_current_max`]);
-      if (trackingOption === 'none') {
+      console.log(`trackEquipment:${trackEquipment} trackingOption:${trackingOption} quantity:${quantity} quantity_max:${quantityMax} current:${uses} current_max:${usesMax}`);
+      if (trackEquipment === 0 || trackingOption === 'none') {
+        console.log(`Change detected: Equipment and/or Row Not Tracked`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
@@ -7813,34 +7815,35 @@ on(
             resolve();
           });
         });
-      }
-      if (trackingOption === 'quantity') {
+      } else if (trackingOption === 'quantity') {
         console.log(`trackEquipment:${trackEquipment} trackingOption:${trackingOption} quantity:${quantity} quantity_max:${quantityMax}`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
             finishRoll(roll.rollId, {
               //'name of key': 'computed value'
-              quantity: Math.max(0, trackEquipment === 1 ? quantity - 1 : quantity),
+              uses: uses,
+              quantity: quantity - 1,
             });
             resolve();
           });
-          output[`repeating_equipment_${id}_equipment_quantity`] = Math.max(0, trackEquipment === 1 ? quantity - 1 : quantity);
+          output[`repeating_equipment_${id}_equipment_quantity`] = quantity - 1;
           setAttrs(output);
         });
-      }
-      if (trackingOption === 'uses') {
+      } else if (trackingOption === 'uses') {
         console.log(`trackEquipment:${trackEquipment} trackingOption:${trackingOption} current:${uses} current_max:${usesMax}`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
             finishRoll(roll.rollId, {
               //'name of key': 'computed value'
-              uses: Math.max(0, trackEquipment === 1 ? uses - 1 : uses),
+              uses: uses - 1,
+              quantity: quantity,
             });
             resolve();
           });
-          output[`repeating_equipment_${id}_equipment_current`] = Math.max(0, trackEquipment === 1 ? uses - 1 : uses);
+          // output[`repeating_equipment_${id}_equipment_current`] = Math.max(0, uses - 1);
+          output[`repeating_equipment_${id}_equipment_current`] = uses - 1;
           setAttrs(output, {silent: true});
         });
       }

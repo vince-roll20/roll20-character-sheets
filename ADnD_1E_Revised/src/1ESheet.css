@@ -4634,7 +4634,6 @@ section.npc-box.statblock3 .image-avatar {
 .sheet-rolltemplate-attacks .sheet-row span:not(.sheet-span-two),
 .sheet-rolltemplate-general .sheet-row span:not(.sheet-span-two) {
   align-self: center;
-  flex-direction: column;
   flex-wrap: wrap;
   margin-inline: auto;
   margin-left: 0;
@@ -4643,6 +4642,10 @@ section.npc-box.statblock3 .image-avatar {
 .sheet-rolltemplate-attacks .sheet-row .sheet-span-two .sheet-inlineroll-reset,
 .sheet-rolltemplate-general .sheet-row .sheet-span-two .sheet-inlineroll-reset {
   flex-direction: row;
+}
+
+.sheet-rolltemplate-general .sheet-inlineroll-reset {
+  padding-inline: .5em;
 }
 
 /* center */
@@ -4695,7 +4698,6 @@ section.npc-box.statblock3 .image-avatar {
 .sheet-rolltemplate-attacks .sheet-span-two,
 .sheet-rolltemplate-attacks-table .sheet-span-two,
 .sheet-rolltemplate-general div span.sheet-span-two {
-  display: block;
   display: flex;
   flex-wrap: wrap;
   grid-column: span 2;
@@ -4809,15 +4811,18 @@ section.npc-box.statblock3 .image-avatar {
 .sheet-rolltemplate-attacks span.sheet-text.sheet-text,
 .sheet-rolltemplate-attacks-table span.sheet-text.sheet-text,
 .sheet-rolltemplate-general span.sheet-text.sheet-text {
+  box-sizing: border-box;
   color: var(--color-black1);
   display: block;
   font-size: var(--text-med);
   line-height: initial;
+  margin: 0;
   max-height: 10em;
   overflow: auto;
   padding: 0.25em 0.5em 0.25em 0.5em;
   scrollbar-width: thin;
   text-align: left;
+  width: 100%;
 }
 
 .sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks-table span.sheet-text,
