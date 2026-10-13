@@ -502,7 +502,6 @@
 .charsheet input[type='checkbox'].toggle-multiclass:checked ~ .background .toggle-multiclass,
 .charsheet input[type='checkbox'].toggle-psionics:checked ~ .background .toggle-psionics,
 .charsheet input[type='checkbox'].toggle-macros:checked ~ .background .toggle-macros,
-.charsheet input[type='checkbox'].toggle-equipment-tracking:not(:checked) ~ .background .toggle-equipment-tracking,
 .charsheet input[type='checkbox'].toggle-critdamage:not(:checked) ~ .background .toggle-critdamage,
 .charsheet input[type='checkbox'].toggle-lbs:not(:checked) ~ .background span.toggle-lbs + span,
 .charsheet input[type='checkbox'].toggle-lbs:checked ~ .background span.toggle-lbs {
@@ -1817,7 +1816,7 @@ section.npc-box.statblock3 .image-avatar {
   .charsheet input[value='1'].toggle-npc ~ input.toggle-single-column-abilities ~ .background .special-abilities-row1.two-column-header {
     align-items: center;
     display: grid;
-    grid-template-columns: 5em 1fr 7em 5em 1fr 7em;
+    grid-template-columns: 5em 1fr 7em 5em 1fr 7em 3.5em;
     justify-items: center;
   }
 
@@ -1825,8 +1824,8 @@ section.npc-box.statblock3 .image-avatar {
     display: grid;
 
     grid-template-areas:
-      'a b b b c c c'
-      'd d d d d d d';
+      'a b b b c c c d'
+      'e e e e e e e e';
   }
 
   .charsheet input[value='1'].toggle-npc ~ input.toggle-single-column-abilities ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-roll {
@@ -1841,8 +1840,12 @@ section.npc-box.statblock3 .image-avatar {
     grid-area: c;
   }
 
-  .charsheet input[value='1'].toggle-npc ~ input.toggle-single-column-abilities ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-desc {
+  .charsheet input[value='1'].toggle-npc ~ input.toggle-single-column-abilities ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-track {
     grid-area: d;
+  }
+
+  .charsheet input[value='1'].toggle-npc ~ input.toggle-single-column-abilities ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-desc {
+    grid-area: e;
   }
 
   .charsheet input[value='1'].toggle-npc ~ input.toggle-single-column-abilities ~ .background .special-abilities-box .spell-details-grid {
@@ -2452,6 +2455,11 @@ section.npc-box.statblock3 .image-avatar {
   left: 3.75em;
 }
 
+.charsheet .weapon-ammo-tracking {
+  display: flex;
+  min-width: 8.5em;
+}
+
 .charsheet .toggle-to-hit-table ~ .sect label,
 .charsheet .thief-class label,
 .charsheet .caster-class label {
@@ -2832,7 +2840,7 @@ section.npc-box.statblock3 .image-avatar {
 .charsheet input.toggle-single-column-abilities:not(:checked) ~ .background .special-abilities-row1.two-column-header {
   align-items: center;
   display: grid;
-  grid-template-columns: 5em 1fr 7em 5em 1fr 7em;
+  grid-template-columns: 3em 1fr 4em 3em 3em 1fr 3em 4em;
   justify-items: center;
 }
 
@@ -2840,8 +2848,8 @@ section.npc-box.statblock3 .image-avatar {
   display: grid;
 
   grid-template-areas:
-    'a b b b c c c'
-    'd d d d d d d';
+    'a b b b c c c d'
+    'e e e e e e e e';
 }
 
 .charsheet input.toggle-single-column-abilities:not(:checked) ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-roll {
@@ -2856,14 +2864,18 @@ section.npc-box.statblock3 .image-avatar {
   grid-area: c;
 }
 
-.charsheet input.toggle-single-column-abilities:not(:checked) ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-desc {
+.charsheet input.toggle-single-column-abilities:not(:checked) ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-track {
   grid-area: d;
+}
+
+.charsheet input.toggle-single-column-abilities:not(:checked) ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-desc {
+  grid-area: e;
 }
 
 .charsheet .special-abilities-row1 {
   align-items: center;
   display: grid;
-  grid-template-columns: 3.5em 3fr 5fr 7em;
+  grid-template-columns: 3.5em 3fr 5fr 7em 3.5em;
   justify-items: center;
   padding: 0 2px 2px 2px;
 }

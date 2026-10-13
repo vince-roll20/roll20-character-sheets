@@ -27,8 +27,6 @@
 <input type="checkbox" name="attr_toggle_single_column_notes" class="toggle-single-column-notes hidden" value="1" checked />
 <input type="checkbox" name="attr_toggle_single_column_spells" class="toggle-single-column-spells hidden" value="1" checked />
 <input type="checkbox" name="attr_toggle_critdamage" class="toggle-critdamage hidden" value="1" />
-<input type="checkbox" name="attr_toggle_ranged_ammo" class="toggle-ranged-ammo hidden" value="1" />
-<input type="checkbox" name="attr_toggle_equipment_tracking" class="toggle-equipment-tracking hidden" value="1" />
 <input type="checkbox" name="attr_toggle_lbs" class="toggle-lbs hidden" value="1" />
 <input type="checkbox" name="attr_toggle_row_shading" class="toggle-row-shading hidden" value="1" />
 <input type="checkbox" name="attr_toggle_linear_background" class="toggle-linear-background hidden" value="1" />
@@ -79,9 +77,10 @@
             <h5>Latest</h5>
             <li>Changed the attack's "show to-Hit?" AC table to a /ssr roll. (only viewable by the DM)</li>
             <li>Updated Attack rolls to Custom Roll Parsing(CRP). Allows determining the best AC hit, ammo tracking, and more without API.</li>
-            <li>Added optional Ranged weapon ammo tracking. If enabled from the sheet settings, each attack roll will reduce Ranged ammo by 1. This will be seen with the attack roll and adjusted on the weapon's row.</li>
+            <li>Added optional Ranged weapon ammo tracking. Each attack roll will reduce Ranged ammo by 1. This will be seen with the attack roll and adjusted on the weapon's row. Each Ranged Attack has an option to track Nothing, or Ammo.</li>
             <li>Updated Equipment and Special Ability rolls to Custom Roll Parsing(CRP). Allows tracking Uses without API.</li>
-            <li>Added optional Equipment and Special Ability Uses tracking. If enabled from the sheet settings, each Equipment or Special Ability roll will reduce Uses by 1. This will be seen with the roll and adjusted on the equipment or special ability row. Each Equipment item has an option to have nothing reduced, uses, or quantity.</li>
+            <li>Added optional Equipment Uses or Quantity tracking. Each Equipment roll will reduce Uses or Quantity by 1. This will be seen with the roll and adjusted on the equipment item's row. Each Equipment item has an option to track Nothing(default), Uses, or Quantity.</li>
+            <li>Added optional Special Ability Uses tracking. Each Special Ability roll will reduce Uses by 1. This will be seen with the roll and adjusted on the special ability's row. Each Special Ability has an option to track Nothing(default), or Uses.</li>
             <li>Moved to-hit table macro outside of repeating_weapon.</li>
             <li>Added an option to show "hits AC" with attack rolls. Uses THAC0, the adjusted to-Hit roll, and the preferred method for handling the attack matrix to determine the best AC the attack can hit.</li>
             <li>Added an option to pick the preferred method for handling the to-Hit matrix determining the best AC the attack can hit.
@@ -2857,14 +2856,20 @@
                         <input type="text" class="width-smaller" name="attr_weapon_num_attacks" value="1" title="@{repeating_weapon_$X_weapon_num_attacks} | Indicate the number of multiple attacks." />
                         <span>#Attacks</span>
                       </label>
-                      <label class="label-under-small hide-if-melee">
-                        <span class="two-inputs-over-label">
-                          <input type="text" class="width-smallest" name="attr_weapon_ammo" value="0" title="@{repeating_weapon_$X_weapon_ammo} | Use for resource tracking." />
-                          <span>/</span>
-                          <input type="text" class="width-smallest" name="attr_weapon_ammo_max" value="0" title="@{repeating_weapon_$X_weapon_ammo_max} | Use for resource tracking." />
-                        </span>
-                        <span>Ammo/Max</span>
-                      </label>
+                      <span class="hide-if-melee weapon-ammo-tracking">
+                        <label class="label-under-small">
+                          <span class="two-inputs-over-label">
+                            <input type="text" class="width-smallest" name="attr_weapon_ammo" value="0" title="@{repeating_weapon_$X_weapon_ammo} | Use for resource tracking." />
+                            <span>/</span>
+                            <input type="text" class="width-smallest" name="attr_weapon_ammo_max" value="0" title="@{repeating_weapon_$X_weapon_ammo_max} | Use for resource tracking." />
+                          </span>
+                          <span>Ammo/Max</span>
+                        </label>
+                        <label class="label-under-small">
+                          <input type="checkbox" class="width-smallest" name="attr_weapon_tracking" value="1" title="@{repeating_weapon_$X_weapon_tracking} | Automatically reduce ammo by 1 with each roll." />
+                          <span>Track</span>
+                        </label>
+                      </span>
                       <label class="label-under-small">
                         <input type="text" class="width-smaller" name="attr_weapon_quantity" value="1" title="@{repeating_weapon_$X_weapon_quantity}" />
                         <span>QTY</span>
@@ -3210,7 +3215,7 @@
                             <button type="action" name="act_addattack" title="Adds weapon to attacks. Creates a unique, non-synced, attack."><span>+Add</span></button>
                           </label>
                         </span>
-                        <span class="inline-label right toggle-equipment-tracking">
+                        <span class="inline-label right">
                           <span>Choose Tracking:</span>
                           <label><span>None</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="none" checked /></label>
                           <label><span>Uses</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="uses" /></label>
@@ -3427,14 +3432,17 @@
                   <span>Name</span>
                   <span>Short Description</span>
                   <span>Uses</span>
+                  <span>Track</span>
                 </span>
                 <span class="special-abilities-row1 column-header two-column-header hide-as-npc">
                   <span></span>
                   <span>Name</span>
                   <span>Uses</span>
+                  <span>Track</span>
                   <span></span>
                   <span>Name</span>
                   <span>Uses</span>
+                  <span>Track</span>
                 </span>
                 <fieldset class="repeating_ability">
                   <span class="top-row special-abilities-row1 border-top-half">
@@ -3465,6 +3473,9 @@
                       <input type="text" class="width-smaller" name="attr_ability_current_max" title="@{repeating_ability_$X_ability_current|max}" value="0" />
                       <!--deprecated; attr_max has been replaced with ability_current_max-->
                       <input type="hidden" name="attr_ability_max" value="1" />
+                    </label>
+                    <label class="inline-label ability-area-track">
+                      <input type="checkbox" class="width-smallest" name="attr_ability_tracking" value="1" title="@{repeating_ability_$X_ability_tracking} | Automatically reduce Uses by 1 with each roll.">
                     </label>
                   </span>
                   <details class="border-bottom-half">
@@ -4454,21 +4465,6 @@
                   <label title="@{toggle_critdamage} | Use crit damage rolls on natural 20. Defaults to weapon damage x2. Crit damage handling can be adjusted per attack.">
                     <span>Use Crit Damage:</span>
                     <input type="checkbox" name="attr_toggle_critdamage" value="1" />
-                  </label>
-                </span>
-                <span class="inline-label wrap width-fill">
-                  <h4>Tracking:</h4>
-                  <label title="@{toggle_ranged_ammo} | Each attack roll will reduce Ranged ammo by 1.">
-                    <span>Track Ranged Ammo:</span>
-                    <input type="checkbox" name="attr_toggle_ranged_ammo" value="1" />
-                  </label>
-                  <label title="@{toggle_equipment_uses} | Equipment items will have an option to auto-reduce nothing, Uses, or Quantity by 1 with each roll.">
-                    <span>Track Equipment Uses or Quantity:</span>
-                    <input type="checkbox" name="attr_toggle_equipment_tracking" value="1" />
-                  </label>
-                  <label title="@{toggle_special_ability_uses} | Each special ability roll will reduce Uses by 1.">
-                    <span>Track Special Ability Uses:</span>
-                    <input type="checkbox" name="attr_toggle_special_ability_uses" value="1" />
                   </label>
                 </span>
                 <span class="inline-label wrap width-fill">

@@ -3805,6 +3805,7 @@ const repeatingWeaponNumber = [
   'weapon_quantity',
   'weapon_ammo',
   'weapon_ammo_max',
+  'weapon_tracking',
   'weapon_weight',
   'weapon_cost',
   'weapon_range_short',
@@ -3856,6 +3857,7 @@ const repeatingEquipmentNumber = [
   'equipment_carried',
   'equipment_quantity',
   'equipment_quantity_max',
+  'equipment_tracking',
   'equipment_weight',
   'equipment_cost',
   'equipment_armor_type',
@@ -7684,19 +7686,14 @@ on(
       'thac0',
       'thac00',
       'weapon_whisper_to_hit',
-      'toggle_ranged_ammo',
-      'toggle_equipment_tracking',
-      'toggle_special_ability_uses',
+      `repeating_weapon_${id}_weapon_tracking`,
       `repeating_weapon_${id}_weapon_attack_type`, // 1 || 3 is ranged
       `repeating_weapon_${id}_weapon_ammo`,
-      `repeating_weapon_${id}_weapon_ammo_max`,
       `repeating_equipment_${id}_equipment_tracking`,
       `repeating_equipment_${id}_equipment_current`,
-      `repeating_equipment_${id}_equipment_current_max`,
       `repeating_equipment_${id}_equipment_quantity`,
-      `repeating_equipment_${id}_equipment_quantity_max`,
+      `repeating_ability_${id}_ability_tracking`,
       `repeating_ability_${id}_ability_current`,
-      `repeating_ability_${id}_ability_current_max`,
     ];
     const v = await getAttrsAsync(fields);
     const output = {};
@@ -7716,12 +7713,12 @@ on(
       const THAC0 = useTHAC0 ? int(v.thac00) : int(v.thac0);
       const toHitTable = v.weapon_whisper_to_hit;
       const hideBestAC = int(v.hide_best_ac_hit);
-      const trackAmmo = int(v.toggle_ranged_ammo) === 1 ? 1 : 0;
+      const weaponTracking = int(v[`repeating_weapon_${id}_weapon_tracking`]);
       // test if value is odd
       const isRanged = int(v[`repeating_weapon_${id}_weapon_attack_type`]) % 2 !== 0;
       const ammo = int(v[`repeating_weapon_${id}_weapon_ammo`]);
-      const ammoMax = int(v[`repeating_weapon_${id}_weapon_ammo_max`]);
-      console.log(`Ranged Ammo - trackAmmo:${trackAmmo} isRanged:${isRanged} ammo:${ammo} ammoMax:${ammoMax}`);
+      const currentAmmo = weaponTracking ? ammo - 1 : ammo;
+      console.log(`weaponTracking:${weaponTracking} isRanged:${isRanged} currentAmmo:${currentAmmo}`);
       await new Promise((resolve) => {
         startRoll(roll_string, async (roll) => {
           // console.log(roll);
@@ -7778,7 +7775,7 @@ on(
             //'name of key': 'computed value'
             // hides "hits AC" in roll based on sheet settings
             bestAChit: hideBestAC ? 99 : bestAC,
-            ammo: Math.max(0, isRanged && trackAmmo === 1 ? ammo - 1 : ammo),
+            ammo: currentAmmo,
           });
           resolve();
 
@@ -7790,19 +7787,15 @@ on(
               resolve();
             });
           });
-          output[`repeating_weapon_${id}_weapon_ammo`] = Math.max(0, isRanged && trackAmmo === 1 ? ammo - 1 : ammo);
+          output[`repeating_weapon_${id}_weapon_ammo`] = currentAmmo;
           setAttrs(output, {silent: true});
         });
       });
     } else if (trigger.includes('equipment-roll-button')) {
-      const trackEquipment = int(v.toggle_equipment_tracking);
-      const trackingOption = v[`repeating_equipment_${id}_equipment_tracking`]; // 'uses' or 'quantity'
+      const equipmentTracking = v[`repeating_equipment_${id}_equipment_tracking`]; // 'uses' or 'quantity'
       const quantity = float(v[`repeating_equipment_${id}_equipment_quantity`]);
-      const quantityMax = float(v[`repeating_equipment_${id}_equipment_quantity_max`]);
       const uses = int(v[`repeating_equipment_${id}_equipment_current`]);
-      const usesMax = int(v[`repeating_equipment_${id}_equipment_current_max`]);
-      console.log(`trackEquipment:${trackEquipment} trackingOption:${trackingOption} quantity:${quantity} quantity_max:${quantityMax} current:${uses} current_max:${usesMax}`);
-      if (trackEquipment === 0 || trackingOption === 'none') {
+      if (equipmentTracking === 'none') {
         console.log(`Change detected: Equipment and/or Row Not Tracked`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
@@ -7815,8 +7808,8 @@ on(
             resolve();
           });
         });
-      } else if (trackingOption === 'quantity') {
-        console.log(`trackEquipment:${trackEquipment} trackingOption:${trackingOption} quantity:${quantity} quantity_max:${quantityMax}`);
+      } else if (equipmentTracking === 'quantity') {
+        // console.log(`trackEquipment:${trackEquipment} equipmentTracking:${equipmentTracking} quantity:${quantity}`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
@@ -7830,8 +7823,8 @@ on(
           output[`repeating_equipment_${id}_equipment_quantity`] = quantity - 1;
           setAttrs(output);
         });
-      } else if (trackingOption === 'uses') {
-        console.log(`trackEquipment:${trackEquipment} trackingOption:${trackingOption} current:${uses} current_max:${usesMax}`);
+      } else if (equipmentTracking === 'uses') {
+        // console.log(`trackEquipment:${trackEquipment} equipmentTracking:${equipmentTracking} current:${uses}`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
@@ -7842,26 +7835,25 @@ on(
             });
             resolve();
           });
-          // output[`repeating_equipment_${id}_equipment_current`] = Math.max(0, uses - 1);
           output[`repeating_equipment_${id}_equipment_current`] = uses - 1;
           setAttrs(output, {silent: true});
         });
       }
     } else if (trigger.includes('ability-roll-button' || 'ability-npc-roll-button')) {
-      const trackAbility = int(v.toggle_special_ability_uses) === 1 ? 1 : 0;
+      const abilityTracking = int(v[`repeating_ability_${id}_ability_tracking`]);
       const uses = int(v[`repeating_ability_${id}_ability_current`]);
-      const usesMax = int(v[`repeating_ability_${id}_ability_current_max`]);
-      console.log(`Ability Uses - trackAbility:${trackAbility} current:${uses} current_max:${usesMax}`);
+      const currentUses = abilityTracking ? uses - 1 : uses;
+      // console.log(`abilityTracking:${abilityTracking} current:${uses}`);
       await new Promise((resolve) => {
         startRoll(roll_string, (roll) => {
           // console.log(roll);
           finishRoll(roll.rollId, {
             //'name of key': 'computed value'
-            uses: Math.max(0, trackAbility === 1 ? uses - 1 : uses),
+            uses: currentUses,
           });
           resolve();
         });
-        output[`repeating_ability_${id}_ability_current`] = Math.max(0, trackAbility === 1 ? uses - 1 : uses);
+        output[`repeating_ability_${id}_ability_current`] = currentUses;
         setAttrs(output, {silent: true});
       });
     } else {
