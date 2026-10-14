@@ -4656,8 +4656,13 @@ section.npc-box.statblock3 .image-avatar {
   flex-direction: row;
 }
 
-.sheet-rolltemplate-general .sheet-inlineroll-reset {
+.sheet-rolltemplate-general .sheet-row .sheet-inlineroll-reset {
   padding-inline: .5em;
+}
+
+.sheet-rolltemplate-general .sheet-row .sheet-inlineroll-reset:only-child {
+  margin-left: auto;
+  margin-right: -2em;
 }
 
 /* center */
