@@ -10,17 +10,17 @@
   "useroptions": [
     {
       "attribute": "is_npc",
-      "displayname": "Default to NPC/Monster:",
+      "displayname": "Default to NPC/Monster instead of PC:",
       "type": "checkbox",
       "value": "1",
-      "description": "Newly created sheets should be considered NPC/Monster. This can still be enabled/edited per sheet."
+      "description": "Newly created sheets will be NPC/Monster and display the Monster tab by default. This can still be enabled/edited per sheet."
     },
     {
       "attribute": "toggle_npc",
-      "displayname": "Default to NPC Tab:",
+      "displayname": "Default to the NPC Tab if sheet is an NPC/Monster:",
       "type": "checkbox",
       "value": "1",
-      "description": "Newly created sheets open to NPC/Monster tab. This can still be enabled/edited per sheet."
+      "description": "Newly created sheets open to the NPC tab instead of the Monster tab if the sheet is an NPC/Monster. This can still be enabled/edited per sheet."
     },
     {
       "attribute": "background",
