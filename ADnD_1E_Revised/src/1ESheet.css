@@ -1678,7 +1678,7 @@ section.npc-box.statblock3 .image-avatar {
   .charsheet input[type='checkbox'].toggle-ar:checked ~ .background .wrapper .header-box:has(.image-avatar[style*='http']) .logo-box .ac-columns label,
   .charsheet input[type='checkbox'].toggle-ar:checked ~ .background .wrapper .header-box:has(.toggle-avatar[value="1"] + .image-avatar img[src]) .logo-box .ac-columns label {
     margin: auto;
-    min-width: stretch;
+    min-width: 100%;
   }
 }
 
@@ -4739,11 +4739,11 @@ section.npc-box.statblock3 .image-avatar {
   color: var(--color-white1);
   font-family: var(--font-headers);
   font-size: var(--text-xxl);
-  max-width: stretch;
+  max-width: 100%;
   padding: 2px;
   text-align: center;
   text-shadow: -1px -1px 0 oklch(0% 0 0), 1px -1px 0 oklch(0% 0 0), -1px 1px 0 oklch(0% 0 0), 1px 1px 0 oklch(0% 0 0);
-  width: stretch;
+  width: 100%;
 }
 
 .sheet-rolltemplate-attacks .sheet-subheader,
@@ -4753,11 +4753,11 @@ section.npc-box.statblock3 .image-avatar {
   color: var(--color-white1);
   font-family: var(--font-headers);
   font-size: var(--text-lg);
-  max-width: stretch;
+  max-width: 100%;
   padding: 2px;
   text-align: center;
   text-shadow: -1px -1px 0 oklch(0% 0 0), 1px -1px 0 oklch(0% 0 0), -1px 1px 0 oklch(0% 0 0), 1px 1px 0 oklch(0% 0 0);
-  width: stretch;
+  width: 100%;
 }
 
 .sheet-rolltemplate-attacks .sheet-template-footer,
@@ -4768,11 +4768,11 @@ section.npc-box.statblock3 .image-avatar {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   color: var(--color-white1);
-  max-width: stretch;
+  max-width: 100%;
   min-height: 1em;
   text-align: center;
   text-shadow: -1px -1px 0 oklch(0% 0 0), 1px -1px 0 oklch(0% 0 0), -1px 1px 0 oklch(0% 0 0), 1px 1px 0 oklch(0% 0 0);
-  width: stretch;
+  width: 100%;
 }
 
 /* needed to prevent visible notch when {{bigname}} and {{name}} are used together */
@@ -5616,7 +5616,7 @@ section.npc-box.statblock3 .image-avatar {
     break-inside: avoid;
     display: flex !important;
     page-break-before: avoid;
-    width: stretch;
+    width: 100%;
   }
 
   .charsheet input[value='1'].toggle-npc ~ .background .wrapper .weapons-box {
