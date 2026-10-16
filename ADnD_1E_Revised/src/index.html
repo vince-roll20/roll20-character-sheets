@@ -5434,9 +5434,13 @@
                             {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
                           {{/rollGreater() computed::ammo 0}}
                           {{#rollTotal() computed::ammo 0}}
-                            {{#ammo}}<br><span class="sheet-bold">NO MORE AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
+                            {{#ammo}}<br><span class="sheet-bold">LAST AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
                             {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
                           {{/rollTotal() computed::ammo 0}}
+                          {{#rollLess() computed::ammo 0}}
+                            {{#ammo}}<br><span class="sheet-bold">NO AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
+                            {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
+                          {{/rollLess() computed::ammo 0}}
                         </span>
                       {{/range}}
                     </span>
@@ -5563,6 +5567,42 @@
                     {{#subtag}}
                       <span class="sheet-subheader sheet-span-two">{{subtag}}</span>
                     {{/subtag}}
+                  </span>
+                  <!-- Uses/Quantity -->
+                  <span class="sheet-row">
+                    {{#rollGreater() uses_max 0}}
+                      <span class="sheet-inlineroll-reset sheet-left">
+                        {{#rollGreater() computed::uses 0}}
+                          {{#uses}}<span class="sheet-bold">Uses:&nbsp;</span>{{computed::uses}}{{/uses}}
+                          {{#uses_max}}<span class="sheet-bold">/</span>{{uses_max}}{{/uses_max}}
+                        {{/rollGreater() computed::uses 0}}
+                        {{#rollTotal() computed::uses 0}}
+                          {{#uses}}<span class="sheet-bold">LAST USE!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
+                          {{#uses_max}}<span class="sheet-bold">/</span>{{uses_max}}{{/uses_max}}
+                        {{/rollTotal() computed::uses 0}}
+                        {{#rollLess() computed::uses 0}}
+                          {{#uses}}<span class="sheet-bold">NO USES!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
+                          {{#uses_max}}<span class="sheet-bold">/</span>{{uses_max}}{{/uses_max}}
+                        {{/rollLess() computed::uses 0}}
+                      </span>
+                    {{/rollGreater() uses_max 0}}
+
+                    {{#rollGreater() quantity_max 0}}
+                      <span class="sheet-inlineroll-reset sheet-right">
+                        {{#rollGreater() computed::quantity 0}}
+                          {{#quantity}}<span class="sheet-bold">Qty:&nbsp;</span>{{computed::quantity}}{{/quantity}}
+                          {{#quantity_max}}<span class="sheet-bold">/</span>{{quantity_max}}{{/quantity_max}}
+                        {{/rollGreater() computed::quantity 0}}
+                        {{#rollTotal() computed::quantity 0}}
+                          {{#quantity}}<span class="sheet-bold">LAST ITEM!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
+                          {{#quantity_max}}<span class="sheet-bold">/</span>{{quantity_max}}{{/quantity_max}}
+                        {{/rollTotal() computed::quantity 0}}
+                        {{#rollLess() computed::quantity 0}}
+                          {{#quantity}}<span class="sheet-bold">NO ITEMS!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
+                          {{#quantity_max}}<span class="sheet-bold">/</span>{{quantity_max}}{{/quantity_max}}
+                        {{/rollLess() computed::quantity 0}}
+                      </span>
+                    {{/rollGreater() quantity_max 0}}
                   </span>
                   <!-- text will be large and center-aligned -->
                   <span class="sheet-row">{{#bigtext1}}<span class="sheet-big-text sheet-span-two">{{bigtext1}}</span>{{/bigtext1}}</span>
@@ -5730,34 +5770,6 @@
                       <span class="sheet-row sheet-span-two sheet-text">{{locked_doors}}</span>
                     {{/locked_doors}}
                   {{/rollGreater() locked_doors 0}}
-
-                  <span class="sheet-row">
-                      {{#rollGreater() uses_max 0}}
-                        <span class="sheet-inlineroll-reset sheet-left">
-                          {{#rollGreater() computed::uses 0}}
-                            {{#uses}}<span class="sheet-bold">Uses:&nbsp;</span>{{computed::uses}}{{/uses}}
-                            {{#uses_max}}<span class="sheet-bold">/</span>{{uses_max}}{{/uses_max}}
-                          {{/rollGreater() computed::uses 0}}
-                          {{#rollLess() computed::uses 1}}
-                            {{#uses}}<span class="sheet-bold">NO MORE USES!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
-                            {{#uses_max}}<span class="sheet-bold">/</span>{{uses_max}}{{/uses_max}}
-                          {{/rollLess() computed::uses 1}}
-                        </span>
-                      {{/rollGreater() uses_max 0}}
-
-                      {{#rollGreater() quantity_max 0}}
-                        <span class="sheet-inlineroll-reset sheet-right">
-                          {{#rollGreater() computed::quantity 0}}
-                            {{#quantity}}<span class="sheet-bold">Qty:&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                            {{#quantity_max}}<span class="sheet-bold">/</span>{{quantity_max}}{{/quantity_max}}
-                          {{/rollGreater() computed::quantity 0}}
-                          {{#rollLess() computed::quantity 1}}
-                            {{#quantity}}<span class="sheet-bold">NO MORE ITEMS!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                            {{#quantity_max}}<span class="sheet-bold">/</span>{{quantity_max}}{{/quantity_max}}
-                          {{/rollLess() computed::quantity 1}}
-                        </span>
-                      {{/rollGreater() quantity_max 0}}
-                  </span>
 
                   {{#allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer freetext color effect_type school spell_level spell_class spell_class_level range duration area_of_effect components casting_time saving_throw save_type link type roll roll_high roll_low roll_target roll_target2 rolldecimal nwp_mod_applied mod_applied wis_applied current_encumbrance dex_adjustment quantity quantity_max uses uses_max whisper attribute_mod_1_name attribute_mod_1 attribute_mod_1_max attribute_mod_2_name attribute_mod_2 attribute_mod_2_max attribute_mod_3_name attribute_mod_3 attribute_mod_3_max attribute_mod_4_name attribute_mod_4 attribute_mod_4_max attribute_mod_5_name attribute_mod_5 attribute_mod_5_max attribute_mod_6_name attribute_mod_6 attribute_mod_6_max notes locked_doors}}
                     <!-- <span class="sheet-row sheet-span-two sheet-all-props">{{key}}{{value}}</span> -->

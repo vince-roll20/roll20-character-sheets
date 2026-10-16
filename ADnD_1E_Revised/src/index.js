@@ -7717,7 +7717,7 @@ on(
       // test if value is odd
       const isRanged = int(v[`repeating_weapon_${id}_weapon_attack_type`]) % 2 !== 0;
       const ammo = int(v[`repeating_weapon_${id}_weapon_ammo`]);
-      const currentAmmo = weaponTracking ? ammo - 1 : ammo;
+      const currentAmmo = isRanged && weaponTracking ? ammo - 1 : ammo;
       console.log(`weaponTracking:${weaponTracking} isRanged:${isRanged} currentAmmo:${currentAmmo}`);
       await new Promise((resolve) => {
         startRoll(roll_string, async (roll) => {

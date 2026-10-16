@@ -4612,7 +4612,7 @@ section.npc-box.statblock3 .image-avatar {
   outline-offset: 0;
   padding: 0;
   text-align: center;
-  width: auto;
+  width: 100%;
 }
 
 .sheet-rolltemplate-attacks .sheet-row:has(.sheet-big-text),
@@ -4646,9 +4646,9 @@ section.npc-box.statblock3 .image-avatar {
 .sheet-rolltemplate-attacks .sheet-row span:not(.sheet-span-two),
 .sheet-rolltemplate-general .sheet-row span:not(.sheet-span-two) {
   align-self: center;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap;
   margin-inline: auto;
-  margin-left: 0;
+  margin-left: 0; */
 }
 
 .sheet-rolltemplate-attacks .sheet-row .sheet-span-two .sheet-inlineroll-reset,
