@@ -1721,11 +1721,11 @@ const updateSyncArmorFlag = async (current_version, final_version) => {
   versionator(current_version, final_version);
 };
 
-// One-time update: trigger recalc for '/ssr to-Hit' default values
+// One-time update: trigger recalc for '/ss to-Hit' default values
 const recalcToHitWhisper = async (current_version, final_version) => {
   const idArray = await getSectionIDsAsync('repeating_weapon');
   const fields = idArray.flatMap((id) => [`repeating_weapon_${id}_weapon_whisper_to_hit`, `repeating_weapon_${id}_weapon_whisper_to_hit_select`]);
-  const v = await getAttrsAsync(['toggle_to_hit_table', 'weapon_whisper_to_hit', ...fields]);
+  const v = await getAttrsAsync(['toggle_to_hit_table', ...fields]);
   const updates = await Promise.all(idArray.map((id) => getToHitRowUpdate(v, id)));
   const output = Object.assign({}, ...updates);
   output.weapon_whisper_to_hit = v.weapon_whisper_to_hit;
@@ -3145,7 +3145,7 @@ const getToHitRowUpdate = async (v, id, isLocal) => {
   const whichTable = int(v.toggle_to_hit_table); // MATRIX or THAC0
   const hideToHit = int(v.hide_to_hit_table); //
   const attrSelect = `repeating_weapon_${id}_weapon_whisper_to_hit_select`;
-  const attrMacro = 'weapon_whisper_to_hit';
+  const attrMacro = `repeating_weapon_${id}_weapon_whisper_to_hit`;
   let thishitTableSelect = int(v[attrSelect]);
   let thishitTableMacro = '';
   const noMacro = '&nbsp;';
@@ -3188,8 +3188,8 @@ const getToHitRowUpdate = async (v, id, isLocal) => {
 on('change:toggle_to_hit_table change:hide_to_hit_table', async (eventInfo) => {
   // hide/show to-Hit? isLocal should override global sheet settings
   const idArray = await getSectionIDsAsync('weapon');
-  const fields = idArray.flatMap((id) => [`repeating_weapon_${id}_weapon_whisper_to_hit_select`]);
-  const v = await getAttrsAsync(['toggle_to_hit_table', 'hide_to_hit_table', 'weapon_whisper_to_hit', ...fields]);
+  const fields = idArray.flatMap((id) => [`repeating_weapon_${id}_weapon_whisper_to_hit_select`, `repeating_weapon_${id}_weapon_whisper_to_hit`]);
+  const v = await getAttrsAsync(['toggle_to_hit_table', 'hide_to_hit_table', ...fields]);
   const isLocal = 0;
   // Map the IDs to an array of Promises
   const updatePromises = idArray.map((id) => getToHitRowUpdate(v, id, isLocal));
@@ -3202,7 +3202,7 @@ on('change:toggle_to_hit_table change:hide_to_hit_table', async (eventInfo) => {
 
 on('change:repeating_weapon:weapon_whisper_to_hit_select', async (eventInfo) => {
   const id = eventInfo.sourceAttribute.split('_')[2];
-  const v = await getAttrsAsync(['toggle_to_hit_table', 'weapon_whisper_to_hit', `repeating_weapon_${id}_weapon_whisper_to_hit_select`]);
+  const v = await getAttrsAsync(['toggle_to_hit_table', `repeating_weapon_${id}_weapon_whisper_to_hit_select`, `repeating_weapon_${id}_weapon_whisper_to_hit`]);
   const isLocal = 1;
   const output = await getToHitRowUpdate(v, id, isLocal);
   await setAttrsAsync(output, {silent: true});
@@ -3827,8 +3827,7 @@ const repeatingWeaponString = [
   'weapon_range_error',
   'weapon_dual',
   'weapon_tohitacadj',
-  // no longer resides in repeating_weapon
-  // 'weapon_whisper_to_hit',
+  'weapon_whisper_to_hit',
   'weapon_length',
   'weapon_space',
   'weapon_speed',
@@ -7685,7 +7684,7 @@ on(
       'hide_best_ac_hit',
       'thac0',
       'thac00',
-      'weapon_whisper_to_hit',
+      `repeating_weapon_${id}_weapon_whisper_to_hit`,
       `repeating_weapon_${id}_weapon_tracking`,
       `repeating_weapon_${id}_weapon_attack_type`, // 1 || 3 is ranged
       `repeating_weapon_${id}_weapon_ammo`,
@@ -7711,14 +7710,14 @@ on(
     if (trigger.includes('weapon-attack-roll-button' || 'weapon-attack-npc-roll-button')) {
       const useTHAC0 = int(v.toggle_to_hit_table);
       const THAC0 = useTHAC0 ? int(v.thac00) : int(v.thac0);
-      const toHitTable = v.weapon_whisper_to_hit;
+      const toHitTable = v[`repeating_weapon_${id}_weapon_whisper_to_hit`];
       const hideBestAC = int(v.hide_best_ac_hit);
       const weaponTracking = int(v[`repeating_weapon_${id}_weapon_tracking`]);
       // test if value is odd
       const isRanged = int(v[`repeating_weapon_${id}_weapon_attack_type`]) % 2 !== 0;
       const ammo = int(v[`repeating_weapon_${id}_weapon_ammo`]);
       const currentAmmo = isRanged && weaponTracking ? ammo - 1 : ammo;
-      console.log(`weaponTracking:${weaponTracking} isRanged:${isRanged} currentAmmo:${currentAmmo}`);
+      // console.log(`weaponTracking:${weaponTracking} isRanged:${isRanged} currentAmmo:${currentAmmo}`);
       await new Promise((resolve) => {
         startRoll(roll_string, async (roll) => {
           // console.log(roll);
@@ -7796,7 +7795,7 @@ on(
       const quantity = float(v[`repeating_equipment_${id}_equipment_quantity`]);
       const uses = int(v[`repeating_equipment_${id}_equipment_current`]);
       if (equipmentTracking === 'none') {
-        console.log(`Change detected: Equipment and/or Row Not Tracked`);
+        // console.log(`Change detected: Equipment and/or Row Not Tracked`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
@@ -7858,7 +7857,7 @@ on(
       });
     } else {
       // NORMAL ROLL NO SPECIAL HANDLING NEEDED
-      console.log(`Normal roll - No special handling`);
+      // console.log(`Normal roll - No special handling`);
       startRoll(roll_string, (roll) => {
         finishRoll(roll.rollId);
       });
