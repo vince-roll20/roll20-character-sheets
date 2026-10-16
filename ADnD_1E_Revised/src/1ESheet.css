@@ -3117,7 +3117,7 @@ section.npc-box.statblock3 .image-avatar {
 .charsheet .custom-attributes .custom-attributes-box {
   display: grid;
   grid-column-gap: 2px;
-  grid-template-columns: 1fr 6em 1fr 6em;
+  grid-template-columns: 1fr 7em 1fr 7em;
   line-height: 1.85em;
   margin-top: 0.25em;
 }

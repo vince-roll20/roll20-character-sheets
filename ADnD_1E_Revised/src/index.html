@@ -3039,6 +3039,12 @@
                           <span class="material-icons gear-nav" title="Expand/Hide sub-section"></span>
                         </summary>
                         <!-- sync armor-->
+                        <span class="inline-label right">
+                          <span>Choose Tracking:</span>
+                          <label><span>None</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="none" checked /></label>
+                          <label><span>Uses</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="uses" /></label>
+                          <label><span>Quantity</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="quantity" /></label>
+                        </span>
                         <span class="span-all show-for-armor inline-label" title="Choose an Armor Type first to access additional fields.">
                           <input type="hidden" class="toggle-armor-details show-shield-only" name="attr_equipment_armor_type" value="99" />
                           <label class="label-under-small sync-lock">
@@ -3214,12 +3220,6 @@
                           <label style="margin-top: 0;">
                             <button type="action" name="act_addattack" title="Adds weapon to attacks. Creates a unique, non-synced, attack."><span>+Add</span></button>
                           </label>
-                        </span>
-                        <span class="inline-label right">
-                          <span>Choose Tracking:</span>
-                          <label><span>None</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="none" checked /></label>
-                          <label><span>Uses</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="uses" /></label>
-                          <label><span>Quantity</span><input type="radio" name="attr_equipment_tracking" title="@{repeating_equipment_$X_equipment_tracking" value="quantity" /></label>
                         </span>
                         <span class="inline-label">
                           <textarea class="height-short" name="attr_equipment_description" title="@{repeating_equipment_$X_equipment_description}" value="" placeholder="Description"></textarea>
