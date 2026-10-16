@@ -90,8 +90,9 @@
               </ol>
             </li>
             <li>Sheet default settings have been updated with the new options.</li>
-            <li>Included a sheet update that checks and updates the default Attack macro. This only works for unedited attack macros. If you have custom attack macros you will need to manually update those macros to enable the new CRP rolls. <code>{{bestAChit=[[0]]}}</code> was added to handle "hits AC" and <code>{{ammo=[[ @{weapon_ammo} ]]/[[ @{weapon_ammo|max} ]]}}</code> was changed/updated to <code>{{ammo=[[ @{weapon_ammo} ]]}} {{ammoMax=[[ @{weapon_ammo|max} ]]}}</code> to handle Ranged ammo tracking. Reminder, you can also reset all macros, by section, to their defaults, from the sheet settings page. You lose any macro-text edits but are guaranteed to get the current default macro.</li>
-            <li>Included a sheet update that checks and updates the default Equipment macro. This only works for unedited Equipment macros. If you have custom Equipment macros you will need to manually update those macros to enable the new CRP rolls. <code>{{uses=@{equipment_current}}}</code> was changed/updated to <code>{{uses=[[ @{equipment_current} ]]}}</code> to handle Equipment Uses tracking. Reminder, you can also reset all macros, by section, to their defaults, from the sheet settings page. You lose any macro-text edits but are guaranteed to get the current default macro.</li>
+            <li>Included a sheet update that checks and updates the default Attack macro. This only works for unedited Attack macros. If you have custom attack macros you can manually update those macros to enable the new CRP rolls. <code>{{bestAChit=[[0]]}}</code> was added to handle "hits AC" and <code>{{ammo=[[ @{weapon_ammo} ]]/[[ @{weapon_ammo|max} ]]}}</code> was changed/updated to <code>{{ammo=[[0]]}} {{ammoMax=[[0]]}}</code> to handle Ranged ammo tracking. Reminder, you can also reset all macros, by section, to their defaults, from the sheet settings page. You lose any macro-text edits but are guaranteed to get the current default macro.</li>
+            <li>Included a sheet update that checks and updates the default Equipment macro. This only works for unedited Equipment macros. If you have custom Equipment macros you can manually update those macros to enable the new CRP rolls. <code>{{uses=@{equipment_current}}}</code> was changed/updated to <code>{{uses=[[0]]}}</code> to handle Equipment Uses tracking. <code>{{quantity=@{equipment_quantity}}}</code> was changed/updated to <code>{{quantity=[[0]]}}</code> to handle Equipment Quantity tracking. Reminder, you can also reset all macros, by section, to their defaults, from the sheet settings page. You lose any macro-text edits but are guaranteed to get the current default macro.</li>
+            <li>Included a sheet update that checks and updates the default Special Ability macro. This only works for unedited Special Ability macros. If you have custom Special Ability macros you can manually update those macros to enable the new CRP rolls. <code>{{uses=@{equipment_current}}}</code> was changed/updated to <code>{{uses=[[0]]}}</code> to handle Uses tracking. Reminder, you can also reset all macros, by section, to their defaults, from the sheet settings page. You lose any macro-text edits but are guaranteed to get the current default macro.</li>
 
             <h5>Recent/Previous</h5>
             <li>Fixed fractional Climb Walls.</li>
@@ -2930,7 +2931,7 @@
                       </span>
                     </span>
                     <textarea class="height-short" name="attr_weapon_notes" title="@{repeating_weapon_$X_weapon_notes}" placeholder="Description"></textarea>
-                    <textarea class="height-short toggle-macros" name="attr_weapon_macro_text" title="@{repeating_weapon_$X_weapon_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + ( @{weapon_backstab_bonus}[BACKSTAB] ) + ( @{weapon_tohitbonus}[HIT_BON] ) + ( @{weapon_prof_pen}[PROF_PEN] ) + ( @{weapon_dual_pen}[DUAL_PEN] ) + ( @{weapon_magicbonus}[MAG_BON] ) + ( ?{To Hit Modifier?|0}[MISC_MOD] ) ]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammo=[[0]]/[[ @{weapon_ammo|max} ]]}} {{crit=[[ @{toggle_critdamage} ]]}} @{weapon_tohitacadj}</textarea>
+                    <textarea class="height-short toggle-macros" name="attr_weapon_macro_text" title="@{repeating_weapon_$X_weapon_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + ( @{weapon_backstab_bonus}[BACKSTAB] ) + ( @{weapon_tohitbonus}[HIT_BON] ) + ( @{weapon_prof_pen}[PROF_PEN] ) + ( @{weapon_dual_pen}[DUAL_PEN] ) + ( @{weapon_magicbonus}[MAG_BON] ) + ( ?{To Hit Modifier?|0}[MISC_MOD] ) ]]}} {{bestAChit=[[0]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammoTracking=[[0]]}} {{ammo=[[0]]}} {{ammoMax=[[0]]}} {{ammoRaw=@{weapon_ammo}/@{weapon_ammo|max}}} {{crit=[[ @{toggle_critdamage} ]]}} @{weapon_tohitacadj}</textarea>
                   </details>
                 </fieldset>
               </div>
@@ -4680,7 +4681,7 @@
                 <span class="inline-label">
                   <h4 class="stack-text">Default Attack Macro:</h4>
                   <label>
-                    <textarea class="height-half" name="attr_default_attack_macro" title="@{default_attack_macro} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + ( @{weapon_backstab_bonus}[BACKSTAB] ) + ( @{weapon_tohitbonus}[HIT_BON] ) + ( @{weapon_prof_pen}[PROF_PEN] ) + ( @{weapon_dual_pen}[DUAL_PEN] ) + ( @{weapon_magicbonus}[MAG_BON] ) + ( ?{To Hit Modifier?|0}[MISC_MOD] ) ]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammo=[[0]]/[[ @{weapon_ammo|max} ]]}} {{crit=[[ @{toggle_critdamage} ]]}} @{weapon_tohitacadj}</textarea>
+                    <textarea class="height-half" name="attr_default_attack_macro" title="@{default_attack_macro} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + ( @{weapon_backstab_bonus}[BACKSTAB] ) + ( @{weapon_tohitbonus}[HIT_BON] ) + ( @{weapon_prof_pen}[PROF_PEN] ) + ( @{weapon_dual_pen}[DUAL_PEN] ) + ( @{weapon_magicbonus}[MAG_BON] ) + ( ?{To Hit Modifier?|0}[MISC_MOD] ) ]]}} {{bestAChit=[[0]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammoTracking=[[0]]}} {{ammo=[[0]]}} {{ammoMax=[[0]]}} {{ammoRaw=@{weapon_ammo}/@{weapon_ammo|max}}} {{crit=[[ @{toggle_critdamage} ]]}} @{weapon_tohitacadj}</textarea>
                   </label>
                   <button type="action" name="act_updateweaponsmacros" class="reset-macros" title="WARNING: Override all attack macros. Any local customization/editing that has been done on existing macro-text fields will be lost!"><span>Update Attacks</span></button>
                 </span>
@@ -5425,18 +5426,25 @@
                     <span class="sheet-span-two">
                       {{#range}}
                         <span class="sheet-inlineroll-reset">
-                          {{#rollGreater() computed::ammo 0}}
-                            {{#ammo}}<span class="sheet-bold">Ammo:&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                            {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
-                          {{/rollGreater() computed::ammo 0}}
-                          {{#rollTotal() computed::ammo 0}}
-                            {{#ammo}}<br><span class="sheet-bold">LAST AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                            {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
-                          {{/rollTotal() computed::ammo 0}}
-                          {{#rollLess() computed::ammo 0}}
-                            {{#ammo}}<br><span class="sheet-bold">NO AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                            {{#ammoMax}}<span class="sheet-bold">/</span>{{ammoMax}}{{/ammoMax}}
-                          {{/rollLess() computed::ammo 0}}
+                          {{#rollTotal() computed::ammoTracking 1}}
+                              {{#rollGreater() computed::ammo 0}}
+                                {{#ammo}}<span class="sheet-bold">Ammo:&nbsp;</span>{{computed::ammo}}{{/ammo}}
+                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}{{/ammoMax}}
+                              {{/rollGreater() computed::ammo 0}}
+                              {{#rollTotal() computed::ammo 0}}
+                                {{#ammo}}<br><span class="sheet-bold">LAST AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
+                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}{{/ammoMax}}
+                              {{/rollTotal() computed::ammo 0}}
+                              {{#rollLess() computed::ammo 0}}
+                                {{#ammo}}<br><span class="sheet-bold">NO AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
+                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}{{/ammoMax}}
+                              {{/rollLess() computed::ammo 0}}
+                          {{/rollTotal() computed::ammoTracking 1}}
+
+                          <!-- fallback ammo display -->
+                          {{#rollTotal() computed::ammoTracking 0}}
+                            {{#ammoRaw}}<span class="sheet-bold">Ammo:&nbsp;<span class="sheet-inlinerollresult">{{ammoRaw}}</span></span>{{/ammoRaw}}
+                          {{/rollTotal() computed::ammoTracking 0}}
                         </span>
                       {{/range}}
                     </span>
@@ -5453,12 +5461,12 @@
                     </span>
                   </span>
 
-                  {{#allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 bestAChit damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammo ammoMax whisper}}
+                  {{#allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 bestAChit damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammoTracking ammo ammoMax ammoRaw whisper}}
                     <span class="sheet-row sheet-all-props">
                       <span class="sheet-tcat">{{key}}</span>
                       <span>{{value}}</span>
                     </span>
-                  {{/allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 bestAChit damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammo ammoMax whisper}}
+                  {{/allprops() name subtag bigname bigtext1 bigtext2 bigtext3 bigtext4 bigtext5 bigtext6 bigtext7 bigtext8 bigtext9 bigtext10 bigtext11 bigtext12 footer backstab crit dual color attack1 attack2 attack3 attack4 bestAChit damagevsSMchatmenu damagevsLchatmenu critdamagevsSMchatmenu critdamagevsLchatmenu damage1vsSM damage2vsSM damage3vsSM damage4vsSM damage1vsL damage2vsL damage3vsL damage4vsL damage1 ToHitArmorType0 ToHitArmorType1 ToHitArmorType2 ToHitArmorType3 ToHitArmorType4 ToHitArmorType5 ToHitArmorType6 ToHitArmorType7 ToHitArmorType8 ToHitArmorType9 ToHitArmorType10 WeaponNotes freetext damagetype rate range length space speed ammoTracking ammo ammoMax ammoRaw whisper}}
 
                   {{#WeaponNotes}}
                     <span class="sheet-row">

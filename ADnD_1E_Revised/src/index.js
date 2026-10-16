@@ -227,7 +227,7 @@ on(
 );
 
 const attackMacroDefault =
-  '&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + ( @{weapon_backstab_bonus}[BACKSTAB] ) + ( @{weapon_tohitbonus}[HIT_BON] ) + ( @{weapon_prof_pen}[PROF_PEN] ) + ( @{weapon_dual_pen}[DUAL_PEN] ) + ( @{weapon_magicbonus}[MAG_BON] ) + ( ?{To Hit Modifier?|0}[MISC_MOD] ) ]]}} {{bestAChit=[[0]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammo=[[0]]}} {{ammoMax=[[ @{weapon_ammo|max} ]]}} {{crit=[[ @{toggle_critdamage} ]]}} @{weapon_tohitacadj}';
+  '&{template:attacks} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=@{weapon_name}}} {{dual=@{weapon_dual}}} {{attack1=[[ 1d20 + ( @{weapon_backstab_bonus}[BACKSTAB] ) + ( @{weapon_tohitbonus}[HIT_BON] ) + ( @{weapon_prof_pen}[PROF_PEN] ) + ( @{weapon_dual_pen}[DUAL_PEN] ) + ( @{weapon_magicbonus}[MAG_BON] ) + ( ?{To Hit Modifier?|0}[MISC_MOD] ) ]]}} {{bestAChit=[[0]]}} {{damagevsSMchatmenu=@{weapon_damagesmallmedium_chat_menu}}} {{damagevsLchatmenu=@{weapon_damagelarge_chat_menu}}} {{critdamagevsSMchatmenu=@{weapon_critdamagesmallmedium_chat_menu}}} {{critdamagevsLchatmenu=@{weapon_critdamagelarge_chat_menu}}} {{WeaponNotes=@{weapon_notes}}} {{backstab=[[ @{weapon_backstab_mult} ]]}} {{damagetype=@{weapon_attackdmgtype}}} {{rate=@{weapon_rateoffire}}} {{range=@{weapon_range}}} {{length=@{weapon_length}}} {{space=@{weapon_space}}} {{speed=@{weapon_speed}}} {{ammoTracking=[[0]]}} {{ammo=[[0]]}} {{ammoMax=[[0]]}} {{ammoRaw=@{weapon_ammo}/@{weapon_ammo|max}}} {{crit=[[ @{toggle_critdamage} ]]}} @{weapon_tohitacadj}';
 
 const armorRowIDs = [
   'unarmored_row_id',
@@ -7688,11 +7688,15 @@ on(
       `repeating_weapon_${id}_weapon_tracking`,
       `repeating_weapon_${id}_weapon_attack_type`, // 1 || 3 is ranged
       `repeating_weapon_${id}_weapon_ammo`,
+      `repeating_weapon_${id}_weapon_ammo_max`,
       `repeating_equipment_${id}_equipment_tracking`,
       `repeating_equipment_${id}_equipment_current`,
+      `repeating_equipment_${id}_equipment_current_max`,
       `repeating_equipment_${id}_equipment_quantity`,
+      `repeating_equipment_${id}_equipment_quantity_max`,
       `repeating_ability_${id}_ability_tracking`,
       `repeating_ability_${id}_ability_current`,
+      `repeating_ability_${id}_ability_current_max`,
     ];
     const v = await getAttrsAsync(fields);
     const output = {};
@@ -7713,11 +7717,13 @@ on(
       const toHitTable = v[`repeating_weapon_${id}_weapon_whisper_to_hit`];
       const hideBestAC = int(v.hide_best_ac_hit);
       const weaponTracking = int(v[`repeating_weapon_${id}_weapon_tracking`]);
-      // test if value is odd
-      const isRanged = int(v[`repeating_weapon_${id}_weapon_attack_type`]) % 2 !== 0;
-      const ammo = int(v[`repeating_weapon_${id}_weapon_ammo`]);
-      const currentAmmo = isRanged && weaponTracking ? ammo - 1 : ammo;
-      console.log(`weaponTracking:${weaponTracking} isRanged:${isRanged} currentAmmo:${currentAmmo}`);
+      const isRanged = int(v[`repeating_weapon_${id}_weapon_attack_type`]) % 2 !== 0; // odd is ranged
+      const ammoValid = await numbersOnly(v[`repeating_weapon_${id}_weapon_ammo`]);
+      const ammoMaxValid = await numbersOnly(v[`repeating_weapon_${id}_weapon_ammo_max`]);
+      const ammo = ammoValid && ammoMaxValid ? int(v[`repeating_weapon_${id}_weapon_ammo`]) : v[`repeating_weapon_${id}_weapon_ammo`];
+      const ammoMax = ammoValid && ammoMaxValid ? int(v[`repeating_weapon_${id}_weapon_ammo_max`]) : v[`repeating_weapon_${id}_weapon_ammo_max`];
+      const currentAmmo = ammoValid && ammoMaxValid && isRanged && weaponTracking ? ammo - 1 : ammo;
+      console.log(`ammoValid:${ammoValid} ammoMaxValid:${ammoMaxValid} weaponTracking:${weaponTracking} isRanged:${isRanged} currentAmmo:${currentAmmo}`);
       await new Promise((resolve) => {
         startRoll(roll_string, async (roll) => {
           // console.log(roll);
@@ -7774,7 +7780,9 @@ on(
             //'name of key': 'computed value'
             // hides "hits AC" in roll based on sheet settings
             bestAChit: hideBestAC ? 99 : bestAC,
+            ammoTracking: weaponTracking,
             ammo: currentAmmo,
+            ammoMax: ammoMax,
           });
           resolve();
 
@@ -7787,6 +7795,7 @@ on(
             });
           });
           output[`repeating_weapon_${id}_weapon_ammo`] = currentAmmo;
+          output[`repeating_weapon_${id}_weapon_ammo_max`] = ammoMax;
           setAttrs(output, {silent: true});
         });
       });
