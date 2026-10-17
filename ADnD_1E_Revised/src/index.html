@@ -2694,11 +2694,6 @@
                   <input type="checkbox" class="hidden" name="attr_weapon_critdamage_flag" value="1" />
                   <div class="top-row border-top-half">
                     <span class="weapons-row1 center">
-                      <!--
-                          <button class="dice-button hide-as-npc" type="roll" name="attr_weapon_attack_roll" title="%{selected|repeating_weapon_$X_weapon_attack_roll} | PC Roll" value="@{whisper_pc} @{weapon_macro_text} @{weapon_whisper_to_hit}"></button>
-                          <button class="dice-button hide-as-pc" type="roll" name="attr_weapon_attack_npc_roll" title="%{selected|repeating_weapon_$X_weapon_attack_npc_roll} | NPC Roll" value="@{whisper_npc} @{weapon_macro_text} @{weapon_damage_chat_menu_npc} @{weapon_whisper_to_hit}"></button>
-                          -->
-
                       <!--CRP PC version-->
                       <button class="dice-button hide-as-npc" type="roll" name="roll_weapon_attack_roll" title="%{selected|repeating_weapon_$X_weapon_attack_roll} | PC Roll" value="@{weapon_attack_roll}"></button>
                       <button type="action" class="hidden" name="act_weapon-attack-roll-button"></button>
@@ -2998,7 +2993,6 @@
                   <div class="equipment-display-carry sect">
                     <div class="equipment-display-type">
                       <span class="top-row equipment-columns border-top-half">
-                        <!-- <button class="dice-button" type="roll" name="attr_equipment_roll" title="%{repeating_equipment_$X_equipment_roll}" value="@{equipment_macro_text}"></button> -->
                         <!--CRP version-->
                         <button class="dice-button" type="roll" name="roll_equipment_roll" title="%{selected|repeating_equipment_$X_equipment_roll}" value="@{equipment_roll}">
                         </button>
@@ -3447,10 +3441,6 @@
                 </span>
                 <fieldset class="repeating_ability">
                   <span class="top-row special-abilities-row1 border-top-half">
-                    <!-- <button class="dice-button hide-as-npc ability-area-roll" type="roll" name="attr_ability_roll" title="%{repeating_ability_$X_ability_roll} | PC Roll" value="@{whisper_pc} @{ability_macro_text}"></button>
-
-                    <button class="dice-button hide-as-pc ability-area-roll" type="roll" name="attr_ability_npc_roll" title="%{repeating_ability_$X_ability_npc_roll} | NPC Roll" value="@{whisper_npc} @{ability_macro_text}"></button> -->
-
                     <!--CRP version-->
                     <button class="dice-button hide-as-npc ability-area-roll" type="roll" name="roll_ability_roll" title="%{selected|repeating_ability_$X_ability_roll}" value="@{ability_roll}">
                     </button>
@@ -3530,7 +3520,6 @@
                         <textarea class="info-link" wrap="off" name="attr_ability_link" title="@{repeating_ability_$X_ability_link}" placeholder="https://www.example.com"></textarea>
                       </label>
                     </span>
-                    <!-- <textarea class="height-short toggle-macros" name="attr_ability_macro_text" title="@{repeating_ability_$X_ability_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll= [[ 0 + @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}} {{uses=@{ability_current}}} {{uses_max=[[ 0 + @{ability_current|max} ]]}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}</textarea> -->
                     <!-- CRP -->
                     <textarea class="height-short toggle-macros" name="attr_ability_macro_text" title="@{repeating_ability_$X_ability_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll=[[ 0 + @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}}{{usesTracking=[[0]]}} {{uses=[[0]]}} {{usesMax=[[0]]}} {{usesRaw=@{ability_current}/@{ability_current|max}}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}</textarea>
                   </details>
