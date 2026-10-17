@@ -1038,7 +1038,7 @@ const equipmentMacroUpdate = async (current_version, final_version) => {
     equipment_old_v2:
       '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{quantity=@{equipment_quantity}}} {{quantity_max=@{equipment_quantity|max}}} {{uses=@{equipment_current}}} {{uses_max=[[ @{equipment_current|max} ]]}}',
     equipment_current:
-      '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{uses=[[0]]}} {{uses_max=[[ @{equipment_current|max} ]]}} {{quantity=[[0]]}} {{quantity_max=[[ @{equipment_quantity|max} ]]}}',
+      '@{whisper_pc} &{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Item/Equipment: @{equipment_item}}} {{link=@{equipment_link}}} {{freetext=@{equipment_description}}} {{usesTracking=[[0]]}} {{uses=[[0]]}} {{usesMax=[[0]]}} {{usesRaw=@{equipment_current}/@{equipment_current|max}}} {{quantityTracking=[[0]]}} {{quantity=[[0]]}} {{quantityMax=[[0]]}} {{quantityRaw=@{equipment_quantity}/@{equipment_quantity|max}}}',
   };
   const oldVersions = [replacements.equipment_old, replacements.equipment_old_v2];
   // check and update all existing equipment
@@ -3871,7 +3871,6 @@ const repeatingEquipmentNumber = [
 ];
 const repeatingEquipmentString = [
   'equipment_macro_text',
-  'equipment_tracking',
   'equipment_weapon_speed',
   'equipment_weapon_misc',
   'equipment_weapon_length',
@@ -7800,51 +7799,71 @@ on(
         });
       });
     } else if (trigger.includes('equipment-roll-button')) {
-      const equipmentTracking = v[`repeating_equipment_${id}_equipment_tracking`]; // 'uses' or 'quantity'
-      const quantity = float(v[`repeating_equipment_${id}_equipment_quantity`]);
-      const uses = int(v[`repeating_equipment_${id}_equipment_current`]);
-      if (equipmentTracking === 'none') {
-        // console.log(`Change detected: Equipment and/or Row Not Tracked`);
+      const equipmentTracking = int(v[`repeating_equipment_${id}_equipment_tracking`]); // 0:none, 1:uses, 2:quantity
+      const usesValid = await numbersOnly(v[`repeating_equipment_${id}_equipment_current`]);
+      const usesMaxValid = await numbersOnly(v[`repeating_equipment_${id}_equipment_current_max`]);
+      const quantityValid = await numbersOnly(v[`repeating_equipment_${id}_equipment_quantity`]);
+      const quantityMaxValid = await numbersOnly(v[`repeating_equipment_${id}_equipment_quantity_max`]);
+      const uses = usesValid && usesMaxValid ? int(v[`repeating_equipment_${id}_equipment_current`]) : v[`repeating_equipment_${id}_equipment_current`];
+      const usesMax = usesValid && usesMaxValid ? int(v[`repeating_equipment_${id}_equipment_current_max`]) : v[`repeating_equipment_${id}_equipment_current_max`];
+      const quantity = quantityValid && quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity`]) : v[`repeating_equipment_${id}_equipment_quantity`];
+      const quantityMax = quantityValid && quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity_max`]) : v[`repeating_equipment_${id}_equipment_quantity_max`];
+      if (equipmentTracking === 0) {
+        console.log(`NONE Equipment and/or Row Not Tracked`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
             finishRoll(roll.rollId, {
               //'name of key': 'computed value'
               uses: uses,
+              usesMax: usesMax,
               quantity: quantity,
+              quantityMax: quantityMax,
+              usesTracking: 0,
+              quantityTracking: 0,
             });
             resolve();
           });
         });
-      } else if (equipmentTracking === 'quantity') {
-        // console.log(`trackEquipment:${trackEquipment} equipmentTracking:${equipmentTracking} quantity:${quantity}`);
-        await new Promise((resolve) => {
-          startRoll(roll_string, (roll) => {
-            // console.log(roll);
-            finishRoll(roll.rollId, {
-              //'name of key': 'computed value'
-              uses: uses,
-              quantity: quantity - 1,
-            });
-            resolve();
-          });
-          output[`repeating_equipment_${id}_equipment_quantity`] = quantity - 1;
-          setAttrs(output);
-        });
-      } else if (equipmentTracking === 'uses') {
-        // console.log(`trackEquipment:${trackEquipment} equipmentTracking:${equipmentTracking} current:${uses}`);
+      } else if (equipmentTracking === 1) {
+        console.log(`USES quantityValid:${quantityValid} quantityMaxValid:${quantityMaxValid} equipmentTracking:${equipmentTracking} current:${uses}`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
             finishRoll(roll.rollId, {
               //'name of key': 'computed value'
               uses: uses - 1,
+              usesMax: usesMax,
               quantity: quantity,
+              quantityMax: quantityMax,
+              usesTracking: 1,
+              quantityTracking: 0, // show raw
             });
             resolve();
           });
           output[`repeating_equipment_${id}_equipment_current`] = uses - 1;
+          output[`repeating_equipment_${id}_equipment_current_max`] = usesMax;
           setAttrs(output, {silent: true});
+        });
+      } else if (equipmentTracking === 2) {
+        console.log(`QUANTITY usesValid:${usesValid} usesMaxValid:${usesMaxValid} equipmentTracking:${equipmentTracking} quantity:${quantity}`);
+        await new Promise((resolve) => {
+          startRoll(roll_string, (roll) => {
+            // console.log(roll);
+            finishRoll(roll.rollId, {
+              //'name of key': 'computed value'
+              uses: uses,
+              usesMax: usesMax,
+              quantity: quantity - 1,
+              quantityMax: quantityMax,
+              usesTracking: 0, // show raw
+              quantityTracking: 1,
+            });
+            resolve();
+          });
+          output[`repeating_equipment_${id}_equipment_quantity`] = quantity - 1;
+          output[`repeating_equipment_${id}_equipment_quantity_max`] = quantityMax;
+          setAttrs(output);
         });
       }
     } else if (trigger.includes('ability-roll-button' || 'ability-npc-roll-button')) {
