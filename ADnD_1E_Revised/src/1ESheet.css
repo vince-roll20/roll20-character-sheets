@@ -4660,8 +4660,9 @@ section.npc-box.statblock3 .image-avatar {
   padding-inline: .5em;
 }
 
-.sheet-rolltemplate-general .sheet-row .sheet-inlineroll-reset:only-child {
-  margin-left: auto;
+.sheet-rolltemplate-general .sheet-row .sheet-inlineroll-reset:only-child,
+.sheet-rolltemplate-general .sheet-row .sheet-inlineroll-reset:first-child:has(+ span:empty) {
+  margin-inline: auto;
   margin-right: -2em;
 }
 

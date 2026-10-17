@@ -938,7 +938,7 @@ const abilityMacroUpdate = async (current_version, final_version) => {
     ability_old_v6:
       '&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll= [[ 0 + @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}} {{uses=@{ability_current}}} {{uses_max=[[ 0 + @{ability_current|max} ]]}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}',
     ability_current:
-      '&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll=[[ 0 + @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}} {{uses=[[0]]}} {{uses_max=[[ @{ability_current|max} ]]}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}',
+      '&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll=[[ 0 + @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}}{{usesTracking=[[0]]}} {{uses=[[0]]}} {{usesMax=[[0]]}} {{usesRaw=@{ability_current}/@{ability_current|max}}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}',
   };
   // Create a list of all old versions for easier checking
   const oldVersions = [
@@ -7809,7 +7809,7 @@ on(
       const quantity = quantityValid && quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity`]) : v[`repeating_equipment_${id}_equipment_quantity`];
       const quantityMax = quantityValid && quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity_max`]) : v[`repeating_equipment_${id}_equipment_quantity_max`];
       if (equipmentTracking === 0) {
-        console.log(`NONE Equipment and/or Row Not Tracked`);
+        console.log(`Equipment NONE Equipment and/or Row Not Tracked`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
@@ -7826,7 +7826,7 @@ on(
           });
         });
       } else if (equipmentTracking === 1) {
-        console.log(`USES quantityValid:${quantityValid} quantityMaxValid:${quantityMaxValid} equipmentTracking:${equipmentTracking} current:${uses}`);
+        console.log(`Equipment USES quantityValid:${quantityValid} quantityMaxValid:${quantityMaxValid} equipmentTracking:${equipmentTracking} current:${uses}`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
@@ -7846,7 +7846,7 @@ on(
           setAttrs(output, {silent: true});
         });
       } else if (equipmentTracking === 2) {
-        console.log(`QUANTITY usesValid:${usesValid} usesMaxValid:${usesMaxValid} equipmentTracking:${equipmentTracking} quantity:${quantity}`);
+        console.log(`Equipment QUANTITY usesValid:${usesValid} usesMaxValid:${usesMaxValid} equipmentTracking:${equipmentTracking} quantity:${quantity}`);
         await new Promise((resolve) => {
           startRoll(roll_string, (roll) => {
             // console.log(roll);
@@ -7868,15 +7868,21 @@ on(
       }
     } else if (trigger.includes('ability-roll-button' || 'ability-npc-roll-button')) {
       const abilityTracking = int(v[`repeating_ability_${id}_ability_tracking`]);
-      const uses = int(v[`repeating_ability_${id}_ability_current`]);
+      const usesValid = await numbersOnly(v[`repeating_ability_${id}_ability_current`]);
+      const usesMaxValid = await numbersOnly(v[`repeating_ability_${id}_ability_current_max`]);
+      const uses = usesValid && usesMaxValid ? int(v[`repeating_ability_${id}_ability_current`]) : v[`repeating_ability_${id}_ability_current`];
+      const usesMax = usesValid && usesMaxValid ? int(v[`repeating_ability_${id}_ability_current_max`]) : v[`repeating_ability_${id}_ability_current_max`];
+      // const uses = int(v[`repeating_ability_${id}_ability_current`]);
       const currentUses = abilityTracking ? uses - 1 : uses;
-      // console.log(`abilityTracking:${abilityTracking} current:${uses}`);
+      console.log(`Ability USES abilityTracking:${abilityTracking} current:${uses}`);
       await new Promise((resolve) => {
         startRoll(roll_string, (roll) => {
           // console.log(roll);
           finishRoll(roll.rollId, {
             //'name of key': 'computed value'
             uses: currentUses,
+            usesMax: usesMax,
+            usesTracking: 1,
           });
           resolve();
         });

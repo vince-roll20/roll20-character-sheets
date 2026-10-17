@@ -3532,7 +3532,7 @@
                     </span>
                     <!-- <textarea class="height-short toggle-macros" name="attr_ability_macro_text" title="@{repeating_ability_$X_ability_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll= [[ 0 + @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}} {{uses=@{ability_current}}} {{uses_max=[[ 0 + @{ability_current|max} ]]}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}</textarea> -->
                     <!-- CRP -->
-                    <textarea class="height-short toggle-macros" name="attr_ability_macro_text" title="@{repeating_ability_$X_ability_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll=[[ 0 + @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}} {{uses=[[0]]}} {{uses_max=[[ @{ability_current|max} ]]}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}</textarea>
+                    <textarea class="height-short toggle-macros" name="attr_ability_macro_text" title="@{repeating_ability_$X_ability_macro_text} | Caution: modifying the macro-text can break the roll.  Deleting this macro-text will safely reset the roll to the sheet's default macro.">&{template:general} {{color=@{color_option}}} {{name=@{character_name}}} {{subtag=Special Ability: @{ability_name}}} {{roll=[[ 0 + @{ability_die} + @{ability_mod}[MOD] ]]}} {{link=@{ability_link}}} {{freetext=@{ability_short_description} @{ability_description}}}{{usesTracking=[[0]]}} {{uses=[[0]]}} {{usesMax=[[0]]}} {{usesRaw=@{ability_current}/@{ability_current|max}}} {{effect_type=@{ability_effect_type}}} {{spell_level=@{ability_level}}} {{casting_time=@{ability_ct}}} {{range=@{ability_range}}} {{duration=@{ability_duration}}} {{saving_throw=@{ability_save}}} {{area_of_effect=@{ability_aoe}}} {{save_type=@{ability_save_type}}}</textarea>
                   </details>
                 </fieldset>
                 <!-- deprecated since each repeating row includes description and notes-->
@@ -5578,52 +5578,57 @@
                   </span>
                   <!-- Uses/Quantity -->
                   <span class="sheet-row">
-                    <span class="sheet-inlineroll-reset sheet-left">
-                      {{#rollTotal() computed::usesTracking 1}}
-                        {{#rollGreater() computed::usesMax 0}}
-                          {{#rollGreater() computed::uses 0}}
-                            {{#uses}}<span class="sheet-bold">Uses:&nbsp;</span>{{computed::uses}}{{/uses}}
-                            {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}{{/usesMax}}
-                          {{/rollGreater() computed::uses 0}}
-                          {{#rollTotal() computed::uses 0}}
-                            {{#uses}}<span class="sheet-bold">LAST USE!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
-                            {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}{{/usesMax}}
-                          {{/rollTotal() computed::uses 0}}
-                          {{#rollLess() computed::uses 0}}
-                            {{#uses}}<span class="sheet-bold">NO USES!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
-                            {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}{{/usesMax}}
-                          {{/rollLess() computed::uses 0}}
-                        {{/rollGreater() computed::usesMax 0}}
+                    {{#rollTotal() computed::usesTracking 1}}
+                      <span class="sheet-inlineroll-reset sheet-left">
+                          {{#rollGreater() computed::usesMax 0}}
+                            {{#rollGreater() computed::uses 0}}
+                              {{#uses}}<span class="sheet-bold">Uses:&nbsp;</span>{{computed::uses}}{{/uses}}
+                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}{{/usesMax}}
+                            {{/rollGreater() computed::uses 0}}
+                            {{#rollTotal() computed::uses 0}}
+                              {{#uses}}<span class="sheet-bold">LAST USE!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
+                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}{{/usesMax}}
+                            {{/rollTotal() computed::uses 0}}
+                            {{#rollLess() computed::uses 0}}
+                              {{#uses}}<span class="sheet-bold">NO USES!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
+                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}{{/usesMax}}
+                            {{/rollLess() computed::uses 0}}
+                          {{/rollGreater() computed::usesMax 0}}
+                        </span>
                       {{/rollTotal() computed::usesTracking 1}}
 
                       <!-- fallback display when Uses is NaN -->
                       {{#rollTotal() computed::usesTracking 0}}
-                        {{#usesRaw}}<span class="sheet-bold">Uses:&nbsp;<span class="sheet-inlinerollresult">{{usesRaw}}</span></span>{{/usesRaw}}
+                        <span class="sheet-inlineroll-reset">
+                          {{#usesRaw}}<span class="sheet-bold">Uses:&nbsp;<span class="sheet-inlinerollresult">{{usesRaw}}</span></span>{{/usesRaw}}
+                        </span>
                       {{/rollTotal() computed::usesTracking 0}}
-                    </span>
-                    <span class="sheet-inlineroll-reset sheet-right">
+
                       {{#rollTotal() computed::quantityTracking 1}}
-                        {{#rollGreater() computed::quantityMax 0}}
-                          {{#rollGreater() computed::quantity 0}}
-                            {{#quantity}}<span class="sheet-bold">Qty:&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                            {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}{{/quantityMax}}
-                          {{/rollGreater() computed::quantity 0}}
-                          {{#rollTotal() computed::quantity 0}}
-                            {{#quantity}}<span class="sheet-bold">LAST ITEM!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                            {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}{{/quantityMax}}
-                          {{/rollTotal() computed::quantity 0}}
-                          {{#rollLess() computed::quantity 0}}
-                            {{#quantity}}<span class="sheet-bold">NO ITEMS!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                            {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}{{/quantityMax}}
-                          {{/rollLess() computed::quantity 0}}
-                        {{/rollGreater() computed::quantityMax 0}}
+                        <span class="sheet-inlineroll-reset sheet-right">
+                          {{#rollGreater() computed::quantityMax 0}}
+                            {{#rollGreater() computed::quantity 0}}
+                              {{#quantity}}<span class="sheet-bold">Qty:&nbsp;</span>{{computed::quantity}}{{/quantity}}
+                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}{{/quantityMax}}
+                            {{/rollGreater() computed::quantity 0}}
+                            {{#rollTotal() computed::quantity 0}}
+                              {{#quantity}}<span class="sheet-bold">LAST ITEM!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
+                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}{{/quantityMax}}
+                            {{/rollTotal() computed::quantity 0}}
+                            {{#rollLess() computed::quantity 0}}
+                              {{#quantity}}<span class="sheet-bold">NO ITEMS!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
+                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}{{/quantityMax}}
+                            {{/rollLess() computed::quantity 0}}
+                          {{/rollGreater() computed::quantityMax 0}}
+                        </span>
                       {{/rollTotal() computed::quantityTracking 1}}
 
                       <!-- fallback display when Quantity is NaN -->
                       {{#rollTotal() computed::quantityTracking 0}}
-                        {{#quantityRaw}}<span class="sheet-bold">Qty:&nbsp;<span class="sheet-inlinerollresult">{{quantityRaw}}</span></span>{{/quantityRaw}}
+                        <span class="sheet-inlineroll-reset">
+                          {{#quantityRaw}}<span class="sheet-bold">Qty:&nbsp;<span class="sheet-inlinerollresult">{{quantityRaw}}</span></span>{{/quantityRaw}}
+                        </span>
                       {{/rollTotal() computed::quantityTracking 0}}
-                    </span>
                   </span>
                   <!-- text will be large and center-aligned -->
                   <span class="sheet-row">{{#bigtext1}}<span class="sheet-big-text sheet-span-two">{{bigtext1}}</span>{{/bigtext1}}</span>
