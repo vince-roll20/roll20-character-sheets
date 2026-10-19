@@ -70,29 +70,28 @@
           <h5 class="right two-columns span-all">
             <span class="left">
               <span>v</span><span name="attr_sheet_version"></span>
-              <span class="right"> • 10/16/26'</span>
+              <span class="right"> • 10/18/26'</span>
             </span>
           </h5>
           <ul>
             <h5>Latest</h5>
-            <li>Changed the attack's "show to-Hit?" AC table to a /ss roll. (only viewable by the DM)</li>
-            <li>Updated Attack rolls to Custom Roll Parsing(CRP). Allows determining the best AC hit, ammo tracking, and more without API.</li>
-            <li>Added optional Ranged weapon ammo tracking. Each Ranged attack roll will reduce ammo by 1. This will be seen with the attack roll and adjusted on the weapon's row. Each Ranged Attack has an option to track Nothing, or Ammo.</li>
-            <li>Updated Equipment and Special Ability rolls to Custom Roll Parsing(CRP). Allows tracking Uses without API.</li>
+            <li>Changed the attack's "show to-Hit?" AC table to use an "/ss" roll. (only viewable by the DM)</li>
+            <li>Updated Attack, Equipment, and Special Ability rolls to use Custom Roll Parsing(CRP). This allows tracking of resources (ammo, uses, quantity) and determining the best AC hit without requiring API mods.</li>
+            <li>Added optional Ranged weapon Ammo tracking. Each Ranged attack roll will reduce ammo by 1. This will be seen with the attack roll and adjusted on the weapon's row. Each Ranged Attack has an option to track Nothing(default), or Ammo.</li>
             <li>Added optional Equipment Uses or Quantity tracking. Each Equipment roll will reduce Uses or Quantity by 1. This will be seen with the roll and adjusted on the equipment item's row. Each Equipment item has an option to track Nothing(default), Uses, or Quantity.</li>
             <li>Added optional Special Ability Uses tracking. Each Special Ability roll will reduce Uses by 1. This will be seen with the roll and adjusted on the special ability's row. Each Special Ability has an option to track Nothing(default), or Uses.</li>
-            <li>Added an option to show "hits AC" with attack rolls. Uses THAC0, the adjusted to-Hit roll, and the preferred method for handling the attack matrix to determine the best AC the attack can hit.</li>
-            <li>Added an option to pick the preferred method for handling the to-Hit matrix determining the best AC the attack can hit.
+            <li>Added an option to show "hits AC" with attack rolls. Uses THAC0, the adjusted to-Hit roll, and the preferred method for handling the attack matrix and repeating 20's when determining the best AC the attack can hit.</li>
+            <li>Added 3 options for the preferred method of handling the to-Hit matrix and repeating 20's when determining the best AC the attack can hit.
               <ol>
-                <li><b>RAW</b> (an adjusted 20 hits the entire range of repeating 20's. An adjusted roll >25 can hit AC's above last repeating 20.) This would be the default.</li>
+                <li><b>RAW</b> (an adjusted 20 hits the entire range of repeating 20's. An adjusted roll >25 can hit AC's above last repeating 20.) This is the default method.</li>
                 <li><b>nat20 Always Hits</b> (same as the RAW option, but a natural 20 always hits regardless of bonuses or the combatants AC.)</li>
                 <li><b>DMG p82</b> (Natural 20 hits the entire range of repeating 20's regardless of bonuses. To hit AC's above the range of the repeating 20's, a natural 20 plus bonuses are required.)</li>
               </ol>
             </li>
-            <li>Sheet default settings have been updated with the new options.</li>
-            <li>Included a sheet update that checks and updates the default Attack macro. This only works for unedited Attack macros. If you have custom attack macros you can manually update those macros to enable the new CRP rolls. <code>{{bestAChit=[[0]]}}</code> was added to handle "hits AC" and <code>{{ammo=[[ @{weapon_ammo} ]]/[[ @{weapon_ammo|max} ]]}}</code> was changed/updated to <code>{{ammo=[[0]]}} {{ammoMax=[[0]]}}</code> to handle Ranged ammo tracking. Reminder, you can also reset all macros, by section, to their defaults, from the sheet settings page. You lose any macro-text edits but are guaranteed to get the current default macro.</li>
-            <li>Included a sheet update that checks and updates the default Equipment macro. This only works for unedited Equipment macros. If you have custom Equipment macros you can manually update those macros to enable the new CRP rolls. <code>{{uses=@{equipment_current}}}</code> was changed/updated to <code>{{uses=[[0]]}}</code> to handle Equipment Uses tracking. <code>{{quantity=@{equipment_quantity}}}</code> was changed/updated to <code>{{quantity=[[0]]}}</code> to handle Equipment Quantity tracking. Reminder, you can also reset all macros, by section, to their defaults, from the sheet settings page. You lose any macro-text edits but are guaranteed to get the current default macro.</li>
-            <li>Included a sheet update that checks and updates the default Special Ability macro. This only works for unedited Special Ability macros. If you have custom Special Ability macros you can manually update those macros to enable the new CRP rolls. <code>{{uses=@{equipment_current}}}</code> was changed/updated to <code>{{uses=[[0]]}}</code> to handle Uses tracking. Reminder, you can also reset all macros, by section, to their defaults, from the sheet settings page. You lose any macro-text edits but are guaranteed to get the current default macro.</li>
+            <li>Default sheet settings have been updated with the new sheet options.</li>
+            <li>Default Attack macro updated. This will only update unedited/modified Attack macros. If you have custom attack macros you can manually update them to enable the new CRP rolls if desired. <code>{{bestAChit=[[0]]}}</code> was added to handle "hits AC" and <code>{{ammo=[[ @{weapon_ammo} ]]/[[ @{weapon_ammo|max} ]]}}</code> was changed/updated to <code>{{ammoTracking=[[0]]}} {{ammo=[[0]]}} {{ammoMax=[[0]]}} {{ammoRaw=@{weapon_ammo}/@{weapon_ammo|max}}}</code> to handle Ranged ammo tracking. Reminder, you can also reset all macros, per section, to their sheet defaults, from the sheet settings page. While you will lose any macro-text edits you are guaranteed to get the sheet's current default macro.</li>
+            <li>Default Equipment macro updated. This will only update unedited/modified Equipment macros. If you have custom Equipment macros you can manually update them to enable the new CRP rolls if desired. <code>{{uses=@{equipment_current}}}</code> was changed/updated to <code>{{usesTracking=[[0]]}} {{uses=[[0]]}} {{usesMax=[[0]]}} {{usesRaw=@{equipment_current}/@{equipment_current|max}}}</code> to handle Equipment Uses tracking. <code>{{quantity=@{equipment_quantity}}}</code> was changed/updated to <code>{{quantityTracking=[[0]]}} {{quantity=[[0]]}} {{quantityMax=[[0]]}} {{quantityRaw=@{equipment_quantity}/@{equipment_quantity|max}}}</code> to handle Equipment Quantity tracking. Reminder, you can also reset all macros, per section, to their sheet defaults, from the sheet settings page. While you will lose any macro-text edits you are guaranteed to get the sheet's current default macro.</li>
+            <li>Default Special Ability macro updated. This will only update unedited/modified Special Ability macros. If you have custom Special Ability macros you can manually update them to enable the new CRP rolls if desired. <code>{{uses=@{equipment_current}}}</code> was changed/updated to <code>{{usesTracking=[[0]]}} {{uses=[[0]]}} {{usesMax=[[0]]}} {{usesRaw=@{equipment_current}/@{equipment_current|max}}}</code> to handle Uses tracking. Reminder, you can also reset all macros, per section, to their sheet defaults, from the sheet settings page. While you will lose any macro-text edits you are guaranteed to get the sheet's current default macro.</li>
 
             <h5>Recent/Previous</h5>
             <li>Fixed fractional Climb Walls.</li>
@@ -5422,15 +5421,15 @@
                           {{#rollTotal() computed::ammoTracking 1}}
                               {{#rollGreater() computed::ammo 0}}
                                 {{#ammo}}<span class="sheet-bold">Ammo:&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/ammoMax}}
+                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}<span class="sheet-tracked" title="-1 has been auto-deducted."></span>{{/ammoMax}}
                               {{/rollGreater() computed::ammo 0}}
                               {{#rollTotal() computed::ammo 0}}
                                 {{#ammo}}<br><span class="sheet-bold">LAST AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/ammoMax}}
+                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}<span class="sheet-tracked" title="-1 has been auto-deducted."></span>{{/ammoMax}}
                               {{/rollTotal() computed::ammo 0}}
                               {{#rollLess() computed::ammo 0}}
                                 {{#ammo}}<br><span class="sheet-bold">NO AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/ammoMax}}
+                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}<span class="sheet-tracked" title="-1 has been auto-deducted."></span>{{/ammoMax}}
                               {{/rollLess() computed::ammo 0}}
                           {{/rollTotal() computed::ammoTracking 1}}
 
@@ -5572,15 +5571,15 @@
                           {{#rollGreater() computed::usesMax 0}}
                             {{#rollGreater() computed::uses 0}}
                               {{#uses}}<span class="sheet-bold">Uses:&nbsp;</span>{{computed::uses}}{{/uses}}
-                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/usesMax}}
+                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}<span class="sheet-tracked" title="-1 has been auto-deducted."></span>{{/usesMax}}
                             {{/rollGreater() computed::uses 0}}
                             {{#rollTotal() computed::uses 0}}
                               {{#uses}}<span class="sheet-bold">LAST USE!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
-                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/usesMax}}
+                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}<span class="sheet-tracked" title="-1 has been auto-deducted."></span>{{/usesMax}}
                             {{/rollTotal() computed::uses 0}}
                             {{#rollLess() computed::uses 0}}
                               {{#uses}}<span class="sheet-bold">NO USES!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
-                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/usesMax}}
+                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}<span class="sheet-tracked" title="-1 has been auto-deducted."></span>{{/usesMax}}
                             {{/rollLess() computed::uses 0}}
                           {{/rollGreater() computed::usesMax 0}}
                         </span>
@@ -5598,15 +5597,15 @@
                           {{#rollGreater() computed::quantityMax 0}}
                             {{#rollGreater() computed::quantity 0}}
                               {{#quantity}}<span class="sheet-bold">Qty:&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/quantityMax}}
+                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}<span class="sheet-tracked" title="-1 has been auto-deducted."></span>{{/quantityMax}}
                             {{/rollGreater() computed::quantity 0}}
                             {{#rollTotal() computed::quantity 0}}
                               {{#quantity}}<span class="sheet-bold">LAST ITEM!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/quantityMax}}
+                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}<span class="sheet-tracked" title="-1 has been auto-deducted."></span>{{/quantityMax}}
                             {{/rollTotal() computed::quantity 0}}
                             {{#rollLess() computed::quantity 0}}
                               {{#quantity}}<span class="sheet-bold">NO ITEMS!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/quantityMax}}
+                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}<span class="sheet-tracked" title="-1 has been auto-deducted."></span>{{/quantityMax}}
                             {{/rollLess() computed::quantity 0}}
                           {{/rollGreater() computed::quantityMax 0}}
                         </span>

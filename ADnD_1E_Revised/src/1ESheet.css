@@ -4666,8 +4666,9 @@ section.npc-box.statblock3 .image-avatar {
   margin-right: -2em;
 }
 
-.sheet-rolltemplate-attacks .sheet-tracked,
-.sheet-rolltemplate-general .sheet-tracked {
+.sheet-rolltemplate-attacks .sheet-tracked::after,
+.sheet-rolltemplate-general .sheet-tracked::after {
+  content: 'S';
   cursor: help;
   font-family: 'Pictos';
   font-size: var(--text-sm);
