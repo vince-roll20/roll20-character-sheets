@@ -7779,7 +7779,7 @@ on(
             //'name of key': 'computed value'
             // hides "hits AC" in roll based on sheet settings
             bestAChit: hideBestAC ? 99 : bestAC,
-            ammoTracking: weaponTracking,
+            ammoTracking: isRanged ? weaponTracking : 99,
             ammo: currentAmmo,
             ammoMax: ammoMax,
           });
