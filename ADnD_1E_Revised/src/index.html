@@ -5422,15 +5422,15 @@
                           {{#rollTotal() computed::ammoTracking 1}}
                               {{#rollGreater() computed::ammo 0}}
                                 {{#ammo}}<span class="sheet-bold">Ammo:&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}{{/ammoMax}}
+                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/ammoMax}}
                               {{/rollGreater() computed::ammo 0}}
                               {{#rollTotal() computed::ammo 0}}
                                 {{#ammo}}<br><span class="sheet-bold">LAST AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}{{/ammoMax}}
+                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/ammoMax}}
                               {{/rollTotal() computed::ammo 0}}
                               {{#rollLess() computed::ammo 0}}
                                 {{#ammo}}<br><span class="sheet-bold">NO AMMO!&nbsp;&nbsp;</span>{{computed::ammo}}{{/ammo}}
-                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}{{/ammoMax}}
+                                {{#ammoMax}}<span class="sheet-bold">/</span>{{computed::ammoMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/ammoMax}}
                               {{/rollLess() computed::ammo 0}}
                           {{/rollTotal() computed::ammoTracking 1}}
 
@@ -5572,15 +5572,15 @@
                           {{#rollGreater() computed::usesMax 0}}
                             {{#rollGreater() computed::uses 0}}
                               {{#uses}}<span class="sheet-bold">Uses:&nbsp;</span>{{computed::uses}}{{/uses}}
-                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}{{/usesMax}}
+                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/usesMax}}
                             {{/rollGreater() computed::uses 0}}
                             {{#rollTotal() computed::uses 0}}
                               {{#uses}}<span class="sheet-bold">LAST USE!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
-                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}{{/usesMax}}
+                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/usesMax}}
                             {{/rollTotal() computed::uses 0}}
                             {{#rollLess() computed::uses 0}}
                               {{#uses}}<span class="sheet-bold">NO USES!&nbsp;&nbsp;</span>{{computed::uses}}{{/uses}}
-                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}{{/usesMax}}
+                              {{#usesMax}}<span class="sheet-bold">/</span>{{computed::usesMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/usesMax}}
                             {{/rollLess() computed::uses 0}}
                           {{/rollGreater() computed::usesMax 0}}
                         </span>
@@ -5598,15 +5598,15 @@
                           {{#rollGreater() computed::quantityMax 0}}
                             {{#rollGreater() computed::quantity 0}}
                               {{#quantity}}<span class="sheet-bold">Qty:&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}{{/quantityMax}}
+                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/quantityMax}}
                             {{/rollGreater() computed::quantity 0}}
                             {{#rollTotal() computed::quantity 0}}
                               {{#quantity}}<span class="sheet-bold">LAST ITEM!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}{{/quantityMax}}
+                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/quantityMax}}
                             {{/rollTotal() computed::quantity 0}}
                             {{#rollLess() computed::quantity 0}}
                               {{#quantity}}<span class="sheet-bold">NO ITEMS!&nbsp;&nbsp;</span>{{computed::quantity}}{{/quantity}}
-                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}{{/quantityMax}}
+                              {{#quantityMax}}<span class="sheet-bold">/</span>{{computed::quantityMax}}<span class="sheet-tracked" title="-1 has been auto-deducted.">S</span>{{/quantityMax}}
                             {{/rollLess() computed::quantity 0}}
                           {{/rollGreater() computed::quantityMax 0}}
                         </span>

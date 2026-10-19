@@ -4666,6 +4666,16 @@ section.npc-box.statblock3 .image-avatar {
   margin-right: -2em;
 }
 
+.sheet-rolltemplate-attacks .sheet-tracked,
+.sheet-rolltemplate-general .sheet-tracked {
+  cursor: help;
+  font-family: 'Pictos';
+  font-size: var(--text-sm);
+  font-weight: var(--text-wt400);
+  position: relative;
+  top: -2px;
+}
+
 /* center */
 .sheet-rolltemplate-attacks .sheet-row.sheet-all-props span.sheet-tcat:has(+ span:empty),
 .sheet-rolltemplate-general .sheet-row.sheet-all-props span.sheet-tcat:has(+ span:empty) {
