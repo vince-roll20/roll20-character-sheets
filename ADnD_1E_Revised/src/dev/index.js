@@ -7710,7 +7710,7 @@ on(
     // which button was pressed?
     const trigger = eventInfo.triggerName.replace('clicked:', '');
     const roll_string = repeatingRolls[trigger];
-    if (trigger.includes('weapon-attack-roll-button' || 'weapon-attack-npc-roll-button')) {
+    if (trigger.includes('weapon-attack-roll-button') || trigger.includes('weapon-attack-npc-roll-button')) {
       const useTHAC0 = int(v.toggle_to_hit_table);
       const THAC0 = useTHAC0 ? int(v.thac00) : int(v.thac0);
       const toHitTable = v[`repeating_weapon_${id}_weapon_whisper_to_hit`];
@@ -7866,7 +7866,7 @@ on(
           setAttrs(output);
         });
       }
-    } else if (trigger.includes('ability-roll-button' || 'ability-npc-roll-button')) {
+    } else if (trigger.includes('ability-roll-button') || trigger.includes('ability-npc-roll-button')) {
       const abilityTracking = int(v[`repeating_ability_${id}_ability_tracking`]);
       const usesValid = await numbersOnly(v[`repeating_ability_${id}_ability_current`]);
       const usesMaxValid = await numbersOnly(v[`repeating_ability_${id}_ability_current_max`]);
