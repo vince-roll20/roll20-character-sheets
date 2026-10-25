@@ -1979,10 +1979,10 @@ on(
   },
 );
 
-on('change:abilities_info_show change:toggle_exceptional change:strength', (eventInfo) => {
+on('change:abilities_info_show change:toggle_exceptional change:strength', async (eventInfo) => {
   const output = {};
   output.exceptional_strength_flag = 1;
-  setAttrs(output, {silent: true});
+  await setAttrsAsync(output, {silent: true});
 });
 
 // PC or NPC sheet role
@@ -2899,20 +2899,20 @@ on('remove:repeating_equipment', async (eventInfo) => {
   if (isMatch) await syncArmorToEquipment(id, null, row_removed);
 });
 
-on('clicked:addturnundead', (eventInfo) => {
+on('clicked:addturnundead', async (eventInfo) => {
   const output = {};
   const newID = generateUniqueRowID();
   output[`repeating_ability_${newID}_ability_name`] = 'Turn Undead by Type';
   output[`repeating_ability_${newID}_ability_short_description`] = '[Turn Undead by Type](~selected|turn_undead_roll)';
-  setAttrs(output, {silent: true});
+  await setAttrsAsync(output, {silent: true});
 });
 
-on('clicked:addturnundead2', (eventInfo) => {
+on('clicked:addturnundead2', async (eventInfo) => {
   const output = {};
   const newID = generateUniqueRowID();
   output[`repeating_ability_${newID}_ability_name`] = 'Turn Undead by HD';
   output[`repeating_ability_${newID}_ability_short_description`] = '[Turn Undead by HD](~selected|turn_undead2_roll)';
-  setAttrs(output, {silent: true});
+  await setAttrsAsync(output, {silent: true});
 });
 
 // Spell Tabs and Memorized toggle
@@ -6988,7 +6988,7 @@ const classView = async () => {
   if (/thief|assassin|rogue|thief-acrobat|acrobat/gi.test(classes)) {
     output.toggle_thief_skills = 0;
   }
-  await setAttrs(output, {silent: true});
+  await setAttrsAsync(output, {silent: true});
 };
 
 // Globals for Ability Calcs
@@ -7146,7 +7146,7 @@ const charismaCalcs = async () => {
   output.loyaltybonus = (AT_CHA.getEntry(stat_cha).getLoyaltyBonus() <= 0 ? '' : '+') + AT_CHA.getEntry(stat_cha).getLoyaltyBonus();
   output.reactionbonus = (AT_CHA.getEntry(stat_cha).getReactionBonus() <= 0 ? '' : '+') + AT_CHA.getEntry(stat_cha).getReactionBonus();
   output.comeliness_cha_adj = (AT_CHA.getEntry(stat_cha).getComeliness() <= 0 ? '' : '+') + AT_CHA.getEntry(stat_cha).getComeliness();
-  await setAttrs(output, {silent: true});
+  await setAttrsAsync(output, {silent: true});
 };
 
 const thiefSkillsDexCalcs = async (autofill_thief_dex) => {
@@ -7795,7 +7795,7 @@ on(
           });
           output[`repeating_weapon_${id}_weapon_ammo`] = currentAmmo;
           output[`repeating_weapon_${id}_weapon_ammo_max`] = ammoMax;
-          setAttrs(output, {silent: true});
+          await setAttrsAsync(output, {silent: true});
         });
       });
     } else if (trigger.includes('equipment-roll-button')) {
@@ -7843,8 +7843,8 @@ on(
           });
           output[`repeating_equipment_${id}_equipment_current`] = uses - 1;
           output[`repeating_equipment_${id}_equipment_current_max`] = usesMax;
-          setAttrs(output, {silent: true});
         });
+        await setAttrsAsync(output, {silent: true});
       } else if (equipmentTracking === 2) {
         console.log(`Equipment QUANTITY usesValid:${usesValid} usesMaxValid:${usesMaxValid} equipmentTracking:${equipmentTracking} quantity:${quantity}`);
         await new Promise((resolve) => {
@@ -7863,8 +7863,8 @@ on(
           });
           output[`repeating_equipment_${id}_equipment_quantity`] = quantity - 1;
           output[`repeating_equipment_${id}_equipment_quantity_max`] = quantityMax;
-          setAttrs(output);
         });
+        await setAttrsAsync(output);
       }
     } else if (trigger.includes('ability-roll-button') || trigger.includes('ability-npc-roll-button')) {
       const abilityTracking = int(v[`repeating_ability_${id}_ability_tracking`]);
@@ -7887,8 +7887,8 @@ on(
           resolve();
         });
         output[`repeating_ability_${id}_ability_current`] = currentUses;
-        setAttrs(output, {silent: true});
       });
+      await setAttrsAsync(output, {silent: true});
     } else {
       // NORMAL ROLL NO SPECIAL HANDLING NEEDED
       // console.log(`Normal roll - No special handling`);
