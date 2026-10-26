@@ -7705,11 +7705,16 @@ on(
       [`repeating_weapon_${id}_weapon-attack-npc-roll-button`]: `@{whisper_npc} @{repeating_weapon_${id}_weapon_macro_text} @{repeating_weapon_${id}_weapon_damage_chat_menu_npc}`,
       [`repeating_equipment_${id}_equipment-roll-button`]: `@{repeating_equipment_${id}_equipment_macro_text}`,
       [`repeating_ability_${id}_ability-roll-button`]: `@{whisper_pc} @{repeating_ability_${id}_ability_macro_text}`,
-      [`repeating_ability_${id}_ability-roll-npc-button`]: `@{whisper_npc} @{repeating_ability_${id}_ability_macro_text}`,
+      [`repeating_ability_${id}_ability-npc-roll-button`]: `@{whisper_npc} @{repeating_ability_${id}_ability_macro_text}`,
     };
-    // which button was pressed?
+    // Which button was pressed?
     const trigger = eventInfo.triggerName.replace('clicked:', '');
     const roll_string = repeatingRolls[trigger];
+    if (!roll_string) {
+      console.error(`Roll string undefined for trigger: ${trigger}`);
+      return;
+    }
+
     if (trigger.includes('weapon-attack-roll-button') || trigger.includes('weapon-attack-npc-roll-button')) {
       const useTHAC0 = int(v.toggle_to_hit_table);
       const THAC0 = useTHAC0 ? int(v.thac00) : int(v.thac0);
@@ -7723,81 +7728,74 @@ on(
       const ammoMax = ammoValid && ammoMaxValid ? int(v[`repeating_weapon_${id}_weapon_ammo_max`]) : v[`repeating_weapon_${id}_weapon_ammo_max`];
       const currentAmmo = ammoValid && ammoMaxValid && isRanged && weaponTracking ? ammo - 1 : ammo;
       console.log(`ammoValid:${ammoValid} ammoMaxValid:${ammoMaxValid} weaponTracking:${weaponTracking} isRanged:${isRanged} currentAmmo:${currentAmmo}`);
-      await new Promise((resolve) => {
-        startRoll(roll_string, async (roll) => {
-          // console.log(roll);
-          const d20 = int(roll.results.attack1.dice[0]);
-          const totalRoll = int(roll.results.attack1.result);
-          const bestAcHitMethod = int(v.best_ac_hit_method) || 0;
-          let bestAC = '';
-          // Option 0: RAW (total adjusted roll)
-          if (bestAcHitMethod === 0) {
-            if (totalRoll < 20) {
-              bestAC = THAC0 - totalRoll;
-            } else if (totalRoll <= 25) {
-              bestAC = THAC0 - 25;
-            } else {
-              bestAC = THAC0 - totalRoll - 5;
-            }
-          }
-          // Option 1: Nat20 Always Hits (Any AC)
-          else if (bestAcHitMethod === 1) {
-            if (d20 === 20) {
-              bestAC = '-99'; // Auto-hit bypass
-            } else if (totalRoll < 20) {
-              bestAC = THAC0 - totalRoll;
-            } else if (totalRoll <= 25) {
-              bestAC = THAC0 - 25;
-            } else {
-              bestAC = THAC0 - totalRoll - 5;
-            }
-          }
-          // Option 2: DMG p82 Official Clarification
-          else if (bestAcHitMethod === 2) {
-            if (d20 === 20) {
-              if (totalRoll < 20) {
-                bestAC = THAC0 - 25; // Penalties frozen on plateau
-              } else {
-                bestAC = THAC0 - totalRoll - 5; // unfreezes bonuses for target numbers 21+
-              }
-            } else {
-              if (totalRoll < 20) {
-                bestAC = THAC0 - totalRoll;
-              } else {
-                bestAC = THAC0 - 25; // totalRoll >= 20 reaches but cannot extend past plateau without a Nat 20
-              }
-            }
-          }
+      // Native async startRoll
+      const roll = await startRoll(roll_string);
+      // console.log(roll);
+      const d20 = int(roll.results.attack1.dice[0]);
+      const totalRoll = int(roll.results.attack1.result);
+      const bestAcHitMethod = int(v.best_ac_hit_method) || 0;
+      let bestAC = '';
 
-          // let methodText = 'RAW';
-          // if (bestAcHitMethod === 1) methodText = 'Nat20';
-          // if (bestAcHitMethod === 2) methodText = 'p82';
-          // console.log(`Method:${methodText} THAC0:${THAC0} d20:${d20} totalRoll:${totalRoll} BEST_AC_HIT:${bestAC}`);
-          // written to an attr for macro and API access
-          output.best_ac_hit = bestAC;
-          finishRoll(roll.rollId, {
-            //'name of key': 'computed value'
-            // hides "hits AC" in roll based on sheet settings
-            bestAChit: hideBestAC ? 99 : bestAC,
-            ammoTracking: isRanged ? weaponTracking : 99,
-            ammo: currentAmmo,
-            ammoMax: ammoMax,
-          });
-          resolve();
+      // Option 0: RAW (total adjusted roll)
+      if (bestAcHitMethod === 0) {
+        if (totalRoll < 20) {
+          bestAC = THAC0 - totalRoll;
+        } else if (totalRoll <= 25) {
+          bestAC = THAC0 - 25;
+        } else {
+          bestAC = THAC0 - totalRoll - 5;
+        }
+      }
+      // Option 1: Nat20 Always Hits (Any AC)
+      else if (bestAcHitMethod === 1) {
+        if (d20 === 20) {
+          bestAC = '-99'; // Auto-hit bypass
+        } else if (totalRoll < 20) {
+          bestAC = THAC0 - totalRoll;
+        } else if (totalRoll <= 25) {
+          bestAC = THAC0 - 25;
+        } else {
+          bestAC = THAC0 - totalRoll - 5;
+        }
+      }
+      // Option 2: DMG p82 Official Clarification
+      else if (bestAcHitMethod === 2) {
+        if (d20 === 20) {
+          if (totalRoll < 20) {
+            bestAC = THAC0 - 25; // Penalties frozen on plateau
+          } else {
+            bestAC = THAC0 - totalRoll - 5; // unfreezes bonuses for target numbers 21+
+          }
+        } else {
+          if (totalRoll < 20) {
+            bestAC = THAC0 - totalRoll;
+          } else {
+            bestAC = THAC0 - 25; // totalRoll >= 20 reaches but cannot extend past plateau without a Nat 20
+          }
+        }
+      }
 
-          // post the to-Hit table macro
-          await new Promise((resolve) => {
-            startRoll(toHitTable, (roll2) => {
-              // console.log(roll2);
-              finishRoll(roll2.rollId);
-              resolve();
-            });
-          });
-          output[`repeating_weapon_${id}_weapon_ammo`] = currentAmmo;
-          output[`repeating_weapon_${id}_weapon_ammo_max`] = ammoMax;
-          await setAttrsAsync(output, {silent: true});
-        });
+      // hidden attr for macros and/or API access
+      output.best_ac_hit = bestAC;
+
+      finishRoll(roll.rollId, {
+        //'name of key': 'computed value'
+        // hides "hits AC" in roll based on sheet settings
+        bestAChit: hideBestAC ? 99 : bestAC,
+        ammoTracking: isRanged ? weaponTracking : 99,
+        ammo: currentAmmo,
+        ammoMax: ammoMax,
       });
+
+      // Post to-Hit table
+      const roll2 = await startRoll(toHitTable);
+      // console.log(roll2);
+      finishRoll(roll2.rollId);
+
+      // Ammo tracking
+      output[`repeating_weapon_${id}_weapon_ammo`] = currentAmmo;
+      output[`repeating_weapon_${id}_weapon_ammo_max`] = ammoMax;
+      await setAttrsAsync(output, {silent: true});
     } else if (trigger.includes('equipment-roll-button')) {
       const equipmentTracking = int(v[`repeating_equipment_${id}_equipment_tracking`]); // 0:none, 1:uses, 2:quantity
       const usesValid = await numbersOnly(v[`repeating_equipment_${id}_equipment_current`]);
@@ -7808,63 +7806,47 @@ on(
       const usesMax = usesValid && usesMaxValid ? int(v[`repeating_equipment_${id}_equipment_current_max`]) : v[`repeating_equipment_${id}_equipment_current_max`];
       const quantity = quantityValid && quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity`]) : v[`repeating_equipment_${id}_equipment_quantity`];
       const quantityMax = quantityValid && quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity_max`]) : v[`repeating_equipment_${id}_equipment_quantity_max`];
+      const roll = await startRoll(roll_string);
+      // console.log(roll);
       if (equipmentTracking === 0) {
         console.log(`Equipment NONE Equipment and/or Row Not Tracked`);
-        await new Promise((resolve) => {
-          startRoll(roll_string, (roll) => {
-            // console.log(roll);
-            finishRoll(roll.rollId, {
-              //'name of key': 'computed value'
-              uses: uses,
-              usesMax: usesMax,
-              quantity: quantity,
-              quantityMax: quantityMax,
-              usesTracking: 0,
-              quantityTracking: 0,
-            });
-            resolve();
-          });
+        finishRoll(roll.rollId, {
+          //'name of key': 'computed value'
+          uses: uses,
+          usesMax: usesMax,
+          quantity: quantity,
+          quantityMax: quantityMax,
+          usesTracking: 0,
+          quantityTracking: 0,
         });
       } else if (equipmentTracking === 1) {
         console.log(`Equipment USES quantityValid:${quantityValid} quantityMaxValid:${quantityMaxValid} equipmentTracking:${equipmentTracking} current:${uses}`);
-        await new Promise((resolve) => {
-          startRoll(roll_string, (roll) => {
-            // console.log(roll);
-            finishRoll(roll.rollId, {
-              //'name of key': 'computed value'
-              uses: uses - 1,
-              usesMax: usesMax,
-              quantity: quantity,
-              quantityMax: quantityMax,
-              usesTracking: 1,
-              quantityTracking: 0, // show raw
-            });
-            resolve();
-          });
-          output[`repeating_equipment_${id}_equipment_current`] = uses - 1;
-          output[`repeating_equipment_${id}_equipment_current_max`] = usesMax;
+        finishRoll(roll.rollId, {
+          //'name of key': 'computed value'
+          uses: uses - 1, // allow negative
+          usesMax: usesMax,
+          quantity: quantity,
+          quantityMax: quantityMax,
+          usesTracking: 1,
+          quantityTracking: 0, // show raw
         });
+        output[`repeating_equipment_${id}_equipment_current`] = uses - 1;
+        output[`repeating_equipment_${id}_equipment_current_max`] = usesMax;
         await setAttrsAsync(output, {silent: true});
       } else if (equipmentTracking === 2) {
         console.log(`Equipment QUANTITY usesValid:${usesValid} usesMaxValid:${usesMaxValid} equipmentTracking:${equipmentTracking} quantity:${quantity}`);
-        await new Promise((resolve) => {
-          startRoll(roll_string, (roll) => {
-            // console.log(roll);
-            finishRoll(roll.rollId, {
-              //'name of key': 'computed value'
-              uses: uses,
-              usesMax: usesMax,
-              quantity: quantity - 1,
-              quantityMax: quantityMax,
-              usesTracking: 0, // show raw
-              quantityTracking: 1,
-            });
-            resolve();
-          });
-          output[`repeating_equipment_${id}_equipment_quantity`] = quantity - 1;
-          output[`repeating_equipment_${id}_equipment_quantity_max`] = quantityMax;
+        finishRoll(roll.rollId, {
+          uses: uses,
+          usesMax: usesMax,
+          quantity: quantity - 1, // allow negative
+          quantityMax: quantityMax,
+          usesTracking: 0,
+          quantityTracking: 1,
         });
-        await setAttrsAsync(output);
+        output[`repeating_equipment_${id}_equipment_quantity`] = quantity - 1;
+        output[`repeating_equipment_${id}_equipment_quantity_max`] = quantityMax;
+        await setAttrsAsync(output, {silent: true});
+        await sumEquipmentWeight();
       }
     } else if (trigger.includes('ability-roll-button') || trigger.includes('ability-npc-roll-button')) {
       const abilityTracking = int(v[`repeating_ability_${id}_ability_tracking`]);
@@ -7872,29 +7854,27 @@ on(
       const usesMaxValid = await numbersOnly(v[`repeating_ability_${id}_ability_current_max`]);
       const uses = usesValid && usesMaxValid ? int(v[`repeating_ability_${id}_ability_current`]) : v[`repeating_ability_${id}_ability_current`];
       const usesMax = usesValid && usesMaxValid ? int(v[`repeating_ability_${id}_ability_current_max`]) : v[`repeating_ability_${id}_ability_current_max`];
-      // const uses = int(v[`repeating_ability_${id}_ability_current`]);
-      const currentUses = abilityTracking ? uses - 1 : uses;
+      const currentUses = abilityTracking ? uses - 1 : uses; // allow negative
+
       console.log(`Ability USES abilityTracking:${abilityTracking} current:${uses}`);
-      await new Promise((resolve) => {
-        startRoll(roll_string, (roll) => {
-          // console.log(roll);
-          finishRoll(roll.rollId, {
-            //'name of key': 'computed value'
-            uses: currentUses,
-            usesMax: usesMax,
-            usesTracking: 1,
-          });
-          resolve();
-        });
-        output[`repeating_ability_${id}_ability_current`] = currentUses;
+      const roll = await startRoll(roll_string);
+      // console.log(roll);
+      finishRoll(roll.rollId, {
+        uses: currentUses,
+        usesMax: usesMax,
+        usesTracking: 1,
       });
-      await setAttrsAsync(output, {silent: true});
+
+      if (abilityTracking) {
+        output[`repeating_ability_${id}_ability_current`] = currentUses;
+        await setAttrsAsync(output, {silent: true});
+      }
     } else {
       // NORMAL ROLL NO SPECIAL HANDLING NEEDED
       // console.log(`Normal roll - No special handling`);
-      startRoll(roll_string, (roll) => {
-        finishRoll(roll.rollId);
-      });
+      const roll = await startRoll(roll_string);
+      // console.log(roll);
+      finishRoll(roll.rollId);
     }
   },
 );
