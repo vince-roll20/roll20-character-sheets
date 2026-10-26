@@ -4,9 +4,3 @@ dev/
 prod/
 .vscode/
 .clineignore
-
-# src/ folder ignores
-src/node_modules/
-src/dev/
-src/prod/
-src/.vscode/
