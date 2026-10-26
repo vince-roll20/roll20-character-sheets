@@ -1,0 +1,6 @@
+.git/
+node_modules/
+dev/
+prod/
+dist/
+.vscode/
