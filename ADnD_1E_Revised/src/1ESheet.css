@@ -3526,6 +3526,10 @@ section.npc-box.statblock3 .image-avatar {
   width: 100%;
 }
 
+.charsheet .width-content {
+  width: min-content;
+}
+
 .charsheet .wrapper select.readonly,
 .charsheet input[disabled],
 .charsheet select[disabled],
@@ -3541,7 +3545,6 @@ section.npc-box.statblock3 .image-avatar {
   color: initial;
   cursor: default;
 }
-
 
 .charsheet .wrapper input.readonly,
 .charsheet .wrapper .readonly-span {

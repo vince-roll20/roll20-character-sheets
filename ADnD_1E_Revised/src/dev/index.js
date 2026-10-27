@@ -7862,7 +7862,7 @@ on(
       finishRoll(roll.rollId, {
         uses: currentUses,
         usesMax: usesMax,
-        usesTracking: 1,
+        usesTracking: abilityTracking,
       });
 
       if (abilityTracking) {
