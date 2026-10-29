@@ -2133,7 +2133,7 @@ function registerEventHandlers() {
   on(
     'clicked:repeating_item:create-attack-entry',
     TAS.callback(function eventcreateAttackEntryFromRow(eventInfo) {
-      TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType);
+      TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType + ' trigger: ' + eventInfo.triggerName.split('_').pop());
       if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api' || eventInfo.triggerName.split('_').pop() === 'create-attack-entry') {
         createAttackEntryFromRow(null, null, false, eventInfo);
       }
