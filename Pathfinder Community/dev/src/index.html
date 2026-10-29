@@ -32,6 +32,7 @@
                     </h2>
                     <ol>
                         <h4>Latest ($$CURRENTRELEASEDATE$$)</h4>
+                        <li>"Create Attack" buttons for Items, Spells, and Abilities have been updated to action buttons. Some user's reported the older checkbox buttons could be triggered outside the sheet which could create new attacks without actually pressing the button.</li>
                         <li>Globally set CL and DC from the top of the Special Abilities section for all SLA's.</li>
                         <li>Updated the logic to hide the spell fail check in the roll template if spell_fail is 0%.</li>
                         <li>Fixed: buff to CMD(Dodge) would erroneously be included with the "FF CMD" calc. Use the "Do not lose Dex..." checkbox e.g. Uncanny Dodge, to include any CMD(Dodge) buff.</li>
@@ -42,8 +43,8 @@
                         <li>Copied the "Has multiple spellcasting classes" option from the Spells section to sheet settings>spells.</li>
                         <li>Fixed: inventory armor/shield name sync with defenses. Setting armor/shield without first selecting an "Item" type will now set as armor and shield.</li>
                         <li>Fixed: inventory weapons name sync with attacks.</li>
-                        <li>Fixed: compendium drop for repeating Items was not accepting "Content" for descriptions.  Casing mismatch.</li>
-                        <li>Fixed: compendium drop for repeating Ability:SLA/Sp was not properly checking setting the ability basis.</li>
+                        <li>Fixed: compendium drop for repeating Items was not accepting "Content" for descriptions. Casing mismatch.</li>
+                        <li>Fixed: compendium drop for repeating Ability:SLA/Sp was not properly checking and setting the ability basis.</li>
 
                         <h4>Previous</h4>
                         <li>Added an "Ask" option to the sheet whisper settings. Rolls will include a query to whisper the roll or not when choosing the "Ask" option.</li>
@@ -9160,7 +9161,7 @@
                                     </div>
                                     <div class="attack-damage non-table sect expand">
                                         <label class="small-label2">
-                                            <input type="checkbox" name="attr_create-attack-entry" value="1" class="cssbutton createattackbutton" data-i18n-title="create-attack-entry" data-i18n-aria-label="create-attack-entry"><span></span>
+                                            <button type="action" name="act_create-attack-entry" class="cssbutton createattackbutton" data-i18n-title="create-attack-entry" data-i18n-aria-label="create-attack-entry"></button><span></span>
                                             <span data-i18n-title="create-attack-entry" data-i18n-aria-label="create-attack-entry" data-i18n="create-attack">Create Attack</span>
                                         </label>
                                         <input type="number" name="attr_toggle_attack_entry" value="1" class="noshow" />
@@ -11300,7 +11301,7 @@
                                     </div>
                                     <div class="attack-damage non-table sect expand">
                                         <label class="small-label2" style="width:5em;">
-                                            <input type="checkbox" name="attr_create-attack-entry" value="1" class="cssbutton createattackbutton" data-i18n-title="create-spell-attack-entry" data-i18n-aria-label="create-spell-attack-entry"><span></span>
+                                            <button type="action" name="act_create-attack-entry" class="cssbutton createattackbutton" data-i18n-title="create-spell-attack-entry" data-i18n-aria-label="create-spell-attack-entry"><span></span>
                                             <span data-i18n-title="create-spell-attack-entry" data-i18n-aria-label="create-spell-attack-entry" data-i18n="create-attack">Create Attack</span>
                                         </label>
                                         <input type="number" name="attr_toggle_attack_entry" value="1" class="noshow" />
@@ -11796,7 +11797,7 @@
                                     </div>
                                     <div class="weapon-attributes show-grp1">
                                         <label class="small-label2" style="width:5em;">
-                                            <input type="checkbox" name="attr_create-attack-entry" value="1" class="cssbutton createattackbutton" data-i18n-title="create-attack-entry" data-i18n-aria-label="create-attack-entry"><span></span>
+                                            <button type="action" name="act_create-attack-entry" class="cssbutton createattackbutton" data-i18n-title="create-attack-entry" data-i18n-aria-label="create-attack-entry"></button><span></span>
                                             <span data-i18n-title="create-attack-entry" data-i18n-aria-label="create-attack-entry" data-i18n="create-attack">Create Attack</span>
                                         </label>
                                         <label class="small-label2 entry-short">
@@ -13472,7 +13473,7 @@
                                             </div>
                                             <div class="attack-damage non-table sect expand">
                                                 <label class="small-label2" style="width:5em;">
-                                                    <input type="checkbox" name="attr_create-attack-entry" value="1" class="cssbutton createattackbutton" data-i18n-title="create-spell-attack-entry" data-i18n-aria-label="create-spell-attack-entry"><span></span>
+                                                    <button type="action" name="act_create-attack-entry" class="cssbutton createattackbutton" data-i18n-title="create-spell-attack-entry" data-i18n-aria-label="create-spell-attack-entry"><span></span>
                                                     <span data-i18n-title="create-spell-attack-entry" data-i18n-aria-label="create-spell-attack-entry" data-i18n="create-attack">Create Attack</span>
                                                 </label>
                                                 <label class="small-label2 entry-short">
@@ -14452,7 +14453,7 @@
                                     </div>
                                     <div class="attack-damage non-table sect expand">
                                         <label class="small-label2">
-                                            <input type="checkbox" name="attr_create-attack-entry" value="1" class="cssbutton createattackbutton" data-i18n-title="create-attack-entry" data-i18n-aria-label="create-attack-entry"><span></span>
+                                            <button type="action" name="act_create-attack-entry" class="cssbutton createattackbutton" data-i18n-title="create-attack-entry" data-i18n-aria-label="create-attack-entry"></button><span></span>
                                             <span data-i18n-title="create-attack-entry" data-i18n-aria-label="create-attack-entry" data-i18n="create-attack">Create Attack</span>
                                         </label>
                                         <input type="number" name="attr_toggle_attack_entry" value="1" class="noshow" />

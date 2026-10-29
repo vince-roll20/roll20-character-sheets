@@ -2241,10 +2241,10 @@ function registerEventHandlers() {
     }),
   );
   on(
-    'change:repeating_spells:create-attack-entry',
-    TAS.callback(function eventcreateAttackEntryFromSpell(eventInfo) {
+    'clicked:repeating_spells:create-attack-entry',
+    TAS.callback(function eventcreateAttackEntryFromRow(eventInfo) {
       TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType);
-      if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api') {
+      if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api' || eventInfo.triggerName.split('_').pop() === 'create-attack-entry') {
         createAttackEntryFromRow(null, null, false, eventInfo);
       }
     }),

@@ -1241,10 +1241,10 @@ function registerEventHandlers() {
   );
 
   on(
-    'change:repeating_ability:create-attack-entry',
-    TAS.callback(function eventcreateAttackEntryFromSLA(eventInfo) {
+    'clicked:repeating_ability:create-attack-entry',
+    TAS.callback(function eventcreateAttackEntryFromRow(eventInfo) {
       TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType);
-      if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api') {
+      if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api' || eventInfo.triggerName.split('_').pop() === 'create-attack-entry') {
         createAttackEntryFromRow(null, null, false, eventInfo);
       }
     }),
