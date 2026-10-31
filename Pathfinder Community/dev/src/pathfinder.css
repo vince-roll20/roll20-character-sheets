@@ -468,14 +468,11 @@
 /* keeps textarea and readonly number attribute to right inline with each other in one .table cell */
 .charsheet .small-label2.linked-tablecell,
 .charsheet .table-cell.linked-tablecell {
-    display: inline-grid;
-    grid-template-columns: minmax(auto, 3.5em) auto;
-    justify-content: center;
+    display: block;
     min-width: max-content;
     padding: 0 2px 0 2px;
     vertical-align: text-top;
     white-space: nowrap;
-    width: auto;
 }
 
 .charsheet .table-cell.linked-tablecell-short {
@@ -4500,7 +4497,7 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
 
 .charsheet .monster-indicator {
     font-size: 1.2rem;
-    margin: 0 .5rem auto auto;
+    margin: 2px .5rem auto auto;
 }
 
 .charsheet .section-header {
@@ -4532,6 +4529,8 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
 
 .charsheet .announcements .footer {
     margin: 0.5rem;
+    max-height: 480px;
+    overflow-y: auto;
     padding: 0.5rem;
     text-align: left;
 }
