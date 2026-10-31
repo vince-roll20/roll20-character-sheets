@@ -6002,7 +6002,7 @@ equipmentnav ~ tabinputtab99:not(:checked) ~ tabinputtab9:not(:checked) ~ tabinp
 .sheet-rolltemplate-pf_attack .sheet-roll-cell.sheet-atk:first-child .inlinerollresult,
 .sheet-rolltemplate-pf_attack > div.sheet-roll-accessible > label.sheet-atk span.sheet-atk:first-child > .inlinerollresult,
 .sheet-rolltemplate-pf_spell > div.sheet-roll-accessible > label > span.inlinerollresult {
-    color: black;
+    color: inherit;
     background-color: transparent;
     border: none;
     font-size: 1.2rem;
