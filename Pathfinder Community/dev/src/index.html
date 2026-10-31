@@ -33,19 +33,19 @@
                     <ol>
                         <h4>Latest ($$CURRENTRELEASEDATE$$)</h4>
                         <li>"Create Attack" buttons for Items, Spells, and Abilities have been updated to action buttons. Some user's reported the older checkbox buttons could be triggered outside the sheet which could create new attacks without actually pressing the button.</li>
-                        <li>Globally set CL and DC from the top of the Special Abilities section for all SLA's.</li>
-                        <li>Updated the logic to hide the spell fail check in the roll template if spell_fail is 0%.</li>
-                        <li>Fixed: buff to CMD(Dodge) would erroneously be included with the "FF CMD" calc. Use the "Do not lose Dex..." checkbox e.g. Uncanny Dodge, to include any CMD(Dodge) buff.</li>
-                        <li>Fixed: buff to all "Saves" would erroneously stack with Trait and Resistance bonuses.</li>
-                        <li>Fixed: buff penalties to Ability scores were not displayed with the Ability row's "Debuff" column or in the active Buffs panel at the top of the sheet.</li>
+                        <li>Added: Globally set CL and DC from the top of the Special Abilities section for all SLA's.</li>
+                        <li>Updated logic to hide the Spell Fail check in the roll template if spell_fail is 0%.</li>
+                        <li>Fixed: Buff to CMD(Dodge) would also be included with the "FF CMD" calc. Use the "Do not lose Dex..." checkbox e.g. Uncanny Dodge, to include any CMD(Dodge) buff.</li>
+                        <li>Fixed: Buff to all "Saves" would also stack with Trait and Resistance bonuses.</li>
+                        <li>Fixed: Buff penalties to Ability scores were not displayed in the Ability row "Debuff" column or in the active Buffs panel.</li>
                         <li>Updated the Feats and Traits datalists to remove duplicate line items.</li>
                         <li>Fixed: #cast in repeating_spells row was not linked to the Spells/Day, #left column.</li>
-                        <li>Copied the "Has multiple spellcasting classes" option from the Spells section to sheet settings>spells.</li>
-                        <li>Fixed: inventory armor/shield name sync with defenses. Setting armor/shield without first selecting an "Item" type will now set as armor and shield.</li>
-                        <li>Fixed: inventory weapons name sync with attacks.</li>
-                        <li>Fixed: compendium drop for repeating Items was not accepting "Content" for descriptions. Casing mismatch.</li>
-                        <li>Fixed: compendium drop for repeating Ability:SLA/Sp was not properly checking and setting the ability basis.</li>
-
+                        <li>Copied the "Has multiple spellcasting classes" option from Sheet Settings>Spells to the top of the Spells section.</li>
+                        <li>Fixed: Equipment>Armor/Shield item name now syncs with the Defenses section. Setting Armor or Shield without first selecting an Equipment Type will now automatically set the item as "Armor or Shield".</li>
+                        <li>Fixed: Equipment>Weapon item name now syncs with the Attacks section.</li>
+                        <li>Fixed: Compendium drop for repeating Items was not accepting "Content" for descriptions.</li>
+                        <li>Fixed: Compendium drop for repeating Ability:SLA/Sp was not properly checking and setting the Ability Basis attribute.</li>
+                        <br>
                         <h4>Previous</h4>
                         <li>Added an "Ask" option to the sheet whisper settings. Rolls will include a query to whisper the roll or not when choosing the "Ask" option.</li>
                         <li>Modified the "Worn Item" behavior to remove the item's name from the Worn Items section when their <strong>Location</strong> is changed to "Carried" or "Not Carried" from the Equipment row. These items are no longer assigned as a slotted item and will need to have their <strong>Location</strong> or (Set Armor/Shield button) re-set in order to re-assign them as a slotted/worn item. Armor and Shield will become un-Equipped on the Defenses page when their <strong>Location</strong> is changed to anything but their assigned slots. Deleting Armor or Shield rows will remove them form Defenses and reset their fields.</li>
