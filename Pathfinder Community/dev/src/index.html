@@ -26,9 +26,11 @@
             <div role="contentinfo" class="announcements selectable" aria-label="Announces changes to sheet" data-i18n-aria-label="announcements">
                 <div class="footer">
                     <h2 style="margin-top:0;margin-bottom:1em;">
-                        <span data-i18n="version">Version</span>
-                        <input type="text" name="attr_PFSheet_Version" value="0" class="calc number" readonly title="A non-blank version indicates attributes have been successfully recalculated." />
                         <span data-i18n="new-features">New Features and Updates</span>
+                        <span style="float: right;">
+                            <span data-i18n="version">Version</span>
+                            <input type="text" name="attr_PFSheet_Version" value="0" class="calc number" readonly="" title="A non-blank version indicates attributes have been successfully recalculated.">
+                        </span>
                     </h2>
                     <ol>
                         <h4>Latest ($$CURRENTRELEASEDATE$$)</h4>
@@ -8869,15 +8871,13 @@
                                     <option value="(0*(@{level}))" data-i18n="other">Other</option>
                                 </select>
                             </span>
-
                             <input type="checkbox" value="0" class="noshow or-A-show" name="attr_ability_CL-basis" role="presentation">
                             <input type="checkbox" value="@{level}" class="noshow or-B-show" name="attr_ability_CL-basis" role="presentation">
                             <label class="small-label2 linked-tablecell nor-sect nowrap entry-med" style="grid-row: span 2;">
-                                <input type="text" value="" name="attr_ability_class-name" title="@{ability_class-name}" class="calc">
+                                <input type="text" value="" name="attr_ability_class-name" title="@{ability_class-name}" class="calc" style="width: inherit;">
                                 <span class="nowrap" data-i18n="source-name">Source Name</span>
                             </label>
                             <input class="number calc hidden" type="number" name="attr_ability_CL-basis-mod" value="0" />
-
                             <input type="checkbox" name="attr_confirm_ability_CL-basis" value="1" data-i18n-title="confirm-ability-sla-cl" />
                             <button type="action" name="act_set-sla-cl" class="command-button" data-i18n-title="set-sla-caster-level-basis">
                                 <span data-i18n="set-sla-caster-level-abbrv">Set CL-Basis</span>
@@ -8892,10 +8892,10 @@
                                 </select>
                             </span>
                             <input type="checkbox" value="0" class="noshow or-B-show" name="attr_ability_spell_level-basis" role="presentation">
-                            <label class="small-label2 linked-tablecell either-or-sect nowrap entry-med" style="grid-row: span 2;">
+                            <label class="small-label2 linked-tablecell either-or-sect nowrap entry-med" style="grid-row: span 2;max-height: 2em;">
                                 <input type="checkbox" value="1" name="attr_ability_spell_level_misc-mod_error" class="error-mshow">
-                                <input type="text" class="macro-text-inline linked-cellfield highlight" title="@{ability_spell_level-misc}" name="attr_ability_spell_level-misc" data-i18n-placeholder="equation-macro-place" placeholder="#/Equation">
-                                <input type="number" value="0" name="attr_ability_spell_level-misc-mod" title="@{ability_spell_level-misc-mod}" class="narrow-numbers calc linked-cellfield highlight" readonly="">
+                                <input type="text" class="macro-text-inline linked-cellfield highlight" title="@{ability_spell_level-misc}" name="attr_ability_spell_level-misc" data-i18n-placeholder="equation-macro-place" placeholder="#/Equation" />
+                                <input type="number" value="0" name="attr_ability_spell_level-misc-mod" title="@{ability_spell_level-misc-mod}" class="narrow-numbers calc linked-cellfield highlight" readonly />
                                 <span class="super note-a" data-i18n-aria-label="spell-level-miscellaneous-desc" data-i18n-title="spell-level-miscellaneous-desc" data-i18n="miscellaneous-abbrv" title="Spell level and DC bonus" aria-label="Spell level and DC bonus">Misc</span>
                             </label>
                             <input type="checkbox" name="attr_confirm_ability_spell_level-basis" value="1" data-i18n-title="confirm-ability-sla-dc" />
@@ -14162,15 +14162,13 @@
                                     <option value="(0*(@{level}))" data-i18n="other">Other</option>
                                 </select>
                             </span>
-
                             <input type="checkbox" value="0" class="noshow or-A-show" name="attr_ability_CL-basis" role="presentation">
                             <input type="checkbox" value="@{level}" class="noshow or-B-show" name="attr_ability_CL-basis" role="presentation">
                             <label class="small-label2 linked-tablecell nor-sect nowrap entry-med" style="grid-row: span 2;">
-                                <input type="text" value="" name="attr_ability_class-name" title="@{ability_class-name}" class="calc">
+                                <input type="text" value="" name="attr_ability_class-name" title="@{ability_class-name}" class="calc" style="width: inherit;">
                                 <span class="nowrap" data-i18n="source-name">Source Name</span>
                             </label>
                             <input class="number calc hidden" type="number" name="attr_ability_CL-basis-mod" value="0" />
-
                             <input type="checkbox" name="attr_confirm_ability_CL-basis" value="1" data-i18n-title="confirm-ability-sla-cl" />
                             <button type="action" name="act_set-sla-cl" class="command-button" data-i18n-title="set-sla-caster-level-basis">
                                 <span data-i18n="set-sla-caster-level-abbrv">Set CL-Basis</span>
@@ -14185,10 +14183,10 @@
                                 </select>
                             </span>
                             <input type="checkbox" value="0" class="noshow or-B-show" name="attr_ability_spell_level-basis" role="presentation">
-                            <label class="small-label2 linked-tablecell either-or-sect nowrap entry-med" style="grid-row: span 2;">
+                            <label class="small-label2 linked-tablecell either-or-sect nowrap entry-med" style="grid-row: span 2;max-height: 2em;">
                                 <input type="checkbox" value="1" name="attr_ability_spell_level_misc-mod_error" class="error-mshow">
-                                <input type="text" class="macro-text-inline linked-cellfield highlight" title="@{ability_spell_level-misc}" name="attr_ability_spell_level-misc" data-i18n-placeholder="equation-macro-place" placeholder="#/Equation">
-                                <input type="number" value="0" name="attr_ability_spell_level-misc-mod" title="@{ability_spell_level-misc-mod}" class="narrow-numbers calc linked-cellfield highlight" readonly="">
+                                <input type="text" class="macro-text-inline linked-cellfield highlight" title="@{ability_spell_level-misc}" name="attr_ability_spell_level-misc" data-i18n-placeholder="equation-macro-place" placeholder="#/Equation" />
+                                <input type="number" value="0" name="attr_ability_spell_level-misc-mod" title="@{ability_spell_level-misc-mod}" class="narrow-numbers calc linked-cellfield highlight" readonly />
                                 <span class="super note-a" data-i18n-aria-label="spell-level-miscellaneous-desc" data-i18n-title="spell-level-miscellaneous-desc" data-i18n="miscellaneous-abbrv" title="Spell level and DC bonus" aria-label="Spell level and DC bonus">Misc</span>
                             </label>
                             <input type="checkbox" name="attr_confirm_ability_spell_level-basis" value="1" data-i18n-title="confirm-ability-sla-dc" />

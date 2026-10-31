@@ -468,10 +468,9 @@
 /* keeps textarea and readonly number attribute to right inline with each other in one .table cell */
 .charsheet .small-label2.linked-tablecell,
 .charsheet .table-cell.linked-tablecell {
-    display: block;
+    display: inline-block;
     min-width: max-content;
     padding: 0 2px 0 2px;
-    vertical-align: text-top;
     white-space: nowrap;
 }
 
@@ -2204,14 +2203,14 @@ also need 1 more level in selector or base css will override border */
     display: inline-flex;
     left: initial;
     margin: 2px;
-    margin-left: 8%;
+    margin-left: 5%;
 }
 
 .charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only > span:first-child {
     display: grid;
     grid-template-columns: 2em 6.25em minmax(0, auto);
     justify-items: stretch;
-    /* width: min-content; */
+    width: 100%;
 }
 
 .charsheet .abilities .tabinput ~ span.selected-tabtitle ~ .sla-only > span:last-child {
@@ -2225,7 +2224,6 @@ also need 1 more level in selector or base css will override border */
 .charsheet .sla-only .or-B-show:not(:checked) ~ .either-or-sect {
     display: inline-grid;
     visibility: collapse;
-    max-width: auto;
 }
 
 .charsheet .sla-only .or-A-show:checked ~ label.nor-sect,
@@ -2233,12 +2231,13 @@ also need 1 more level in selector or base css will override border */
     display: inline-grid;
     grid-template-columns: 0;
     visibility: collapse;
+    width: auto;
 }
 
 .charsheet .sla-only .or-A-show:not(:checked) ~ .nor-sect,
 .charsheet .sla-only .or-B-show:not(:checked) ~ .nor-sect {
     display: inline-grid;
-    grid-template-columns: min-content;
+    grid-template-columns: minmax(0, min-content);
     visibility: visible;
 }
 
