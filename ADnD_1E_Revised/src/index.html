@@ -2754,8 +2754,8 @@
                       <label></label>
                     </span>
                     <span class="weapons-row2 center">
-                      <label class="inline-label" title="@{repeating_weapon_$X_weapon_use} | Weapon is armed.">
-                        <input type="checkbox" name="attr_weapon_use" value="1" />
+                      <label class="inline-label">
+                        <input type="checkbox" name="attr_weapon_use" title="@{repeating_weapon_$X_weapon_use} | Weapon is armed." value="1" />
                         <span class="label-under-small">In-Use</span>
                       </label>
                       <details class="small-damage">
@@ -2825,8 +2825,8 @@
                         <input type="text" class="width-medium" name="attr_weapon_attackdmgbonus" title="@{repeating_weapon_$X_weapon_attackdmgbonus}" value="0" />
                         <span>DMG Adj.</span>
                       </label>
-                      <label class="label-under-small" title="@{repeating_weapon_$X_weapon_attackdmgtype} | (P)iercing, (S)lashing, (B)ludgeoning, etc.">
-                        <input type="text" class="width-medium" name="attr_weapon_attackdmgtype" value="" placeholder="-" />
+                      <label class="label-under-small">
+                        <input type="text" class="width-medium" name="attr_weapon_attackdmgtype" title="@{repeating_weapon_$X_weapon_attackdmgtype} | (P)iercing, (S)lashing, (B)ludgeoning, etc." value="" placeholder="-" />
                         <span>DMG Type</span>
                       </label>
                       <label class="label-under-small hide-if-melee">
