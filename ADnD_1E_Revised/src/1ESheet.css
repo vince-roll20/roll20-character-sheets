@@ -2327,6 +2327,7 @@ section.npc-box.statblock3 .image-avatar {
 
 .charsheet .background .wrapper .weapons-row1 > label,
 .charsheet .background .wrapper .weapons-row2 > label {
+  align-self: start;
   flex: 1 0 6em;
   margin: inherit;
   margin-inline: auto;
@@ -2352,6 +2353,7 @@ section.npc-box.statblock3 .image-avatar {
   margin: auto;
   max-width: 7em;
   min-width: 6em;
+  padding: 0 2px 0 2px;
 }
 
 .charsheet .background .wrapper .weapons-row1 label.repeating-name {
@@ -2447,7 +2449,7 @@ section.npc-box.statblock3 .image-avatar {
 
 .charsheet .select-over-label {
   appearance: none;
-  margin: -3px 0 0 0;
+  margin: 0;
   max-width: 97%;
 }
 
@@ -2456,6 +2458,7 @@ section.npc-box.statblock3 .image-avatar {
 }
 
 .charsheet .weapon-ammo-tracking {
+  align-self: start;
   display: flex;
   min-width: 8.5em;
 }
