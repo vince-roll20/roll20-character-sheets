@@ -5634,8 +5634,8 @@
                   <!--Success/Failure for Roll High-->
                   {{#roll_high}}
                     {{#^rollLess() roll_high roll_target}}
-                      <span class="sheet-row">
-                        <span class="sheet-tcat sheet-span-two sheet-success">Success!</span>
+                    <span class="sheet-row">
+                      <span class="sheet-tcat sheet-span-two sheet-success">Success!</span>
                     {{/^rollLess() roll_high roll_target}}
                     {{#rollLess() roll_high roll_target}}
                       <span class="sheet-tcat sheet-span-two sheet-failure">Failure...</span>
@@ -5646,8 +5646,8 @@
                   <!--Success/Failure for Roll Low-->
                   {{#roll_low}}
                     {{#^rollGreater() roll_low roll_target}}
-                      <span class="sheet-row">
-                        <span class="sheet-tcat sheet-span-two sheet-success">Success!</span>
+                    <span class="sheet-row">
+                      <span class="sheet-tcat sheet-span-two sheet-success">Success!</span>
                     {{/^rollGreater() roll_low roll_target}}
                     {{#rollGreater() roll_low roll_target}}
                       <span class="sheet-tcat sheet-span-two sheet-failure">Failure...</span>
@@ -5655,13 +5655,13 @@
                     </span>
                     <span class="sheet-row sheet-span-two sheet-tcat"><span class="sheet-center">Roll =</span>&nbsp;{{roll_low}}&nbsp;<span class="sheet-center">vs</span>&nbsp;{{roll_target}}</span>
                     {{#^rollGreater() roll_low roll_target2}}
-                      <span class="sheet-row">
+                    <span class="sheet-row">
                     {{/^rollGreater() roll_low roll_target2}}
                     {{#rollGreater() roll_low roll_target2}}
                       <span class="sheet-tcat sheet-span-two sheet-failure">Detected</span>
                       <span class="sheet-tcat sheet-span-two sheet-center">roll is >= +21% failure</span>
-                      </span>
-                      <span class="sheet-row sheet-span-two sheet-tcat">{{roll_low}}&nbsp;<span class="sheet-center">vs</span>&nbsp;{{roll_target2}}</span>
+                    </span>
+                    <span class="sheet-row sheet-span-two sheet-tcat">{{roll_low}}&nbsp;<span class="sheet-center">vs</span>&nbsp;{{roll_target2}}</span>
                     {{/rollGreater() roll_low roll_target2}}
                   {{/roll_low}}
                   {{#^rollTotal() roll 0}}

@@ -5070,9 +5070,9 @@ section.npc-box.statblock3 .image-avatar {
   display: inline-flex;
 }
 
-.sheet-rolltemplate-attacks .inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-general .inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-attacks-table .inlinerollresult.inlinerollresult {
+.sheet-rolltemplate-attacks div .sheet-row .inlinerollresult.inlinerollresult,
+.sheet-rolltemplate-general div .sheet-row .inlinerollresult.inlinerollresult,
+.sheet-rolltemplate-attacks-table div .sheet-row .inlinerollresult.inlinerollresult {
   align-items: center;
   background-color: oklch(95.774% 0.12615 104.673);
   box-sizing: border-box;
@@ -5096,32 +5096,32 @@ section.npc-box.statblock3 .image-avatar {
   padding-right: .5em;
 }
 
-.sheet-rolltemplate-attacks .sheet-inlineroll-reset span.inlinerollresult.inlinerollresult {
+.sheet-rolltemplate-attacks div .sheet-row .sheet-inlineroll-reset span.inlinerollresult.inlinerollresult {
   font-size: initial;
 }
 
-.sheet-rolltemplate-general .sheet-inlineroll-reset span.inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-attacks .sheet-inlineroll-reset span.inlinerollresult.inlinerollresult {
+.sheet-rolltemplate-general div .sheet-row .sheet-inlineroll-reset span.inlinerollresult.inlinerollresult,
+.sheet-rolltemplate-attacks div .sheet-row .sheet-inlineroll-reset span.inlinerollresult.inlinerollresult {
   display: contents;
   font-size: inherit;
 }
 
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks .inlinerollresult,
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks span.inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-general .inlinerollresult,
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-general span.inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-general .sheet-row span.inlinerollresult.inlinerollresult {
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks div .sheet-row .inlinerollresult,
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks div .sheet-row span.inlinerollresult.inlinerollresult,
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-general div .sheet-row .inlinerollresult,
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-general div .sheet-row span.inlinerollresult.inlinerollresult,
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-general div .sheet-row .sheet-row span.inlinerollresult.inlinerollresult {
   background-color: var(--dark-gamecard);
   color: var(--color-white3);
   font-weight: normal;
 }
 
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks .sheet-ToHit .inlinerollresult,
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks .sheet-ToHit span.inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks .sheet-wrap-ToHit .inlinerollresult,
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks .sheet-wrap-ToHit span.inlinerollresult.inlinerollresult,
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks-table .sheet-wrap-ToHit .inlinerollresult,
-.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks-table .sheet-wrap-ToHit span.inlinerollresult.inlinerollresult {
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks div .sheet-row .sheet-ToHit .inlinerollresult,
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks div .sheet-row .sheet-ToHit span.inlinerollresult.inlinerollresult,
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks div .sheet-row .sheet-wrap-ToHit .inlinerollresult,
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks div .sheet-row .sheet-wrap-ToHit span.inlinerollresult.inlinerollresult,
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks-table div .sheet-row .sheet-wrap-ToHit .inlinerollresult,
+.sheet-rolltemplate-darkmode.sheet-rolltemplate-attacks-table div .sheet-row .sheet-wrap-ToHit span.inlinerollresult.inlinerollresult {
   background-color: oklch(95.774% 0.12615 104.673);
   border: none;
   color: var(--black);
