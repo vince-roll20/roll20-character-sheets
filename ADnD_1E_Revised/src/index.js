@@ -7726,7 +7726,7 @@ on(
       const ammoMaxValid = await numbersOnly(v[`repeating_weapon_${id}_weapon_ammo_max`]);
       const ammo = ammoValid && ammoMaxValid ? int(v[`repeating_weapon_${id}_weapon_ammo`]) : v[`repeating_weapon_${id}_weapon_ammo`];
       const ammoMax = ammoValid && ammoMaxValid ? int(v[`repeating_weapon_${id}_weapon_ammo_max`]) : v[`repeating_weapon_${id}_weapon_ammo_max`];
-      const currentAmmo = ammoValid && ammoMaxValid && isRanged && weaponTracking ? ammo - 1 : ammo;
+      const currentAmmo = isRanged && weaponTracking && ammo >= 0 && ammoMax >= ammo ? ammo - 1 : ammo; // allow negative for roll template
       console.log(`ammoValid:${ammoValid} ammoMaxValid:${ammoMaxValid} weaponTracking:${weaponTracking} isRanged:${isRanged} currentAmmo:${currentAmmo}`);
       // Native async startRoll
       const roll = await startRoll(roll_string);
@@ -7793,7 +7793,7 @@ on(
       finishRoll(roll2.rollId);
 
       // Ammo tracking
-      output[`repeating_weapon_${id}_weapon_ammo`] = currentAmmo;
+      output[`repeating_weapon_${id}_weapon_ammo`] = Math.max(0, currentAmmo); // prevents setting a negative value
       output[`repeating_weapon_${id}_weapon_ammo_max`] = ammoMax;
       await setAttrsAsync(output, {silent: true});
     } else if (trigger.includes('equipment-roll-button')) {
@@ -7804,8 +7804,10 @@ on(
       const quantityMaxValid = await numbersOnly(v[`repeating_equipment_${id}_equipment_quantity_max`]);
       const uses = usesValid && usesMaxValid ? int(v[`repeating_equipment_${id}_equipment_current`]) : v[`repeating_equipment_${id}_equipment_current`];
       const usesMax = usesValid && usesMaxValid ? int(v[`repeating_equipment_${id}_equipment_current_max`]) : v[`repeating_equipment_${id}_equipment_current_max`];
+      const currentUses = uses >= 0 && usesMax >= uses ? uses - 1 : uses;
       const quantity = quantityValid && quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity`]) : v[`repeating_equipment_${id}_equipment_quantity`];
       const quantityMax = quantityValid && quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity_max`]) : v[`repeating_equipment_${id}_equipment_quantity_max`];
+      const currentQuantity = quantity >= 0 && quantityMax >= quantity ? quantity - 1 : quantity;
       const roll = await startRoll(roll_string);
       // console.log(roll);
       if (equipmentTracking === 0) {
@@ -7823,14 +7825,14 @@ on(
         console.log(`Equipment USES quantityValid:${quantityValid} quantityMaxValid:${quantityMaxValid} equipmentTracking:${equipmentTracking} current:${uses}`);
         finishRoll(roll.rollId, {
           //'name of key': 'computed value'
-          uses: uses - 1, // allow negative
+          uses: currentUses, // allow negative for roll template
           usesMax: usesMax,
           quantity: quantity,
           quantityMax: quantityMax,
           usesTracking: 1,
           quantityTracking: 0, // show raw
         });
-        output[`repeating_equipment_${id}_equipment_current`] = uses - 1;
+        output[`repeating_equipment_${id}_equipment_current`] = Math.max(0, currentUses); // prevents setting a negative value
         output[`repeating_equipment_${id}_equipment_current_max`] = usesMax;
         await setAttrsAsync(output, {silent: true});
       } else if (equipmentTracking === 2) {
@@ -7838,12 +7840,12 @@ on(
         finishRoll(roll.rollId, {
           uses: uses,
           usesMax: usesMax,
-          quantity: quantity - 1, // allow negative
+          quantity: currentQuantity, // allow negative for roll template
           quantityMax: quantityMax,
           usesTracking: 0,
           quantityTracking: 1,
         });
-        output[`repeating_equipment_${id}_equipment_quantity`] = quantity - 1;
+        output[`repeating_equipment_${id}_equipment_quantity`] = Math.max(0, currentQuantity); // prevents setting a negative value
         output[`repeating_equipment_${id}_equipment_quantity_max`] = quantityMax;
         await setAttrsAsync(output, {silent: true});
         await sumEquipmentWeight();
@@ -7852,9 +7854,9 @@ on(
       const abilityTracking = int(v[`repeating_ability_${id}_ability_tracking`]);
       const usesValid = await numbersOnly(v[`repeating_ability_${id}_ability_current`]);
       const usesMaxValid = await numbersOnly(v[`repeating_ability_${id}_ability_current_max`]);
-      const uses = usesValid && usesMaxValid ? int(v[`repeating_ability_${id}_ability_current`]) : v[`repeating_ability_${id}_ability_current`];
       const usesMax = usesValid && usesMaxValid ? int(v[`repeating_ability_${id}_ability_current_max`]) : v[`repeating_ability_${id}_ability_current_max`];
-      const currentUses = abilityTracking ? uses - 1 : uses; // allow negative
+      const uses = usesValid && usesMaxValid ? int(v[`repeating_ability_${id}_ability_current`]) : v[`repeating_ability_${id}_ability_current`];
+      const currentUses = abilityTracking && uses >= 0 && usesMax >= uses ? uses - 1 : uses; // allow negative for roll template
 
       console.log(`Ability USES abilityTracking:${abilityTracking} current:${uses}`);
       const roll = await startRoll(roll_string);
@@ -7866,7 +7868,7 @@ on(
       });
 
       if (abilityTracking) {
-        output[`repeating_ability_${id}_ability_current`] = currentUses;
+        output[`repeating_ability_${id}_ability_current`] = Math.max(0, currentUses); // prevents setting a negative value
         await setAttrsAsync(output, {silent: true});
       }
     } else {
