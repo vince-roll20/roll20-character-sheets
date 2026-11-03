@@ -527,7 +527,7 @@
 /* hide costs all tabs*/
 .charsheet input[type='checkbox'].toggle-costs:checked ~ .background .equipment-columns {
   grid-template-columns:
-    3.5em minmax(7em, 2fr) minmax(4em, 1fr) minmax(3em, 7em) minmax(1em, 3em) minmax(3.5em, 5em) 0.5em minmax(1em, 3em) minmax(3em, 5em) minmax(1em, 3em) 0.5em minmax(1em, 3em) minmax(1em, 4em) 0;
+    3.5em minmax(8em, 2fr) minmax(6em, 1fr) minmax(4em, 7em) 3em minmax(1em, 3em) 0.5em minmax(1em, 3em) 3em minmax(3em, 5em) minmax(1em, 3em) 0.5em minmax(1em, 3em) 3em minmax(1em, 4em) 0;
 }
 
 /* hide costs Armor tab specific */
@@ -535,7 +535,7 @@
 .charsheet .toggle-costs:checked ~ .background .equipment-display-type[value='2'] ~ .repcontainer .equipment-columns {
   display: grid;
   grid-template-columns:
-    3.5em minmax(7em, 2fr) minmax(4em, 1fr) minmax(3em, 7em) minmax(3.5em, 5em) minmax(3em, 5em) minmax(1em, 3em) 0.5em minmax(1em, 3em) minmax(1em, 4em);
+    3.5em minmax(8em, 2fr) minmax(6em, 1fr) minmax(4em, 7em) 3em minmax(3em, 5em) minmax(1em, 3em) minmax(1em, 3em) 0.5em minmax(1em, 3em) 3em minmax(1em, 4em);
 }
 
 /* prevent interaction until an armor type is chosen */
@@ -1840,7 +1840,7 @@ section.npc-box.statblock3 .image-avatar {
     grid-area: c;
   }
 
-  .charsheet input[value='1'].toggle-npc ~ input.toggle-single-column-abilities ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-track {
+  .charsheet input[value='1'].toggle-npc ~ input.toggle-single-column-abilities ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area- {
     grid-area: d;
   }
 
@@ -2457,10 +2457,14 @@ section.npc-box.statblock3 .image-avatar {
   left: 3.75em;
 }
 
-.charsheet .weapon-ammo-tracking {
+.charsheet .weapon-ammo-ing {
   align-self: start;
   display: flex;
   min-width: 8.5em;
+}
+
+.charsheet .weapon-ammo-tracking {
+  display: inline-flex;
 }
 
 .charsheet .toggle-to-hit-table ~ .sect label,
@@ -2649,7 +2653,7 @@ section.npc-box.statblock3 .image-avatar {
   justify-items: center;
   padding: 2px 2px 0 2px;
   grid-template-columns:
-    3.5em minmax(7em, 2fr) minmax(4em, 1fr) minmax(3em, 7em) minmax(3.5em, 5em) minmax(1em, 3em) 0.5em minmax(1em, 3em) minmax(3em, 5em) minmax(1em, 3em) 0.5em minmax(1em, 3em) minmax(1em, 4em) minmax(1em, 4em);
+    3.5em minmax(8em, 2fr) minmax(6em, 1fr) minmax(4em, 7em) 3em minmax(1em, 3em) 0.5em minmax(1em, 3em) 3em minmax(3em, 5em) minmax(1em, 3em) 0.5em minmax(1em, 3em) 3em minmax(1em, 4em) minmax(1em, 4em);
 }
 
 /* Armor tab specific */
@@ -2658,7 +2662,7 @@ section.npc-box.statblock3 .image-avatar {
   display: grid;
   padding: 0 2px 0 2px;
   grid-template-columns:
-    3.5em minmax(7em, 2fr) minmax(4em, 1fr) minmax(3em, 7em) minmax(3.5em, 5em) minmax(3em, 5em) minmax(1em, 3em) 0.5em minmax(1em, 3em) minmax(1em, 4em) minmax(1em, 4em);
+    3.5em minmax(8em, 2fr) minmax(6em, 1fr) minmax(4em, 7em) 3em minmax(3em, 5em) minmax(1em, 3em) 0.5em minmax(1em, 3em) 3em minmax(1em, 4em) minmax(1em, 4em);
 }
 
 .charsheet span.equipment-columns.column-header {
@@ -2867,7 +2871,7 @@ section.npc-box.statblock3 .image-avatar {
   grid-area: c;
 }
 
-.charsheet input.toggle-single-column-abilities:not(:checked) ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-track {
+.charsheet input.toggle-single-column-abilities:not(:checked) ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area- {
   grid-area: d;
 }
 
@@ -4672,8 +4676,8 @@ section.npc-box.statblock3 .image-avatar {
   margin-right: -2em;
 }
 
-.sheet-rolltemplate-attacks .sheet-tracked::after,
-.sheet-rolltemplate-general .sheet-tracked::after {
+.sheet-rolltemplate-attacks .sheet-ed::after,
+.sheet-rolltemplate-general .sheet-ed::after {
   content: 'S';
   cursor: help;
   font-family: 'Pictos';
