@@ -1840,7 +1840,7 @@ section.npc-box.statblock3 .image-avatar {
     grid-area: c;
   }
 
-  .charsheet input[value='1'].toggle-npc ~ input.toggle-single-column-abilities ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area- {
+  .charsheet input[value='1'].toggle-npc ~ input.toggle-single-column-abilities ~ .background .repcontainer[data-groupname='repeating_ability'] .special-abilities-row1 .ability-area-track {
     grid-area: d;
   }
 
@@ -2457,13 +2457,8 @@ section.npc-box.statblock3 .image-avatar {
   left: 3.75em;
 }
 
-.charsheet .weapon-ammo-ing {
-  align-self: start;
-  display: flex;
-  min-width: 8.5em;
-}
-
 .charsheet .weapon-ammo-tracking {
+  align-self: start;
   display: inline-flex;
 }
 
@@ -4676,8 +4671,8 @@ section.npc-box.statblock3 .image-avatar {
   margin-right: -2em;
 }
 
-.sheet-rolltemplate-attacks .sheet-ed::after,
-.sheet-rolltemplate-general .sheet-ed::after {
+.sheet-rolltemplate-attacks .sheet-tracked::after,
+.sheet-rolltemplate-general .sheet-tracked::after {
   content: 'S';
   cursor: help;
   font-family: 'Pictos';
@@ -5175,9 +5170,9 @@ section.npc-box.statblock3 .image-avatar {
   position: relative;
   margin-top: calc(-43px + min(17px,
         max(0px,
-        calc(1700% - 6224px))));
-        /* 1px-wide CSS trigger that transitions the margin by exactly one line-height */
-      }
+          calc(1700% - 6224px))));
+  /* 1px-wide CSS trigger that transitions the margin by exactly one line-height */
+}
 
 .sheet-rolltemplate-attacks div.sheet-color-black .sheet-template-header,
 .sheet-rolltemplate-attacks div.sheet-color-black .sheet-template-footer,
