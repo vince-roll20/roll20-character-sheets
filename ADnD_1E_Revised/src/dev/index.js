@@ -7707,6 +7707,8 @@ on(
       [`repeating_ability_${id}_ability-roll-button`]: `@{whisper_pc} @{repeating_ability_${id}_ability_macro_text}`,
       [`repeating_ability_${id}_ability-npc-roll-button`]: `@{whisper_npc} @{repeating_ability_${id}_ability_macro_text}`,
     };
+    const toHitTableDefault =
+      '/ss gm &{template:attacks-table} {{color=@{color_option}}} {{ToHitAC-10=[[ @{thac-10} ]]}} {{ToHitAC-9=[[ @{thac-9} ]]}} {{ToHitAC-8=[[ @{thac-8} ]]}} {{ToHitAC-7=[[ @{thac-7} ]]}} {{ToHitAC-6=[[ @{thac-6} ]]}} {{ToHitAC-5=[[ @{thac-5} ]]}} {{ToHitAC-4=[[ @{thac-4} ]]}} {{ToHitAC-3=[[ @{thac-3} ]]}} {{ToHitAC-2=[[ @{thac-2} ]]}} {{ToHitAC-1=[[ @{thac-1} ]]}} {{ToHitAC0=[[ @{thac0} ]]}} {{ToHitAC1=[[ @{thac1} ]]}} {{ToHitAC2=[[ @{thac2} ]]}} {{ToHitAC3=[[ @{thac3} ]]}} {{ToHitAC4=[[ @{thac4} ]]}} {{ToHitAC5=[[ @{thac5} ]]}} {{ToHitAC6=[[ @{thac6} ]]}} {{ToHitAC7=[[ @{thac7} ]]}} {{ToHitAC8=[[ @{thac8} ]]}} {{ToHitAC9=[[ @{thac9} ]]}} {{ToHitAC10=[[ @{thac10} ]] }}';
     // Which button was pressed?
     const trigger = eventInfo.triggerName.replace('clicked:', '');
     const roll_string = repeatingRolls[trigger];
@@ -7718,15 +7720,16 @@ on(
     if (trigger.includes('weapon-attack-roll-button') || trigger.includes('weapon-attack-npc-roll-button')) {
       const useTHAC0 = int(v.toggle_to_hit_table);
       const THAC0 = useTHAC0 ? int(v.thac00) : int(v.thac0);
-      const toHitTable = v[`repeating_weapon_${id}_weapon_whisper_to_hit`];
+      const toHitTable = v[`repeating_weapon_${id}_weapon_whisper_to_hit`] || toHitTableDefault;
       const hideBestAC = int(v.hide_best_ac_hit);
       const weaponTracking = int(v[`repeating_weapon_${id}_weapon_tracking`]);
-      const isRanged = int(v[`repeating_weapon_${id}_weapon_attack_type`]) % 2 !== 0; // odd is ranged
+      const attackType = int(v[`repeating_weapon_${id}_weapon_attack_type`]);
+      const isRanged = attackType === 1 || attackType === 3;
       const ammoValid = await numbersOnly(v[`repeating_weapon_${id}_weapon_ammo`]);
       const ammoMaxValid = await numbersOnly(v[`repeating_weapon_${id}_weapon_ammo_max`]);
-      const ammo = ammoValid && ammoMaxValid ? int(v[`repeating_weapon_${id}_weapon_ammo`]) : v[`repeating_weapon_${id}_weapon_ammo`];
-      const ammoMax = ammoValid && ammoMaxValid ? int(v[`repeating_weapon_${id}_weapon_ammo_max`]) : v[`repeating_weapon_${id}_weapon_ammo_max`];
-      const currentAmmo = isRanged && weaponTracking && ammo >= 0 && ammoMax >= ammo ? ammo - 1 : ammo; // allow negative for roll template
+      const ammo = ammoValid ? int(v[`repeating_weapon_${id}_weapon_ammo`]) : v[`repeating_weapon_${id}_weapon_ammo`];
+      const ammoMax = ammoMaxValid ? int(v[`repeating_weapon_${id}_weapon_ammo_max`]) : v[`repeating_weapon_${id}_weapon_ammo_max`];
+      const currentAmmo = isRanged && weaponTracking === 1 && ammoValid && ammo >= 0 ? ammo - 1 : ammo; // allow negative for roll template
       console.log(`ammoValid:${ammoValid} ammoMaxValid:${ammoMaxValid} weaponTracking:${weaponTracking} isRanged:${isRanged} currentAmmo:${currentAmmo}`);
       // Native async startRoll
       const roll = await startRoll(roll_string);
@@ -7734,7 +7737,7 @@ on(
       const d20 = int(roll.results.attack1.dice[0]);
       const totalRoll = int(roll.results.attack1.result);
       const bestAcHitMethod = int(v.best_ac_hit_method) || 0;
-      let bestAC = '';
+      let bestAC = 0;
 
       // Option 0: RAW (total adjusted roll)
       if (bestAcHitMethod === 0) {
@@ -7749,7 +7752,7 @@ on(
       // Option 1: Nat20 Always Hits (Any AC)
       else if (bestAcHitMethod === 1) {
         if (d20 === 20) {
-          bestAC = '-99'; // Auto-hit bypass
+          bestAC = -99; // Auto-hit bypass
         } else if (totalRoll < 20) {
           bestAC = THAC0 - totalRoll;
         } else if (totalRoll <= 25) {
@@ -7773,11 +7776,16 @@ on(
             bestAC = THAC0 - 25; // totalRoll >= 20 reaches but cannot extend past plateau without a Nat 20
           }
         }
+      } else {
+        // bestAcHitMethod value not recognized use RAW
+        if (totalRoll < 20) {
+          bestAC = THAC0 - totalRoll;
+        } else if (totalRoll <= 25) {
+          bestAC = THAC0 - 25;
+        } else {
+          bestAC = THAC0 - totalRoll - 5;
+        }
       }
-
-      // hidden attr for macros and/or API access
-      output.best_ac_hit = bestAC;
-
       finishRoll(roll.rollId, {
         //'name of key': 'computed value'
         // hides "hits AC" in roll based on sheet settings
@@ -7786,28 +7794,29 @@ on(
         ammo: currentAmmo,
         ammoMax: ammoMax,
       });
+      // hidden attr for macros and/or API access
+      output.best_ac_hit = bestAC;
+      // Ammo tracking
+      output[`repeating_weapon_${id}_weapon_ammo`] = ammoValid ? Math.max(0, currentAmmo) : currentAmmo; // prevents setting a negative value
+      output[`repeating_weapon_${id}_weapon_ammo_max`] = ammoMax;
+      await setAttrsAsync(output, {silent: true});
 
       // Post to-Hit table
       const roll2 = await startRoll(toHitTable);
       // console.log(roll2);
       finishRoll(roll2.rollId);
-
-      // Ammo tracking
-      output[`repeating_weapon_${id}_weapon_ammo`] = Math.max(0, currentAmmo); // prevents setting a negative value
-      output[`repeating_weapon_${id}_weapon_ammo_max`] = ammoMax;
-      await setAttrsAsync(output, {silent: true});
     } else if (trigger.includes('equipment-roll-button')) {
       const equipmentTracking = int(v[`repeating_equipment_${id}_equipment_tracking`]); // 0:none, 1:uses, 2:quantity
       const usesValid = await numbersOnly(v[`repeating_equipment_${id}_equipment_current`]);
       const usesMaxValid = await numbersOnly(v[`repeating_equipment_${id}_equipment_current_max`]);
       const quantityValid = await numbersOnly(v[`repeating_equipment_${id}_equipment_quantity`]);
       const quantityMaxValid = await numbersOnly(v[`repeating_equipment_${id}_equipment_quantity_max`]);
-      const uses = usesValid && usesMaxValid ? int(v[`repeating_equipment_${id}_equipment_current`]) : v[`repeating_equipment_${id}_equipment_current`];
-      const usesMax = usesValid && usesMaxValid ? int(v[`repeating_equipment_${id}_equipment_current_max`]) : v[`repeating_equipment_${id}_equipment_current_max`];
-      const currentUses = uses >= 0 && usesMax >= uses ? uses - 1 : uses;
-      const quantity = quantityValid && quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity`]) : v[`repeating_equipment_${id}_equipment_quantity`];
-      const quantityMax = quantityValid && quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity_max`]) : v[`repeating_equipment_${id}_equipment_quantity_max`];
-      const currentQuantity = quantity >= 0 && quantityMax >= quantity ? quantity - 1 : quantity;
+      const uses = usesValid ? int(v[`repeating_equipment_${id}_equipment_current`]) : v[`repeating_equipment_${id}_equipment_current`];
+      const usesMax = usesMaxValid ? int(v[`repeating_equipment_${id}_equipment_current_max`]) : v[`repeating_equipment_${id}_equipment_current_max`];
+      const currentUses = equipmentTracking === 1 && usesValid && uses >= 0 ? uses - 1 : uses; // allow negative for roll template
+      const quantity = quantityValid ? float(v[`repeating_equipment_${id}_equipment_quantity`]) : v[`repeating_equipment_${id}_equipment_quantity`];
+      const quantityMax = quantityMaxValid ? float(v[`repeating_equipment_${id}_equipment_quantity_max`]) : v[`repeating_equipment_${id}_equipment_quantity_max`];
+      const currentQuantity = equipmentTracking === 2 && quantityValid && quantity >= 0 ? quantity - 1 : quantity; // allow negative for roll template
       const roll = await startRoll(roll_string);
       // console.log(roll);
       if (equipmentTracking === 0) {
@@ -7832,7 +7841,7 @@ on(
           usesTracking: 1,
           quantityTracking: 0, // show raw
         });
-        output[`repeating_equipment_${id}_equipment_current`] = Math.max(0, currentUses); // prevents setting a negative value
+        output[`repeating_equipment_${id}_equipment_current`] = usesValid ? Math.max(0, currentUses) : currentUses; // prevents setting a negative value
         output[`repeating_equipment_${id}_equipment_current_max`] = usesMax;
         await setAttrsAsync(output, {silent: true});
       } else if (equipmentTracking === 2) {
@@ -7845,19 +7854,29 @@ on(
           usesTracking: 0,
           quantityTracking: 1,
         });
-        output[`repeating_equipment_${id}_equipment_quantity`] = Math.max(0, currentQuantity); // prevents setting a negative value
+        output[`repeating_equipment_${id}_equipment_quantity`] = quantityValid ? Math.max(0, currentQuantity) : currentQuantity; // prevents setting a negative value
         output[`repeating_equipment_${id}_equipment_quantity_max`] = quantityMax;
         await setAttrsAsync(output, {silent: true});
         await sumEquipmentWeight();
+      } else {
+        // equipmentTracking value not recognized use None
+        finishRoll(roll.rollId, {
+          //'name of key': 'computed value'
+          uses: uses,
+          usesMax: usesMax,
+          quantity: quantity,
+          quantityMax: quantityMax,
+          usesTracking: 0,
+          quantityTracking: 0,
+        });
       }
     } else if (trigger.includes('ability-roll-button') || trigger.includes('ability-npc-roll-button')) {
       const abilityTracking = int(v[`repeating_ability_${id}_ability_tracking`]);
       const usesValid = await numbersOnly(v[`repeating_ability_${id}_ability_current`]);
       const usesMaxValid = await numbersOnly(v[`repeating_ability_${id}_ability_current_max`]);
-      const usesMax = usesValid && usesMaxValid ? int(v[`repeating_ability_${id}_ability_current_max`]) : v[`repeating_ability_${id}_ability_current_max`];
-      const uses = usesValid && usesMaxValid ? int(v[`repeating_ability_${id}_ability_current`]) : v[`repeating_ability_${id}_ability_current`];
-      const currentUses = abilityTracking && uses >= 0 && usesMax >= uses ? uses - 1 : uses; // allow negative for roll template
-
+      const uses = usesValid ? int(v[`repeating_ability_${id}_ability_current`]) : v[`repeating_ability_${id}_ability_current`];
+      const usesMax = usesMaxValid ? int(v[`repeating_ability_${id}_ability_current_max`]) : v[`repeating_ability_${id}_ability_current_max`];
+      const currentUses = abilityTracking === 1 && usesValid && uses >= 0 ? uses - 1 : uses; // allow negative for roll template
       console.log(`Ability USES abilityTracking:${abilityTracking} current:${uses}`);
       const roll = await startRoll(roll_string);
       // console.log(roll);
@@ -7867,8 +7886,8 @@ on(
         usesTracking: abilityTracking,
       });
 
-      if (abilityTracking) {
-        output[`repeating_ability_${id}_ability_current`] = Math.max(0, currentUses); // prevents setting a negative value
+      if (abilityTracking === 1) {
+        output[`repeating_ability_${id}_ability_current`] = usesValid ? Math.max(0, currentUses) : currentUses; // prevents setting a negative value
         await setAttrsAsync(output, {silent: true});
       }
     } else {
