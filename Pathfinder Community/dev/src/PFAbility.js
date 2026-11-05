@@ -637,7 +637,7 @@ export function createAttackEntryFromRow(id, callback, silently, eventInfo, weap
     done();
     return;
   }
-  itemId = id || (eventInfo ? SWUtils.getRowId(eventInfo.sourceAttribute) : '');
+  itemId = id || (eventInfo ? SWUtils.getRowId(eventInfo.triggerName) : '');
   item_entry = 'repeating_ability_' + SWUtils.getRepeatingIDStr(itemId);
   slaPrefix = item_entry;
   if (!itemId) {
