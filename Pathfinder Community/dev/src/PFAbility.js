@@ -1103,7 +1103,7 @@ function setSLAsGlobally(eventInfo) {
       ],
       (v) => {
         const output = {};
-        const button = eventInfo.triggerName;
+        const button = eventInfo.triggerName.split(':').pop();
         const confirmCL = +v['confirm_ability_CL-basis'] || 0;
         const confirmSL = +v['confirm_ability_spell_level-basis'] || 0;
         const clBasis = v['ability_CL-basis'] || '@{level}';
@@ -1112,14 +1112,16 @@ function setSLAsGlobally(eventInfo) {
         const slBasis = v['ability_spell_level-basis'] || 'floor(@{casterlevel}/2)';
         const slBasisCustom = v['ability_spell_level-misc'] || 0;
         idArray.forEach((id) => {
-          if (button === 'clicked:set-sla-cl' && confirmCL) {
+          if (button === 'set-sla-cl' && confirmCL) {
             output[`repeating_ability_${id}_CL-basis`] = clBasis;
             output[`repeating_ability_${id}_class-name`] = clBasisName;
             output[`repeating_ability_${id}_CL-basis-mod`] = clBasisMod;
-          } else if (button === 'clicked:set-sla-dc' && confirmSL) {
+            output['confirm_ability_CL-basis'] = 0;
+          } else if (button === 'set-sla-dc' && confirmSL) {
             slBasis === '0' ? (output[`repeating_ability_${id}_spell_level-misc`] = slBasisCustom) : (output[`repeating_ability_${id}_spell_level-misc`] = 0);
             output[`repeating_ability_${id}_spell_level-basis`] = slBasis;
             output[`repeating_ability_${id}_ability-basis`] = '@{CHA-mod}';
+            output['confirm_ability_spell_level-basis'] = 0;
           } else {
             TAS.error('no match ' + button);
           }
@@ -1374,7 +1376,7 @@ function registerEventHandlers() {
 
   // set all SLA's using global attrs
   on('clicked:set-sla-cl clicked:set-sla-dc', (eventInfo) => {
-    TAS.debug('caught ' + eventInfo.triggerName);
+    TAS.debug('caught ' + eventInfo.triggerName.split(':').pop());
     setSLAsGlobally(eventInfo);
   });
 }
