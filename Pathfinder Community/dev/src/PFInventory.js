@@ -902,6 +902,7 @@ function updateWornArmorAndShield(location, sourceAttribute, callback) {
   try {
     attribUpdated = SWUtils.getAttributeName(sourceAttribute);
     id = SWUtils.getRowId(sourceAttribute);
+    console.log(`~~~ attribUpdated: ${attribUpdated}`);
     item_entry = 'repeating_item_' + id + '_';
     if (item_entry.slice(-1) !== '_') {
       item_entry += '_';
@@ -942,7 +943,7 @@ function updateWornArmorAndShield(location, sourceAttribute, callback) {
       //if we are setting new, or updating an item in the location, or updating an item in a different location
       //so we can set a new ring of shield, but not update it. but we can update armor and shields.
       if (attribUpdated === 'set-as-armor' || attribUpdated === 'set-as-shield' || location === locationMap.Armor || location === locationMap.Shield) {
-        //TAS.debug("updateWornArmorAndShield ", w);
+        // TAS.debug("updateWornArmorAndShield ", w);
         for (i = 0; i < PFDefense.defenseArmorShieldColumns.length; i++) {
           if (
             PFDefense.defenseArmorShieldColumns[i] !== 'max-dex' &&
@@ -2104,8 +2105,11 @@ function registerEventHandlers() {
       TAS.debug('caught ' + eventInfo.sourceAttribute + ' event' + eventInfo.sourceType);
       getAttrs(['repeating_item_location'], function (v) {
         const location = parseInt(v['repeating_item_location'], 10) || 0;
-        if (location !== locationMap.Armor || location !== locationMap.Shield) return;
-        updateWornArmorAndShield(location, eventInfo.sourceAttribute);
+        console.log(`~~~location:${location} sourceAttribute:${eventInfo.sourceAttribute} armor:${locationMap.Armor} shield:${locationMap.Shield}`);
+        // if (location !== locationMap.Armor || location !== locationMap.Shield) return;
+        if (location === locationMap.Armor || location === locationMap.Shield) {
+          updateWornArmorAndShield(location, eventInfo.sourceAttribute);
+        }
       });
     }),
   );
