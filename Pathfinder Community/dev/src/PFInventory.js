@@ -677,41 +677,47 @@ function unsetOtherItems(callback, location, id) {
     if (typeof callback === 'function') {
       callback();
     }
+    return;
   }
-  /*
-   * The player has now changed the location to a worn slot, so check for other repeating items that have the same
-   * slot and set them to 'carried'.
-   */
+
   getSectionIDs('repeating_item', function (idarray) {
-    // get the repeating set
     var attribs = [];
-    if (_.size(idarray) <= 1) {
+    var currentIDLower = (id || '').toLowerCase();
+    /*
+     * The player has now changed the location to a worn slot, so check for other repeating items that have the same
+     * slot and set them to 'carried'.
+     */
+    _.each(idarray, function (currentID) {
+      if (currentID.toLowerCase() !== currentIDLower) {
+        attribs.push('repeating_item_' + currentID + '_location');
+      }
+    });
+
+    if (!attribs.length) {
       if (typeof callback === 'function') {
         callback();
       }
       return;
     }
-    _.each(idarray, function (currentID, i) {
-      // loop through the set
-      if (currentID !== id) {
-        attribs.push('repeating_item_' + currentID + '_location');
-      }
-    });
+
     getAttrs(attribs, function (w) {
       var setter = {};
-      _.each(idarray, function (currentID, i) {
-        // loop through the set
-        if ((parseInt(w['repeating_item_' + currentID + '_location'], 10) || 0) === location) {
-          setter['repeating_item_' + currentID + '_location'] = 0;
-          setter['repeating_item_' + currentID + '_old_location'] = 0;
+
+      _.each(idarray, function (currentID) {
+        if (currentID.toLowerCase() !== currentIDLower) {
+          var field = 'repeating_item_' + currentID + '_location';
+
+          if ((parseInt(w[field], 10) || 0) === location) {
+            setter[field] = 0;
+            setter['repeating_item_' + currentID + '_old_location'] = 0;
+          }
         }
       });
-      if (_.size(setter) > 0) {
-        SWUtils.setWrapper(setter, {silent: true}, callback);
-      } else {
-        if (typeof callback === 'function') {
-          callback();
-        }
+
+      if (_.size(setter)) {
+        SWUtils.setWrapper(setter, PFConst.silentParams, callback);
+      } else if (typeof callback === 'function') {
+        callback();
       }
     });
   });
@@ -722,8 +728,9 @@ function unsetOtherItems(callback, location, id) {
  *@param {function} callback to call when done
  *@param {boolean} silently if true call SWUtils.setWrapper with {silent:true}
  *@param {object} eventInfo USED - from event, to get id from sourceAttribute
+ *@param {string} targetLocation of row updated, or null
  */
-function updateEquipmentLocation(id, callback, silently, eventInfo) {
+function updateEquipmentLocation(id, callback, silently, eventInfo, targetLocation) {
   var done = _.once(function () {
       //TAS.debug("leaving PFInventory.updateEquipmentLocation for id "+id);
       if (typeof callback === 'function') {
@@ -755,7 +762,18 @@ function updateEquipmentLocation(id, callback, silently, eventInfo) {
         setter = {};
       //TAS.debug("updateEquipmentLocation: ", v);
       try {
-        location = parseInt(v[locationField], 10);
+        var sheetLocation = parseInt(v[locationField], 10);
+        // Use targetLocation if provided, otherwise fallback to sheet value
+        if (typeof targetLocation === 'number' && !isNaN(targetLocation)) {
+          location = targetLocation;
+          // prevent loop
+          if (sheetLocation !== location) {
+            wornItemAttrs[locationField] = location;
+          }
+        } else {
+          location = sheetLocation;
+        }
+
         if (sourceAttr === 'set-as-armor') {
           location = locationMap.Armor;
           wornItemAttrs[locationField] = location;
@@ -868,8 +886,9 @@ function updateEquipmentLocation(id, callback, silently, eventInfo) {
  *@param {int} location the value of location attribute in repeating_item
  *@param {string} sourceAttribute eventInfo sourceAttribute of change user made that called this
  *@param {function} callback call when done
+ *@param {object} eventInfo USED - from event, to get id from sourceAttribute
  */
-function updateWornArmorAndShield(location, sourceAttribute, callback) {
+function updateWornArmorAndShield(location, sourceAttribute, callback, eventInfo) {
   var done = _.once(function () {
       //TAS.debug("leaving PFInventory.updateWornArmorAndShield");
       if (typeof callback === 'function') {
@@ -902,7 +921,6 @@ function updateWornArmorAndShield(location, sourceAttribute, callback) {
   try {
     attribUpdated = SWUtils.getAttributeName(sourceAttribute);
     id = SWUtils.getRowId(sourceAttribute);
-    console.log(`~~~ attribUpdated: ${attribUpdated}`);
     item_entry = 'repeating_item_' + id + '_';
     if (item_entry.slice(-1) !== '_') {
       item_entry += '_';
@@ -983,15 +1001,6 @@ function updateWornArmorAndShield(location, sourceAttribute, callback) {
         if (w[defenseItem + '-equipped'] !== '1') {
           setter[defenseItem + '-equipped'] = 1;
         }
-        //reset the buttons silently so we don't loop.
-        attrib = parseInt(w[item_entry + 'set-as-armor'], 10);
-        if (attrib) {
-          silentSetter[item_entry + 'set-as-armor'] = '0';
-        }
-        attrib = parseInt(w[item_entry + 'set-as-shield'], 10);
-        if (attrib) {
-          silentSetter[item_entry + 'set-as-shield'] = '0';
-        }
         //set armor3 or shield3 name
         itemName = w[item_entry + 'name'] || 'Row ' + id;
         if (itemName) {
@@ -1004,22 +1013,13 @@ function updateWornArmorAndShield(location, sourceAttribute, callback) {
         //if we hit "set as armor or shield" on a piece of armor / shield equipment, make sure to slot it.
         //do it silently so we don't loop
         equipType = parseInt(w[item_entry + 'equip-type'], 10);
-        actualLocation = parseInt(w[item_entry + 'location'], 10);
-        //this would only be if "set as armor or shield" checked
-        if (
-          (location === locationMap.Armor && equipType === equipMap.Armor && actualLocation !== locationMap.Armor) ||
-          (location === locationMap.Shield && equipType === equipMap.Armor && actualLocation !== locationMap.Shield)
-        ) {
-          silentSetter[item_entry + 'old_location'] = actualLocation;
-          silentSetter[item_entry + 'location'] = location; // should set location to match set armor or shield button
-          if (itemName && w[wornSlotField] !== itemName) {
-            silentSetter[wornSlotField] = itemName;
-          } else if (!itemName) {
-            silentSetter[wornSlotField] = ''; //when would this happen? never.
-          }
-        } else if (equipType !== equipMap.Armor && equipType !== equipMap.Shield) {
-          //need to remove any others from armor or shield location depending
-          takeOffWornItem(location);
+        actualLocation = parseInt(w[item_entry + 'location'], 10) || 0;
+        silentSetter[item_entry + 'old_location'] = actualLocation;
+        silentSetter[item_entry + 'location'] = location;
+        if (itemName) {
+          silentSetter[wornSlotField] = itemName;
+        } else {
+          silentSetter[wornSlotField] = '';
         }
       } else {
         TAS.warning('no reason to update armor or shield for ' + sourceAttribute + ' in location ' + locationNames[location]);
@@ -1029,9 +1029,7 @@ function updateWornArmorAndShield(location, sourceAttribute, callback) {
     } finally {
       if (_.size(silentSetter) > 0) {
         SWUtils.setWrapper(silentSetter, PFConst.silentParams, function () {
-          if (actualLocation !== location) {
-            updateEquipmentLocation(id, null, true, eventInfo);
-          }
+          unsetOtherItems(done, location, id);
         });
       }
       if (_.size(setter) > 0) {
@@ -1965,16 +1963,21 @@ function registerEventHandlers() {
   on(
     'change:repeating_item:location',
     TAS.callback(function eventUpdateItemLocation(eventInfo) {
-      const id = SWUtils.getRepeatingIDStr(id);
-      // TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType);
+      const id = SWUtils.getRowId(eventInfo.sourceAttribute);
+      const item_entry = 'repeating_item_' + id + '_';
       if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api') {
-        getAttrs(['repeating_item_location', 'repeating_item_old_location'], function (v) {
-          var newLoc = parseInt(v.repeating_item_location, 10),
-            oldLoc = parseInt(v.repeating_item_old_location, 10);
+        getAttrs([item_entry + 'location', item_entry + 'old_location'], function (v) {
+          var newLoc = parseInt(v[item_entry + 'location'], 10),
+            oldLoc = parseInt(v[item_entry + 'old_location'], 10);
           if (newLoc === locationMap.Armor || newLoc === locationMap.Shield) {
-            updateWornArmorAndShield(newLoc, eventInfo.sourceAttribute, function () {
-              updateEquipmentLocation(id, null, null, eventInfo);
-            });
+            updateWornArmorAndShield(
+              newLoc,
+              eventInfo.sourceAttribute,
+              function () {
+                updateEquipmentLocation(id, null, null, eventInfo);
+              },
+              eventInfo,
+            );
           } else {
             updateEquipmentLocation(id, null, null, eventInfo);
           }
@@ -2105,8 +2108,6 @@ function registerEventHandlers() {
       TAS.debug('caught ' + eventInfo.sourceAttribute + ' event' + eventInfo.sourceType);
       getAttrs(['repeating_item_location'], function (v) {
         const location = parseInt(v['repeating_item_location'], 10) || 0;
-        console.log(`~~~location:${location} sourceAttribute:${eventInfo.sourceAttribute} armor:${locationMap.Armor} shield:${locationMap.Shield}`);
-        // if (location !== locationMap.Armor || location !== locationMap.Shield) return;
         if (location === locationMap.Armor || location === locationMap.Shield) {
           updateWornArmorAndShield(location, eventInfo.sourceAttribute);
         }
@@ -2144,24 +2145,30 @@ function registerEventHandlers() {
     }),
   );
   on(
-    'change:repeating_item:set-as-armor',
+    'clicked:repeating_item:set-as-armor',
     TAS.callback(function eventcreateArmorEntryFromRow(eventInfo) {
-      TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType);
-      if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api') {
-        updateWornArmorAndShield(locationMap.Armor, eventInfo.sourceAttribute, function () {
-          updateEquipmentLocation(null, null, null, eventInfo);
-        });
+      TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType + ' trigger: ' + eventInfo.triggerName.split('_').pop());
+      if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api' || eventInfo.triggerName.split('_').pop() === 'set-as-armor') {
+        updateWornArmorAndShield(
+          locationMap.Armor,
+          eventInfo.sourceAttribute,
+          null, // Removed redundant callback call to updateEquipmentLocation
+          eventInfo,
+        );
       }
     }),
   );
   on(
-    'change:repeating_item:set-as-shield',
+    'clicked:repeating_item:set-as-shield',
     TAS.callback(function eventcreateShieldEntryFromRow(eventInfo) {
-      TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType);
-      if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api') {
-        updateWornArmorAndShield(locationMap.Shield, eventInfo.sourceAttribute, function () {
-          updateEquipmentLocation(null, null, null, eventInfo);
-        });
+      TAS.debug('caught ' + eventInfo.sourceAttribute + ' event: ' + eventInfo.sourceType + ' trigger: ' + eventInfo.triggerName.split('_').pop());
+      if (eventInfo.sourceType === 'player' || eventInfo.sourceType === 'api' || eventInfo.triggerName.split('_').pop() === 'set-as-shield') {
+        updateWornArmorAndShield(
+          locationMap.Shield,
+          eventInfo.sourceAttribute,
+          null, // Removed redundant callback call to updateEquipmentLocation
+          eventInfo,
+        );
       }
     }),
   );
