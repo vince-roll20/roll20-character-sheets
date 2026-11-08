@@ -7003,10 +7003,12 @@ also if multiple repeating sects inside h2 they are 100% wide and only h2 is nar
 }
 
 .charsheet .small-label2.autoexpand {
-    padding-top: 2em;
-    width: auto;
-    min-width: 3.5em;
+    margin-bottom: 2px;
     max-width: 99%;
+    min-width: 3.5em;
+    padding-top: 2em;
+    vertical-align: bottom;
+    width: auto;
 }
 
 .charsheet .small-label2.autoexpand input {
