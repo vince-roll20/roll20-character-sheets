@@ -333,18 +333,18 @@
 
 .charsheet details[open] summary + textarea.skill-macro-text,
 .charsheet details[open] summary + * {
-    background-color: #f0f8ff;
-    color: revert;
+    background-color: #fbf5d0;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px #000;
+    color: #000;
     display: flex;
     height: auto;
     left: 1em;
+    outline: 2px solid #101010;
     position: absolute;
     width: calc(100% - 2em);
     word-break: normal;
     z-index: 2;
-    border-radius: 0;
-    outline: 2px solid #e20c0c;
-    box-shadow: 2px 2px 5px #000;
 }
 
 .charsheet details[open]:focus-within summary + textarea.skill-macro-text,
@@ -363,12 +363,20 @@
     position: relative;
 }
 
+.charsheet .skills .table-row span.table-cell:has( > textarea:focus) {
+    position: relative;
+}
+
 .charsheet .skills .table-row span.table-cell > textarea:focus {
-    height: 4em;
-    left: auto;
-    margin-top: -1em;
-    right: 2em;
-    width: 33%;
+    background-color: #fbf5d0;
+    box-shadow: 2px 2px 5px #000;
+    color: #000;
+    height: 2.85em;
+    left: 0;
+    min-width: max-content;
+    outline: 2px solid #101010;
+    position: absolute;
+    top: 0;
     z-index: 5;
 }
 
@@ -427,14 +435,18 @@
 .charsheet .skills input.macro-text-inline:focus,
 .charsheet .section-skills textarea.macro-text-inline:focus,
 .charsheet .section-skills input.macro-text-inline:focus {
-    background-color: #f0f8ff;
-    color: revert;
+    background-color: #fbf5d0;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px #000;
+    color: #000;
     display: block;
     height: 2.85em;
     margin: 0;
     max-width: none;
+    min-width: auto;
+    outline: 2px solid #101010;
     position: absolute;
-    width: 26em;
+    width: clamp(15em, 17vw, 25em);
     word-break: normal;
     z-index: 4;
 }
@@ -469,8 +481,9 @@
 .charsheet .small-label2.linked-tablecell,
 .charsheet .table-cell.linked-tablecell {
     display: inline-block;
-    min-width: max-content;
+    min-width: 7em;
     padding: 0 2px 0 2px;
+    position: relative;
     white-space: nowrap;
 }
 
@@ -1095,6 +1108,9 @@ pf-wrapper,
 .charsheet .small-label2 span:not(.autoexpand) {
     cursor: help;
     font-size: 1.125rem;
+    line-height: normal;
+    text-align: center;
+    text-wrap-style: pretty;
 }
 
 .charsheet .monster-indicator label:has(.condition-exists.npc-show:not(:checked)),
@@ -1438,9 +1454,11 @@ also need 1 more level in selector or base css will override border */
 
 .charsheet .section-config {
     background-color: #737373;
+    border-radius: 4px;
     margin-bottom: -11rem;
     margin-inline: auto;
     outline: 2px solid #e20c0c;
+    overflow: hidden;
     padding-bottom: 1rem;
     position: relative;
     top: -4em;
@@ -2811,6 +2829,7 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
 
 /* .charsheet .cssbutton.readonly-show:not(:checked) + span::before, */
 .charsheet .cssbutton.config-show:checked + span::before {
+    color: #fff;
     outline: 2px solid #e20c0c;
     outline-offset: -1px;
 }
