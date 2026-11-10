@@ -347,6 +347,12 @@
     z-index: 2;
 }
 
+.charsheet details[open] summary + textarea.skill-macro-text.third-width {
+    left: auto;
+    right: 1em;
+    width: 33%;
+}
+
 .charsheet details[open]:focus-within summary + textarea.skill-macro-text,
 .charsheet details[open]:hover summary + textarea.skill-macro-text,
 .charsheet details[open]:focus-within summary + *,
