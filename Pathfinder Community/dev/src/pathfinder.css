@@ -320,6 +320,14 @@
     overflow: hidden;
 }
 
+.charsheet .inline-attribute-macro {
+    display: inline-grid;
+    gap: 2px;
+    grid-template-columns: auto 1fr;
+    padding-block: .5em;
+    width: calc(100% - 1em);
+}
+
 /* macro-text field pop-up */
 .charsheet details[open]:focus-within summary,
 .charsheet details[open]:hover summary,
@@ -1681,7 +1689,8 @@ also need 1 more level in selector or base css will override border */
 }
 
 .charsheet .pf-wrapper span.super::after,
-.charsheet .pf-wrapper .h2.super::after {
+.charsheet .pf-wrapper h2.super::after,
+.charsheet .pf-wrapper h3.super::after {
     font-weight: normal;
     font-family: 'Roboto Mono', monospace;
     font-size: 1rem;
@@ -1720,22 +1729,26 @@ also need 1 more level in selector or base css will override border */
 }
 
 .charsheet .pf-wrapper span.note-a::after,
-.charsheet .pf-wrapper .h2.note-a::after {
+.charsheet .pf-wrapper h2.note-a::after,
+.charsheet .pf-wrapper h3.note-a::after {
     content: '(a)';
 }
 
 .charsheet .pf-wrapper span.note-b::after,
-.charsheet .pf-wrapper .h2.note-b::after {
+.charsheet .pf-wrapper h2.note-b::after,
+.charsheet .pf-wrapper h3.note-b::after {
     content: '(b)';
 }
 
 .charsheet .pf-wrapper span.note-c::after,
-.charsheet .pf-wrapper .h2.note-c::after {
+.charsheet .pf-wrapper h2.note-c::after,
+.charsheet .pf-wrapper h3.note-c::after {
     content: '(c)';
 }
 
 .charsheet .pf-wrapper span.note-d::after,
-.charsheet .pf-wrapper .h2.note-d::after {
+.charsheet .pf-wrapper h2.note-d::after,
+.charsheet .pf-wrapper h3.note-d::after {
     content: '(d)';
 }
 
@@ -2478,8 +2491,8 @@ also need 1 more level in selector or base css will override border */
 }
 
 .charsheet .showsect,
-.charsheet .h3.clickheader,
-.charsheet .h2.clickheader {
+.charsheet h3.clickheader,
+.charsheet h2.clickheader {
     display: inline-block;
     margin-left: -.2rem;
 }
