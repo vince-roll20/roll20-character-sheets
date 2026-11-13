@@ -3784,13 +3784,21 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
 
 .ui-dialog .tab-content .charsheet input:not(.calc):focus-visible,
 .ui-dialog .tab-content .charsheet select:focus-visible,
-.ui-dialog .tab-content .charsheet .inline-textarea:focus-visible {
+.ui-dialog .tab-content .charsheet .inline-textarea:focus-visible,
+.ui-dialog .tab-content .charsheet textarea.macro-text:focus-visible,
+.ui-dialog .tab-content .charsheet textarea.macro-text-inline:focus-visible,
+.ui-dialog .tab-content .charsheet input.selectable.calc:focus-visible,
+.ui-dialog .tab-content .charsheet .skill-macro-text.calc:focus-visible {
     outline: 1px auto #101010;
 }
 
 .charsheet input:not(.calc):hover,
 .charsheet select:hover,
-.charsheet .inline-textarea:hover {
+.charsheet .inline-textarea:hover,
+.charsheet textarea.macro-text:hover,
+.charsheet textarea.macro-text-inline:hover,
+.charsheet input.selectable.calc:hover,
+.charsheet .skill-macro-text.calc:hover {
     outline: 1px auto #10101080;
 }
 
