@@ -4183,8 +4183,13 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
 }
 
 .charsheet .nontable-repeating .divider-db-lg {
-    vertical-align: middle;
     line-height: 1em;
+    margin-inline: auto;
+    vertical-align: middle;
+}
+
+.charsheet .nontable-repeating *:has(.super) + .divider-db-lg {
+    margin-left: 1.2rem;
 }
 
 .charsheet .entry-vlong {
