@@ -610,6 +610,7 @@
 
 .charsheet button[type="roll"].no-decoration::before {
     content: "";
+    display: block;
 }
 
 .charsheet button[type="roll"].no-decoration:hover {
@@ -1122,6 +1123,14 @@ pf-wrapper,
     line-height: normal;
     text-align: center;
     text-wrap-style: pretty;
+}
+
+.charsheet .compendium-note.hide-readonly span:first-child {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 12em;
+    padding-right: 2px;
+    text-align: end;
 }
 
 .charsheet .monster-indicator label:has(.condition-exists.npc-show:not(:checked)),
@@ -1828,6 +1837,7 @@ also need 1 more level in selector or base css will override border */
 .charsheet button[type="roll"].command-button::before,
 .charsheet button[type="action"].command-button::before {
     content: "" !important;
+    display: block;
 }
 
 /************************************* BUFFS ******************************************/
@@ -3308,11 +3318,9 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
 }
 
 .charsheet .compendium-note {
-    align-items: center;
-    display: flex;
     float: right;
-    max-height: 2rem;
-    position: relative;
+    max-height: 2.5rem;
+    top: 2px;
 }
 
 .charsheet .repitem .compendium-drop-target.active-drop-target {
@@ -3327,13 +3335,6 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
     font-weight: bold;
     font-size: 2.4rem;
     vertical-align: sub;
-}
-
-.charsheet .compendium-icon {
-    font-weight: bold;
-    font-family: Pictos;
-    font-size: 1.8rem;
-    vertical-align: middle;
 }
 
 .charsheet .repcontainer .repitem,
