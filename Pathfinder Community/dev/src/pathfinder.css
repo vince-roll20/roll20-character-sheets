@@ -194,21 +194,26 @@
     display: inline;
 }
 
-/* turn off spinners for disabled number fields in chrome */
-.charsheet input::-webkit-outer-spin-button,
-.charsheet input::-webkit-inner-spin-button,
-.charsheet input[type="number"].calc:hover,
-.charsheet input[type="number"].calc:focus,
-.charsheet input[type="number"].calc,
-.charsheet input[type="number"]:disabled {
-    -webkit-appearance: none;
+/* Force spin buttons to stay completely hidden on hover and focus in Roll20 */
+.charsheet input[type="number"]::-webkit-outer-spin-button,
+.charsheet input[type="number"]::-webkit-inner-spin-button,
+.charsheet input[type="number"]:hover::-webkit-outer-spin-button,
+.charsheet input[type="number"]:hover::-webkit-inner-spin-button,
+.charsheet input[type="number"]:focus::-webkit-outer-spin-button,
+.charsheet input[type="number"]:focus::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    display: none !important;
+    margin: 0 !important;
 }
 
-/* turn off spinners for all number field in firefox */
+/* Firefox fallback + balanced padding for centered text */
 .charsheet input[type="number"] {
     -moz-appearance: textfield !important;
-    -moz-padding-end: .5em;
-    padding-inline-end: .5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    text-align: center;
+    box-sizing: border-box;
 }
 
 .charsheet input[type="text"],
@@ -3797,13 +3802,18 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
     box-shadow: none;
 }
 
+.charsheet .hit-points input:not(.calc),
+.charsheet .hit-points-calcs2 input:not(.calc) {
+    background-color: #fff;
+}
+
 .charsheet .hit-points,
 .charsheet .hit-points-calcs2 {
     background-color: LightGray;
     color: initial;
     display: inline-block;
     margin-right: .125em;
-    min-height: 4em;
+    min-height: 11.66em;
     min-width: 15em;
     width: calc(30% - 4px);
 }
@@ -6469,6 +6479,7 @@ also if multiple repeating sects inside h2 they are 100% wide and only h2 is nar
 
 .charsheet .readonly-show:not(:checked) ~ .main .section-core .wounds-show:not(:checked) ~ .h2-section.hit-points {
     margin: 0.2rem;
+    min-height: auto;
 }
 
 .charsheet .wound-threshold .table-row {
