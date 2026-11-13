@@ -48,6 +48,7 @@
                         <li>Fixed: Equipment>Weapon item name now syncs with the Attacks section.</li>
                         <li>Fixed: Compendium drop for repeating Items was not accepting "Content" for descriptions.</li>
                         <li>Fixed: Compendium drop for repeating Ability:SLA/Sp was not properly checking and setting the Ability Basis attribute.</li>
+                        <li>Items: quantity and quantity_max of newly added items now default to 1 instead of 0 (same as a compendium drop)</li>
                         <br>
                         <h4>Previous</h4>
                         <li>Added an "Ask" option to the sheet whisper settings. Rolls will include a query to whisper the roll or not when choosing the "Ask" option.</li>
@@ -11718,11 +11719,11 @@
                                 </label>
                                 <div class="linked-fields">
                                     <label class="small-label2 small-label">
-                                        <input title="@{repeating_item_$X_qty}" type="number" name="attr_qty" value="0" aria-label-i18n="worn-equipment-quantity-title" />
+                                        <input title="@{repeating_item_$X_qty}" type="number" name="attr_qty" value="1" aria-label-i18n="worn-equipment-quantity-title" />
                                         <span data-i81n-title="worn-equipment-quantity-title" data-i18n="quantity-abbrv">Qty</span>
                                     </label>
                                     <span class="divider-db-lg sect hide-readonly items-toggle" style="width:0.1%;">/</span>
-                                    <label class="small-label2 small-label hide-readonly sect items-toggle"><input title="@{repeating_item_$X_qty|max}" type="number" name="attr_qty_max" value="0" /><span data-i18n="maximum-abbrv">Max</span></label>
+                                    <label class="small-label2 small-label hide-readonly sect items-toggle"><input title="@{repeating_item_$X_qty|max}" type="number" name="attr_qty_max" value="1" /><span data-i18n="maximum-abbrv">Max</span></label>
                                 </div>
                                 <label class="small-label2 small-label"><input title="@{repeating_item_$X_item-weight}" type="number" name="attr_item-weight" value="0" step="any" /><span data-i18n="weight-abbrv">Wt</span></label>
                                 <label class="small-label2 small-label hide-readonly sect items-toggle"><input title="@{repeating_item_$X_hardness}" type="number" name="attr_hardness" value="0" step="any" min="0" /><span data-i18n="hardness-abbrv">Hard</span></label>
