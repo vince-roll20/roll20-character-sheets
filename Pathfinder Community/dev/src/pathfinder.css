@@ -3782,6 +3782,17 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
     top: 0;
 }
 
+.ui-dialog .tab-content .charsheet input:not(.calc):focus-visible,
+.ui-dialog .tab-content .charsheet select:focus-visible,
+.ui-dialog .tab-content .charsheet .inline-textarea:focus-visible {
+    outline: 1px auto #101010;
+}
+
+.charsheet input:not(.calc):hover,
+.charsheet select:hover,
+.charsheet .inline-textarea:hover {
+    outline: 1px auto #10101080;
+}
 
 /* added for ability level basis inline formulas */
 .charsheet .small-label2 > input.error-mshow {
