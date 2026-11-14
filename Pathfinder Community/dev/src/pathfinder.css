@@ -346,10 +346,10 @@
 
 .charsheet details[open] summary + textarea.skill-macro-text,
 .charsheet details[open] summary + * {
-    background-color: #fbf5d0;
+    background-color: #fffded;
     border-radius: 4px;
     box-shadow: 2px 2px 5px #000;
-    color: #000;
+    color: #222222;
     display: flex;
     height: auto;
     left: 1em;
@@ -382,14 +382,14 @@
     position: relative;
 }
 
-.charsheet .skills .table-row span.table-cell:has( > textarea:focus) {
+.charsheet .skills .table-row span.table-cell:has( > textarea:focus-visible) {
     position: relative;
 }
 
-.charsheet .skills .table-row span.table-cell > textarea:focus {
-    background-color: #fbf5d0;
+.charsheet .skills .table-row span.table-cell > textarea:focus-visible {
+    background-color: #fffded;
     box-shadow: 2px 2px 5px #000;
-    color: #000;
+    color: #222222;
     height: 2.85em;
     left: 0;
     min-width: max-content;
@@ -399,9 +399,9 @@
     z-index: 5;
 }
 
-.charsheet .skills .table-row input.macro-text-inline:focus,
-.charsheet .section-skills span input.macro-text-inline:focus,
-.charsheet .section-defenses .table-row input.macro-text-inline:focus {
+.charsheet .skills .table-row input.macro-text-inline:focus-visible,
+.charsheet .section-skills span input.macro-text-inline:focus-visible,
+.charsheet .section-defenses .table-row input.macro-text-inline:focus-visible {
     margin-top: -1em;
 }
 
@@ -437,27 +437,27 @@
     background-color: transparent;
 }
 
-.charsheet .abilities input.macro-text-inline:focus,
-.charsheet .section-abilities input.macro-text-inline:focus,
-.charsheet .attack-grid input.macro-text-inline:focus,
-.charsheet .attacks label > input.macro-text-inline:focus,
-.charsheet .defense-grid input.macro-text-inline:focus,
-.charsheet .section-defenses input.macro-text-inline:focus,
-.charsheet .items input.macro-text-inline:focus,
-.charsheet .items textarea.macro-text-inline:focus,
-.charsheet .saves input.macro-text-inline:focus,
-.charsheet .sect-buff input.macro-text-inline:focus,
-.charsheet .section-core input.macro-text-inline:focus,
-.charsheet .section-npc input.macro-text-inline:focus,
-.charsheet .section-spells .macro-text-inline:focus,
-.charsheet .section-spells input.macro-text-inline:focus,
-.charsheet .skills input.macro-text-inline:focus,
-.charsheet .section-skills textarea.macro-text-inline:focus,
-.charsheet .section-skills input.macro-text-inline:focus {
-    background-color: #fbf5d0;
+.charsheet .abilities input.macro-text-inline:focus-visible,
+.charsheet .section-abilities input.macro-text-inline:focus-visible,
+.charsheet .attack-grid input.macro-text-inline:focus-visible,
+.charsheet .attacks label > input.macro-text-inline:focus-visible,
+.charsheet .defense-grid input.macro-text-inline:focus-visible,
+.charsheet .section-defenses input.macro-text-inline:focus-visible,
+.charsheet .items input.macro-text-inline:focus-visible,
+.charsheet .items textarea.macro-text-inline:focus-visible,
+.charsheet .saves input.macro-text-inline:focus-visible,
+.charsheet .sect-buff input.macro-text-inline:focus-visible,
+.charsheet .section-core input.macro-text-inline:focus-visible,
+.charsheet .section-npc input.macro-text-inline:focus-visible,
+.charsheet .section-spells .macro-text-inline:focus-visible,
+.charsheet .section-spells input.macro-text-inline:focus-visible,
+.charsheet .skills input.macro-text-inline:focus-visible,
+.charsheet .section-skills textarea.macro-text-inline:focus-visible,
+.charsheet .section-skills input.macro-text-inline:focus-visible {
+    background-color: #fffded;
     border-radius: 4px;
     box-shadow: 2px 2px 5px #000;
-    color: #000;
+    color: #222222;
     display: block;
     height: 2.85em;
     margin: 0;
@@ -471,8 +471,8 @@
 }
 
 /* acts as a placeholder to prevent collapsing row */
-.charsheet .linked-tablecell:has(input.macro-text-inline:focus)::before,
-.charsheet .table-cell:has(input.macro-text-inline:focus)::before {
+.charsheet .linked-tablecell:has(input.macro-text-inline:focus-visible)::before,
+.charsheet .table-cell:has(input.macro-text-inline:focus-visible)::before {
     content: '...';
     display: block;
     height: 2em;
@@ -482,8 +482,8 @@
     visibility: hidden;
 }
 
-.charsheet input.macro-text-inline.float-right:focus,
-.charsheet .macro-text-inline.float-right:focus {
+.charsheet input.macro-text-inline.float-right:focus-visible,
+.charsheet .macro-text-inline.float-right:focus-visible {
     left: auto;
     right: 1em;
 }
@@ -1784,9 +1784,9 @@ also need 1 more level in selector or base css will override border */
 }
 
 .charsheet button[type="roll"].command-button:hover,
-.charsheet button[type="roll"].command-button:focus,
+.charsheet button[type="roll"].command-button:focus-visible,
 .charsheet button[type="action"].command-button:hover,
-.charsheet button[type="action"].command-button:focus {
+.charsheet button[type="action"].command-button:focus-visible {
     color: #e20c0c;
     box-shadow: 0.1rem 0.1rem 0.2rem #333;
 }
@@ -3459,7 +3459,7 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
     box-shadow: none;
 }
 
-.charsheet .repcontrol .btn:focus {
+.charsheet .repcontrol .btn:focus-visible {
     outline: 0;
 }
 
@@ -3752,7 +3752,7 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
 
 .ui-dialog .charsheet .pf-wrapper input.selectable,
 .ui-dialog .charsheet .pf-wrapper input.selectable.calc {
-    background-color: #fbf5d0;
+    background-color: #fffded;
     border: 1px solid lightgrey;
     border-radius: 4px;
     box-sizing: content-box;
@@ -3795,13 +3795,19 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
     top: 0;
 }
 
+.ui-dialog .tab-content .charsheet input.selectable.calc:focus-visible,
+.ui-dialog .tab-content .charsheet .skill-macro-text.calc:focus-visible {
+    color: #222222;
+    outline: 1px auto #101010;
+}
+
 .ui-dialog .tab-content .charsheet input:not(.calc):focus-visible,
 .ui-dialog .tab-content .charsheet select:focus-visible,
 .ui-dialog .tab-content .charsheet .inline-textarea:focus-visible,
 .ui-dialog .tab-content .charsheet textarea.macro-text:focus-visible,
-.ui-dialog .tab-content .charsheet textarea.macro-text-inline:focus-visible,
-.ui-dialog .tab-content .charsheet input.selectable.calc:focus-visible,
-.ui-dialog .tab-content .charsheet .skill-macro-text.calc:focus-visible {
+.ui-dialog .tab-content .charsheet textarea.macro-text-inline:focus-visible {
+    background-color: #fffded;
+    color: #222222;
     outline: 1px auto #101010;
 }
 
