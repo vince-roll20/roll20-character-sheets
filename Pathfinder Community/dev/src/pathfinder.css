@@ -3423,6 +3423,29 @@ span[data-i18n-title="display-settings-config"]:has(input.cssbutton:not(:checked
     color: #000;
 }
 
+.charsheet .repeating-fields .repeating-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 5px;
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.charsheet .repeating-fields .repcontrol:has(.repcontrol_add:hover) ~ .add-tooltip {
+    display: block;
+    left: 5.5em;
+}
+
+.charsheet .repeating-fields .repcontrol:not(.editmode):has(.repcontrol_edit:hover) ~ .edit-tooltip {
+    display: block;
+    right: 5.5em;
+}
+
+.charsheet .repeating-fields .repcontrol.editmode:has(.repcontrol_edit:hover) ~ .done-tooltip {
+    display: block;
+    right: 5.5em;
+}
+
 .charsheet .repcontrol .repcontrol_edit:after {
     font-weight: bold;
     content: '☰';
